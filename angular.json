@@ -71,7 +71,8 @@
               "buildTarget": "ah-front:build:production"
             },
             "development": {
-              "buildTarget": "ah-front:build:development"
+              "buildTarget": "ah-front:build:development",
+              "proxyConfig": "proxy.conf.json"
             }
           },
           "defaultConfiguration": "development"
