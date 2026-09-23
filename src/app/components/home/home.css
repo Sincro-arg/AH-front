@@ -4,11 +4,23 @@
   margin: 0 auto;
 }
 
+.home__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 0 0 1.5rem;
+}
+
 .home h1 {
   font-size: 1.5rem;
   font-weight: 700;
   color: var(--color-text);
-  margin: 0 0 1.5rem;
+  margin: 0;
+}
+
+.home__config-link {
+  font-size: 0.9rem;
+  font-weight: 600;
 }
 
 .home__error {

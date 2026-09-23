@@ -1,0 +1,24 @@
+<section class="config">
+  <h1 class="config__title">Configuración</h1>
+
+  <div class="config__card">
+    <h2 class="config__subtitle">Apariencia</h2>
+
+    <div class="config__row">
+      <div>
+        <p class="config__label">Tema oscuro</p>
+        <p class="config__desc">Cambia los colores de la aplicación a un modo oscuro.</p>
+      </div>
+
+      <label class="toggle">
+        <input
+          type="checkbox"
+          [checked]="esOscuro()"
+          (change)="theme.toggle()"
+          aria-label="Activar tema oscuro"
+        />
+        <span class="toggle-track"></span>
+      </label>
+    </div>
+  </div>
+</section>
