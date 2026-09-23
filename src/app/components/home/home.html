@@ -1,0 +1,15 @@
+<section class="home">
+  <h1>Usuarios de ejemplo</h1>
+
+  @if (cargando()) {
+    <p>Cargando...</p>
+  } @else if (error()) {
+    <p class="home__error">{{ error() }}</p>
+  } @else {
+    <ul class="home__lista">
+      @for (u of usuarios(); track u.id) {
+        <li>{{ u.nombre }} {{ u.apellido }} — {{ u.email }}</li>
+      }
+    </ul>
+  }
+</section>
