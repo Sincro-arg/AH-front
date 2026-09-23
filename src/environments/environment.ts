@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  apiUrl: 'http://localhost:5203/api',
+  apiUrl: 'https://ah-back.onrender.com/api',
 };
