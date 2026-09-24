@@ -1,1 +1,5 @@
+@if (connectionError.mensaje(); as mensaje) {
+  <div class="app__connection-error" role="alert">{{ mensaje }}</div>
+}
+
 <router-outlet></router-outlet>
