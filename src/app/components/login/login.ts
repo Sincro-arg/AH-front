@@ -1,7 +1,7 @@
 import { Component, inject, signal } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 
 @Component({
@@ -15,9 +15,13 @@ export class Login {
   private readonly fb = inject(FormBuilder);
   private readonly authSvc = inject(AuthService);
   private readonly router = inject(Router);
+  private readonly route = inject(ActivatedRoute);
 
   readonly enviando = signal(false);
   readonly error = signal<string | null>(null);
+  // Viene de Registro tras crear la cuenta (navega a /login?registrado=1)
+  // para confirmarle al usuario que ya puede iniciar sesion.
+  readonly registrado = signal(this.route.snapshot.queryParamMap.get('registrado') === '1');
 
   readonly form = this.fb.nonNullable.group({
     email: ['', [Validators.required, Validators.email]],
