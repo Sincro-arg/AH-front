@@ -88,3 +88,17 @@
 .toggle input:checked + .toggle-track::after {
   transform: translateX(18px);
 }
+
+@media (max-width: 480px) {
+  .config {
+    padding: 20px 16px;
+  }
+
+  .config__card {
+    padding: 16px 18px;
+  }
+
+  .config__row {
+    flex-wrap: wrap;
+  }
+}
