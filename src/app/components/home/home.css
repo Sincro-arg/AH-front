@@ -5,6 +5,23 @@
   font-family: system-ui, sans-serif;
 }
 
+/* El contenido (cargando / error / lista) entra con un fade + leve desplazamiento
+   cada vez que cambia el estado, en vez de aparecer de golpe. */
+.home > * {
+  animation: home-fade-in .25s ease;
+}
+
+@keyframes home-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
 .home__error {
   color: #c0392b;
 }
@@ -15,6 +32,19 @@
 }
 
 .home__lista li {
-  padding: 0.5rem 0;
+  padding: 0.5rem 0.5rem 0.5rem 0;
   border-bottom: 1px solid #eee;
+  border-radius: 6px;
+  transition: background-color .15s ease, padding-left .15s ease;
+}
+
+.home__lista li:hover {
+  background-color: #f7f7f9;
+  padding-left: 0.75rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .home > * {
+    animation: none;
+  }
 }

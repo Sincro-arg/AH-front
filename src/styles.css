@@ -6,3 +6,53 @@ body {
   margin: 0;
   font-family: system-ui, sans-serif;
 }
+
+/* Estados de interactividad globales: cualquier boton, link o campo que se
+   agregue en la app hereda hover/foco/transicion sin tener que repetirlo. */
+button,
+a,
+input,
+select,
+textarea {
+  transition: background-color .15s ease, color .15s ease, border-color .15s ease,
+    box-shadow .15s ease, transform .15s ease, opacity .15s ease;
+}
+
+button {
+  cursor: pointer;
+}
+
+button:hover:not(:disabled) {
+  filter: brightness(0.95);
+}
+
+button:active:not(:disabled) {
+  transform: translateY(1px);
+}
+
+button:disabled {
+  cursor: not-allowed;
+  opacity: .6;
+}
+
+a {
+  color: inherit;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+:focus-visible {
+  outline: 2px solid #ee4f23;
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
