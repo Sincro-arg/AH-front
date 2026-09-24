@@ -46,6 +46,69 @@
   color: var(--color-text-muted);
 }
 
+.config__form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.campo {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.campo__label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+.campo__error {
+  margin: 0;
+  font-size: 0.8rem;
+  color: var(--color-danger);
+}
+
+.config__mensaje {
+  margin: 0;
+  padding: 10px 12px;
+  border-radius: var(--radius-md);
+  font-size: 0.85rem;
+}
+
+.config__mensaje--error {
+  background: var(--color-danger-light);
+  color: var(--color-danger);
+}
+
+.config__mensaje--exito {
+  background: var(--color-success-light);
+  color: var(--color-success);
+}
+
+.config__submit {
+  align-self: flex-start;
+  margin-top: 4px;
+  padding: 10px 20px;
+  border: none;
+  border-radius: var(--radius-md);
+  background: var(--color-primary);
+  color: #fff;
+  font-size: 0.9rem;
+  font-weight: 600;
+  transition: background var(--transition);
+}
+
+.config__submit:hover:not(:disabled) {
+  background: var(--color-primary-dark);
+}
+
+.config__submit:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
 /* Toggle: mismo patron que sincroresto (checkbox + track deslizante) */
 .toggle {
   position: relative;
