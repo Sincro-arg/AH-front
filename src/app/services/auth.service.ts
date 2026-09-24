@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { tap } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
+import { ThemeService } from './theme.service';
 
 export type Tema = 'claro' | 'oscuro';
 
@@ -35,6 +36,7 @@ export const TOKEN_KEY = 'ah_token';
 export class AuthService {
   private readonly http = inject(HttpClient);
   private readonly router = inject(Router);
+  private readonly themeSvc = inject(ThemeService);
 
   readonly usuarioActual = signal<Usuario | null>(null);
   readonly estaLogueado = computed(() => !!this.usuarioActual());
@@ -56,6 +58,7 @@ export class AuthService {
         tap((res) => {
           localStorage.setItem(TOKEN_KEY, res.token);
           this.usuarioActual.set(res.usuario);
+          this.themeSvc.set(res.usuario.tema);
         }),
       );
   }
