@@ -3,8 +3,8 @@
 }
 
 .footer {
-  border-top: 1px solid #e5e7eb;
-  background-color: #ffffff;
+  border-top: 1px solid var(--color-border);
+  background-color: var(--color-surface);
 }
 
 .footer__inner {
@@ -12,6 +12,13 @@
   margin: 0 auto;
   padding: 1rem 1.5rem;
   font-size: 0.8rem;
-  color: #94a3b8;
+  color: var(--color-text-subtle);
   text-align: center;
+}
+
+@media (max-width: 480px) {
+  .footer__inner {
+    padding: 0.85rem 1rem;
+    font-size: 0.75rem;
+  }
 }

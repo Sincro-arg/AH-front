@@ -1,0 +1,92 @@
+<section class="configuracion">
+  <h1>Mi cuenta</h1>
+
+  @if (usuario(); as u) {
+    <form class="configuracion__form" [formGroup]="perfilForm" (ngSubmit)="guardarPerfil()">
+      <h2>Datos personales</h2>
+
+      <label class="configuracion__label" for="cfg-nombre">Nombre</label>
+      <input id="cfg-nombre" class="configuracion__input" type="text" formControlName="nombre" />
+
+      <label class="configuracion__label" for="cfg-apellido">Apellido</label>
+      <input id="cfg-apellido" class="configuracion__input" type="text" formControlName="apellido" />
+
+      <label class="configuracion__label" for="cfg-telefono">Telefono</label>
+      <input id="cfg-telefono" class="configuracion__input" type="tel" formControlName="telefono" />
+
+      <label class="configuracion__label" for="cfg-email">Email</label>
+      <input id="cfg-email" class="configuracion__input" type="email" formControlName="email" />
+
+      @if (perfilError()) {
+        <p class="configuracion__error">{{ perfilError() }}</p>
+      }
+      @if (perfilExito()) {
+        <p class="configuracion__exito">Datos actualizados.</p>
+      }
+
+      <button class="configuracion__submit" type="submit" [disabled]="perfilEnviando()">
+        {{ perfilEnviando() ? 'Guardando...' : 'Guardar cambios' }}
+      </button>
+    </form>
+
+    <form class="configuracion__form" [formGroup]="passwordForm" (ngSubmit)="cambiarPassword()">
+      <h2>Cambiar contrasena</h2>
+
+      <label class="configuracion__label" for="cfg-password-actual">Contrasena actual</label>
+      <input
+        id="cfg-password-actual"
+        class="configuracion__input"
+        type="password"
+        formControlName="passwordActual"
+        autocomplete="current-password"
+      />
+
+      <label class="configuracion__label" for="cfg-password-nueva">Contrasena nueva</label>
+      <input
+        id="cfg-password-nueva"
+        class="configuracion__input"
+        type="password"
+        formControlName="passwordNueva"
+        autocomplete="new-password"
+      />
+
+      @if (passwordError()) {
+        <p class="configuracion__error">{{ passwordError() }}</p>
+      }
+      @if (passwordExito()) {
+        <p class="configuracion__exito">Contrasena actualizada.</p>
+      }
+
+      <button class="configuracion__submit" type="submit" [disabled]="passwordEnviando()">
+        {{ passwordEnviando() ? 'Guardando...' : 'Cambiar contrasena' }}
+      </button>
+    </form>
+
+    <div class="configuracion__tema">
+      <h2>Tema</h2>
+      <div class="configuracion__tema-opciones">
+        <button
+          type="button"
+          class="configuracion__tema-boton"
+          [class.configuracion__tema-boton--activo]="u.tema === 'claro'"
+          [disabled]="temaEnviando()"
+          (click)="cambiarTema('claro')"
+        >
+          Claro
+        </button>
+        <button
+          type="button"
+          class="configuracion__tema-boton"
+          [class.configuracion__tema-boton--activo]="u.tema === 'oscuro'"
+          [disabled]="temaEnviando()"
+          (click)="cambiarTema('oscuro')"
+        >
+          Oscuro
+        </button>
+      </div>
+      @if (temaError()) {
+        <p class="configuracion__error">{{ temaError() }}</p>
+      }
+    </div>
+  }
+</section>

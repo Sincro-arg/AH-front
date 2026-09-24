@@ -1,0 +1,101 @@
+.configuracion {
+  padding: 2rem 1.5rem;
+  max-width: 480px;
+  margin: 0 auto;
+  font-family: system-ui, sans-serif;
+}
+
+.configuracion__form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid #e5e7eb;
+}
+
+.configuracion__form:first-of-type {
+  border-top: none;
+  padding-top: 0;
+  margin-top: 1rem;
+}
+
+.configuracion__label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #1a1412;
+  margin-top: 0.6rem;
+}
+
+.configuracion__input {
+  padding: 0.6rem 0.7rem;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  font-size: 0.95rem;
+}
+
+.configuracion__input:focus {
+  outline: none;
+  border-color: #ee4f23;
+}
+
+.configuracion__error {
+  color: #c0392b;
+  font-size: 0.85rem;
+  margin: 0.4rem 0 0;
+}
+
+.configuracion__exito {
+  color: #2e7d32;
+  font-size: 0.85rem;
+  margin: 0.4rem 0 0;
+}
+
+.configuracion__submit {
+  margin-top: 1.2rem;
+  padding: 0.7rem;
+  border: none;
+  border-radius: 6px;
+  background-color: #ee4f23;
+  color: #fff;
+  font-weight: 600;
+  cursor: pointer;
+  align-self: flex-start;
+}
+
+.configuracion__submit:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+.configuracion__tema {
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid #e5e7eb;
+}
+
+.configuracion__tema-opciones {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 0.6rem;
+}
+
+.configuracion__tema-boton {
+  padding: 0.5rem 1rem;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  background: #fff;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+.configuracion__tema-boton--activo {
+  border-color: #ee4f23;
+  color: #ee4f23;
+  font-weight: 600;
+}
+
+.configuracion__tema-boton:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
