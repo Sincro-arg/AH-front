@@ -1,4 +1,6 @@
 export const environment = {
   production: true,
-  apiUrl: 'http://localhost:5203/api',
+  // Reemplazado en build time por scripts/replace-env.js a partir de la
+  // variable de entorno NG_API_URL (URL real del back desplegado).
+  apiUrl: '%%API_URL%%',
 };
