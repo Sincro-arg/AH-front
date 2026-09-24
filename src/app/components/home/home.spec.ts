@@ -4,6 +4,7 @@ import { HttpTestingController, provideHttpClientTesting } from '@angular/common
 import { provideRouter, Router } from '@angular/router';
 import { environment } from '../../../environments/environment';
 import { Home } from './home';
+import { ThemeService } from '../../services/theme.service';
 
 describe('Home', () => {
   let fixture: ComponentFixture<Home>;
@@ -50,10 +51,25 @@ describe('Home', () => {
     expect(req.request.headers.get('Authorization')).toBe('Bearer un-token-jwt');
     req.flush(usuarioMock);
 
+    // ThemeService.set ya encuentra el token guardado y sincroniza el tema
+    // contra el back; esa request tambien hay que responderla.
+    httpMock.expectOne(`${environment.apiUrl}/usuarios/me/tema`).flush({ tema: usuarioMock.tema });
+
     fixture.detectChanges();
 
     expect(fixture.componentInstance.usuario()?.nombre).toBe('Ana');
     expect(fixture.nativeElement.textContent).toContain('Hola, Ana');
+  });
+
+  it('sincroniza el tema del usuario con ThemeService al restaurar la sesion', () => {
+    const themeService = TestBed.inject(ThemeService);
+    spyOn(themeService, 'set');
+
+    fixture.detectChanges();
+
+    httpMock.expectOne(`${environment.apiUrl}/usuarios/me`).flush(usuarioMock);
+
+    expect(themeService.set).toHaveBeenCalledWith(usuarioMock.tema);
   });
 
   it('muestra un mensaje de error si falla la carga', () => {
@@ -70,6 +86,7 @@ describe('Home', () => {
   it('cerrar sesion borra el token y redirige a login', () => {
     fixture.detectChanges();
     httpMock.expectOne(`${environment.apiUrl}/usuarios/me`).flush(usuarioMock);
+    httpMock.expectOne(`${environment.apiUrl}/usuarios/me/tema`).flush({ tema: usuarioMock.tema });
 
     const navigateSpy = spyOn(router, 'navigate');
 
