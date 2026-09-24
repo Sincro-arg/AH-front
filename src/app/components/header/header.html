@@ -1,0 +1,19 @@
+<header class="header">
+  <div class="header__inner">
+    <a class="header__brand" routerLink="/">AH</a>
+
+    @if (estaLogueado()) {
+      <div class="header__user">
+        <a class="header__user-link" routerLink="/configuracion">
+          {{ usuario()?.nombre }} {{ usuario()?.apellido }}
+        </a>
+        <button class="header__logout" type="button" (click)="logout()">Salir</button>
+      </div>
+    } @else {
+      <nav class="header__nav">
+        <a class="header__nav-link" routerLink="/login">Ingresar</a>
+        <a class="header__nav-link" routerLink="/registro">Registrarme</a>
+      </nav>
+    }
+  </div>
+</header>

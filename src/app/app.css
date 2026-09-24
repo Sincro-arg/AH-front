@@ -1,5 +1,21 @@
 /* estilos globales del shell de la app */
 
+:host {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.app__shell {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.app__main {
+  flex: 1;
+}
+
 .app__connection-error {
   background: #fdecea;
   color: #611a15;
