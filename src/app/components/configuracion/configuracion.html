@@ -58,6 +58,65 @@
   </div>
 
   <div class="config__card">
+    <h2 class="config__subtitle">Cambiar contraseña</h2>
+
+    <form class="config__form" [formGroup]="passwordForm" (ngSubmit)="cambiarPassword()" novalidate>
+      <div class="campo">
+        <label class="campo__label" for="passwordActual">Contraseña actual</label>
+        <input
+          id="passwordActual"
+          type="password"
+          formControlName="passwordActual"
+          autocomplete="current-password"
+        />
+        @if (passwordForm.controls.passwordActual.invalid && passwordForm.controls.passwordActual.touched) {
+          <p class="campo__error">Ingresá tu contraseña actual.</p>
+        }
+      </div>
+
+      <div class="campo">
+        <label class="campo__label" for="passwordNueva">Contraseña nueva</label>
+        <input
+          id="passwordNueva"
+          type="password"
+          formControlName="passwordNueva"
+          autocomplete="new-password"
+        />
+        @if (passwordForm.controls.passwordNueva.touched && passwordForm.controls.passwordNueva.hasError('required')) {
+          <p class="campo__error">La contraseña nueva es obligatoria.</p>
+        }
+        @if (passwordForm.controls.passwordNueva.touched && passwordForm.controls.passwordNueva.hasError('minlength')) {
+          <p class="campo__error">Debe tener al menos 8 caracteres.</p>
+        }
+      </div>
+
+      <div class="campo">
+        <label class="campo__label" for="passwordConfirmacion">Confirmar contraseña nueva</label>
+        <input
+          id="passwordConfirmacion"
+          type="password"
+          formControlName="passwordConfirmacion"
+          autocomplete="new-password"
+        />
+        @if (passwordForm.controls.passwordConfirmacion.touched && passwordForm.hasError('noCoincide')) {
+          <p class="campo__error">Las contraseñas no coinciden.</p>
+        }
+      </div>
+
+      @if (errorPassword()) {
+        <p class="config__mensaje config__mensaje--error" role="alert">{{ errorPassword() }}</p>
+      }
+      @if (exitoPassword()) {
+        <p class="config__mensaje config__mensaje--exito" role="status">{{ exitoPassword() }}</p>
+      }
+
+      <button type="submit" class="config__submit" [disabled]="cambiandoPassword()">
+        {{ cambiandoPassword() ? 'Guardando...' : 'Cambiar contraseña' }}
+      </button>
+    </form>
+  </div>
+
+  <div class="config__card">
     <h2 class="config__subtitle">Apariencia</h2>
 
     <div class="config__row">

@@ -10,6 +10,11 @@ export interface ActualizarPerfilRequest {
   email: string;
 }
 
+export interface CambiarPasswordRequest {
+  passwordActual: string;
+  passwordNueva: string;
+}
+
 @Injectable({ providedIn: 'root' })
 export class UsuariosService {
   private readonly http = inject(HttpClient);
@@ -23,6 +28,12 @@ export class UsuariosService {
 
   actualizarPerfil(datos: ActualizarPerfilRequest) {
     return this.http.put<UsuarioSesion>(`${environment.apiUrl}/usuarios/me`, datos, {
+      headers: this.authHeaders(),
+    });
+  }
+
+  cambiarPassword(datos: CambiarPasswordRequest) {
+    return this.http.put<{ mensaje: string }>(`${environment.apiUrl}/usuarios/me/password`, datos, {
       headers: this.authHeaders(),
     });
   }

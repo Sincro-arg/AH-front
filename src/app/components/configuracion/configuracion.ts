@@ -1,8 +1,20 @@
 import { Component, OnInit, computed, inject, signal } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
-import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import {
+  AbstractControl,
+  FormBuilder,
+  ReactiveFormsModule,
+  ValidationErrors,
+  Validators,
+} from '@angular/forms';
 import { ThemeService } from '../../services/theme.service';
 import { UsuariosService } from '../../services/usuarios.service';
+
+function passwordsCoinciden(control: AbstractControl): ValidationErrors | null {
+  const nueva = control.get('passwordNueva')?.value;
+  const confirmacion = control.get('passwordConfirmacion')?.value;
+  return nueva === confirmacion ? null : { noCoincide: true };
+}
 
 @Component({
   selector: 'app-configuracion',
@@ -29,6 +41,19 @@ export class Configuracion implements OnInit {
     email: ['', [Validators.required, Validators.email]],
     telefono: ['', Validators.required],
   });
+
+  protected readonly cambiandoPassword = signal(false);
+  protected readonly errorPassword = signal<string | null>(null);
+  protected readonly exitoPassword = signal<string | null>(null);
+
+  protected readonly passwordForm = this.fb.nonNullable.group(
+    {
+      passwordActual: ['', Validators.required],
+      passwordNueva: ['', [Validators.required, Validators.minLength(8)]],
+      passwordConfirmacion: ['', Validators.required],
+    },
+    { validators: passwordsCoinciden },
+  );
 
   ngOnInit(): void {
     this.usuariosSvc.getMe().subscribe({
@@ -66,6 +91,35 @@ export class Configuracion implements OnInit {
       error: (err: HttpErrorResponse) => {
         this.guardando.set(false);
         this.error.set(err.error?.error ?? 'No se pudieron guardar los cambios.');
+      },
+    });
+  }
+
+  cambiarPassword(): void {
+    if (this.passwordForm.invalid) {
+      this.passwordForm.markAllAsTouched();
+      return;
+    }
+
+    this.errorPassword.set(null);
+    this.exitoPassword.set(null);
+    this.cambiandoPassword.set(true);
+
+    const { passwordActual, passwordNueva } = this.passwordForm.getRawValue();
+
+    this.usuariosSvc.cambiarPassword({ passwordActual, passwordNueva }).subscribe({
+      next: () => {
+        this.cambiandoPassword.set(false);
+        this.exitoPassword.set('Contraseña actualizada.');
+        this.passwordForm.reset({
+          passwordActual: '',
+          passwordNueva: '',
+          passwordConfirmacion: '',
+        });
+      },
+      error: (err: HttpErrorResponse) => {
+        this.cambiandoPassword.set(false);
+        this.errorPassword.set(err.error?.error ?? 'No se pudo cambiar la contraseña.');
       },
     });
   }

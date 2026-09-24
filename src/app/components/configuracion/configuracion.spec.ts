@@ -101,4 +101,56 @@ describe('Configuracion', () => {
     httpMock.expectNone(`${environment.apiUrl}/usuarios/me`);
     expect(fixture.componentInstance['form'].controls.nombre.touched).toBe(true);
   });
+
+  it('al cambiar la contraseña con exito muestra el mensaje de exito', () => {
+    const pwForm = fixture.componentInstance['passwordForm'];
+    pwForm.controls.passwordActual.setValue('actual123');
+    pwForm.controls.passwordNueva.setValue('nueva12345');
+    pwForm.controls.passwordConfirmacion.setValue('nueva12345');
+
+    fixture.componentInstance['cambiarPassword']();
+
+    const req = httpMock.expectOne(`${environment.apiUrl}/usuarios/me/password`);
+    expect(req.request.method).toBe('PUT');
+    expect(req.request.body).toEqual({
+      passwordActual: 'actual123',
+      passwordNueva: 'nueva12345',
+    });
+    req.flush({ mensaje: 'Contraseña actualizada' });
+    fixture.detectChanges();
+
+    expect(fixture.componentInstance['exitoPassword']()).toBe('Contraseña actualizada.');
+    expect(fixture.componentInstance['errorPassword']()).toBeNull();
+  });
+
+  it('al cambiar la contraseña y fallar muestra el mensaje de error del back', () => {
+    const pwForm = fixture.componentInstance['passwordForm'];
+    pwForm.controls.passwordActual.setValue('incorrecta');
+    pwForm.controls.passwordNueva.setValue('nueva12345');
+    pwForm.controls.passwordConfirmacion.setValue('nueva12345');
+
+    fixture.componentInstance['cambiarPassword']();
+
+    const req = httpMock.expectOne(`${environment.apiUrl}/usuarios/me/password`);
+    req.flush(
+      { error: 'La contraseña actual no es correcta' },
+      { status: 400, statusText: 'Bad Request' },
+    );
+    fixture.detectChanges();
+
+    expect(fixture.componentInstance['errorPassword']()).toBe('La contraseña actual no es correcta');
+    expect(fixture.componentInstance['exitoPassword']()).toBeNull();
+  });
+
+  it('no envia el cambio de contraseña si las contraseñas nuevas no coinciden', () => {
+    const pwForm = fixture.componentInstance['passwordForm'];
+    pwForm.controls.passwordActual.setValue('actual123');
+    pwForm.controls.passwordNueva.setValue('nueva12345');
+    pwForm.controls.passwordConfirmacion.setValue('otra12345');
+
+    fixture.componentInstance['cambiarPassword']();
+
+    httpMock.expectNone(`${environment.apiUrl}/usuarios/me/password`);
+    expect(pwForm.hasError('noCoincide')).toBe(true);
+  });
 });
