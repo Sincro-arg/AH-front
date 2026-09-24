@@ -1,5 +1,5 @@
 import { Injectable, effect, inject, signal } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 
 export type Tema = 'claro' | 'oscuro';
@@ -34,12 +34,18 @@ export class ThemeService {
     const token = localStorage.getItem(TOKEN_KEY);
     if (!token) return;
 
-    this.http.put(`${environment.apiUrl}/usuarios/me/tema`, { tema }).subscribe({
-      error: () => {
-        // Si falla (sin red, sesion vencida, etc.) el tema ya quedo aplicado
-        // y guardado localmente; no hace falta romper la UI por esto.
-      },
-    });
+    this.http
+      .put(
+        `${environment.apiUrl}/usuarios/me/tema`,
+        { tema },
+        { headers: new HttpHeaders({ Authorization: `Bearer ${token}` }) },
+      )
+      .subscribe({
+        error: () => {
+          // Si falla (sin red, sesion vencida, etc.) el tema ya quedo aplicado
+          // y guardado localmente; no hace falta romper la UI por esto.
+        },
+      });
   }
 
   private leerInicial(): Tema {
