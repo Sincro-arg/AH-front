@@ -1,15 +1,17 @@
 <section class="home">
-  <h1>Usuarios de ejemplo</h1>
+  @if (usuario(); as u) {
+    <h1>Hola, {{ u.nombre }}</h1>
+    <p>Bienvenido a tu cuenta.</p>
 
-  @if (cargando()) {
-    <p>Cargando...</p>
-  } @else if (error()) {
-    <p class="home__error">{{ error() }}</p>
-  } @else {
-    <ul class="home__lista">
-      @for (u of usuarios(); track u.id) {
-        <li>{{ u.nombre }} {{ u.apellido }} — {{ u.email }}</li>
-      }
-    </ul>
+    <dl class="home__datos">
+      <dt>Email</dt>
+      <dd>{{ u.email }}</dd>
+      <dt>Telefono</dt>
+      <dd>{{ u.telefono || 'Sin cargar' }}</dd>
+      <dt>Miembro desde</dt>
+      <dd>{{ u.fechaAlta | date: 'longDate' }}</dd>
+    </dl>
+
+    <a class="home__link" routerLink="/configuracion">Editar mi cuenta</a>
   }
 </section>

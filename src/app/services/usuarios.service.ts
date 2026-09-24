@@ -3,13 +3,6 @@ import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { Tema, Usuario } from './auth.service';
 
-export interface DemoUsuario {
-  id: string;
-  nombre: string;
-  apellido: string;
-  email: string;
-}
-
 export interface DatosActualizarPerfil {
   nombre: string;
   apellido: string;
@@ -25,10 +18,6 @@ export interface DatosCambiarPassword {
 @Injectable({ providedIn: 'root' })
 export class UsuariosService {
   private readonly http = inject(HttpClient);
-
-  getDemoUsuarios() {
-    return this.http.get<DemoUsuario[]>(`${environment.apiUrl}/auth/demo-usuarios`);
-  }
 
   obtenerMe() {
     return this.http.get<Usuario>(`${environment.apiUrl}/usuarios/me`);

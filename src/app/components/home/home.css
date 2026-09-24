@@ -22,25 +22,25 @@
   }
 }
 
-.home__error {
-  color: #c0392b;
+.home__datos {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.5rem 1rem;
+  margin: 1.5rem 0;
 }
 
-.home__lista {
-  list-style: none;
-  padding: 0;
+.home__datos dt {
+  font-weight: 600;
+  color: #555;
 }
 
-.home__lista li {
-  padding: 0.5rem 0.5rem 0.5rem 0;
-  border-bottom: 1px solid #eee;
-  border-radius: 6px;
-  transition: background-color .15s ease, padding-left .15s ease;
+.home__datos dd {
+  margin: 0;
 }
 
-.home__lista li:hover {
-  background-color: #f7f7f9;
-  padding-left: 0.75rem;
+.home__link {
+  display: inline-block;
+  margin-top: 1rem;
 }
 
 @media (prefers-reduced-motion: reduce) {

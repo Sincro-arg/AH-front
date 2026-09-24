@@ -1,30 +1,17 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
-import { DemoUsuario, UsuariosService } from '../../services/usuarios.service';
+import { Component, computed, inject } from '@angular/core';
+import { DatePipe } from '@angular/common';
+import { RouterLink } from '@angular/router';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [],
+  imports: [DatePipe, RouterLink],
   templateUrl: './home.html',
   styleUrl: './home.css',
 })
-export class Home implements OnInit {
-  private readonly usuariosSvc = inject(UsuariosService);
+export class Home {
+  private readonly authSvc = inject(AuthService);
 
-  readonly usuarios = signal<DemoUsuario[]>([]);
-  readonly cargando = signal(true);
-  readonly error = signal<string | null>(null);
-
-  ngOnInit(): void {
-    this.usuariosSvc.getDemoUsuarios().subscribe({
-      next: (data) => {
-        this.usuarios.set(data);
-        this.cargando.set(false);
-      },
-      error: () => {
-        this.error.set('No se pudo cargar la lista de usuarios.');
-        this.cargando.set(false);
-      },
-    });
-  }
+  readonly usuario = computed(() => this.authSvc.usuarioActual());
 }
