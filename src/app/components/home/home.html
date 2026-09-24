@@ -1,18 +1,44 @@
 <section class="home">
   <div class="home__header">
-    <h1>Usuarios de ejemplo</h1>
-    <a routerLink="/configuracion" class="home__config-link">Configuración</a>
+    @if (usuario(); as u) {
+      <h1>Hola, {{ u.nombre }}</h1>
+    } @else {
+      <h1>Hola</h1>
+    }
   </div>
 
   @if (cargando()) {
     <p>Cargando...</p>
   } @else if (error()) {
     <p class="home__error">{{ error() }}</p>
-  } @else {
-    <ul class="home__lista">
-      @for (u of usuarios(); track u.id) {
-        <li>{{ u.nombre }} {{ u.apellido }} — {{ u.email }}</li>
-      }
-    </ul>
+  } @else if (usuario(); as u) {
+    <div class="home__card">
+      <h2 class="home__subtitle">Tus datos</h2>
+      <dl class="home__datos">
+        <div class="home__dato">
+          <dt>Nombre</dt>
+          <dd>{{ u.nombre }} {{ u.apellido }}</dd>
+        </div>
+        <div class="home__dato">
+          <dt>Email</dt>
+          <dd>{{ u.email }}</dd>
+        </div>
+        <div class="home__dato">
+          <dt>Teléfono</dt>
+          <dd>{{ u.telefono }}</dd>
+        </div>
+        <div class="home__dato">
+          <dt>Miembro desde</dt>
+          <dd>{{ fechaAlta() }}</dd>
+        </div>
+      </dl>
+    </div>
   }
+
+  <div class="home__acciones">
+    <a routerLink="/configuracion" class="home__boton">Configuración</a>
+    <button type="button" class="home__boton home__boton--salir" (click)="cerrarSesion()">
+      Cerrar sesión
+    </button>
+  </div>
 </section>
