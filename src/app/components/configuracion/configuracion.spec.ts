@@ -3,11 +3,13 @@ import { provideHttpClient } from '@angular/common/http';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideRouter } from '@angular/router';
 import { environment } from '../../../environments/environment';
+import { ThemeService } from '../../services/theme.service';
 import { Configuracion } from './configuracion';
 
 describe('Configuracion', () => {
   let fixture: ComponentFixture<Configuracion>;
   let httpMock: HttpTestingController;
+  let themeSvc: ThemeService;
 
   const meUrl = `${environment.apiUrl}/usuarios/me`;
 
@@ -29,6 +31,7 @@ describe('Configuracion', () => {
 
     fixture = TestBed.createComponent(Configuracion);
     httpMock = TestBed.inject(HttpTestingController);
+    themeSvc = TestBed.inject(ThemeService);
   });
 
   afterEach(() => {
@@ -90,5 +93,19 @@ describe('Configuracion', () => {
     req.flush({ tema: 'oscuro' });
 
     expect(component.usuario()?.tema).toBe('oscuro');
+  });
+
+  it('aplica el tema nuevo con ThemeService al cambiarlo', () => {
+    const setSpy = spyOn(themeSvc, 'set');
+    fixture.detectChanges();
+    httpMock.expectOne(meUrl).flush(usuarioMock);
+
+    const component = fixture.componentInstance;
+    component.cambiarTema('oscuro');
+
+    const req = httpMock.expectOne(`${environment.apiUrl}/usuarios/me/tema`);
+    req.flush({ tema: 'oscuro' });
+
+    expect(setSpy).toHaveBeenCalledWith('oscuro');
   });
 });

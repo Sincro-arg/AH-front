@@ -9,7 +9,19 @@
   --color-surface: #ffffff;
   --color-error: #c0392b;
   --color-success: #2e7d32;
+  --color-bg: #ffffff;
   --font-family-base: system-ui, sans-serif;
+}
+
+:root[data-tema='oscuro'] {
+  --color-text: #f1f5f9;
+  --color-text-muted: #cbd5e1;
+  --color-text-subtle: #94a3b8;
+  --color-border: #334155;
+  --color-surface: #1e293b;
+  --color-error: #f87171;
+  --color-success: #4ade80;
+  --color-bg: #0f172a;
 }
 
 * {
@@ -19,6 +31,8 @@
 body {
   margin: 0;
   font-family: var(--font-family-base);
+  background-color: var(--color-bg);
+  color: var(--color-text);
 }
 
 /* Estados de interactividad globales: cualquier boton, link o campo que se

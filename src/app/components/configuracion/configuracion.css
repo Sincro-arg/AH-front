@@ -11,7 +11,7 @@
   gap: 0.4rem;
   margin-top: 1.5rem;
   padding-top: 1.5rem;
-  border-top: 1px solid #e5e7eb;
+  border-top: 1px solid var(--color-border);
 }
 
 .configuracion__form:first-of-type {
@@ -23,30 +23,32 @@
 .configuracion__label {
   font-size: 0.85rem;
   font-weight: 600;
-  color: #1a1412;
+  color: var(--color-text);
   margin-top: 0.6rem;
 }
 
 .configuracion__input {
   padding: 0.6rem 0.7rem;
-  border: 1px solid #e5e7eb;
+  border: 1px solid var(--color-border);
   border-radius: 6px;
   font-size: 0.95rem;
+  background-color: var(--color-surface);
+  color: var(--color-text);
 }
 
 .configuracion__input:focus {
   outline: none;
-  border-color: #ee4f23;
+  border-color: var(--color-primary);
 }
 
 .configuracion__error {
-  color: #c0392b;
+  color: var(--color-error);
   font-size: 0.85rem;
   margin: 0.4rem 0 0;
 }
 
 .configuracion__exito {
-  color: #2e7d32;
+  color: var(--color-success);
   font-size: 0.85rem;
   margin: 0.4rem 0 0;
 }
@@ -56,7 +58,7 @@
   padding: 0.7rem;
   border: none;
   border-radius: 6px;
-  background-color: #ee4f23;
+  background-color: var(--color-primary);
   color: #fff;
   font-weight: 600;
   cursor: pointer;
@@ -71,7 +73,7 @@
 .configuracion__tema {
   margin-top: 1.5rem;
   padding-top: 1.5rem;
-  border-top: 1px solid #e5e7eb;
+  border-top: 1px solid var(--color-border);
 }
 
 .configuracion__tema-opciones {
@@ -82,16 +84,17 @@
 
 .configuracion__tema-boton {
   padding: 0.5rem 1rem;
-  border: 1px solid #e5e7eb;
+  border: 1px solid var(--color-border);
   border-radius: 6px;
-  background: #fff;
+  background: var(--color-surface);
+  color: var(--color-text);
   cursor: pointer;
   font-size: 0.9rem;
 }
 
 .configuracion__tema-boton--activo {
-  border-color: #ee4f23;
-  color: #ee4f23;
+  border-color: var(--color-primary);
+  color: var(--color-primary);
   font-weight: 600;
 }
 

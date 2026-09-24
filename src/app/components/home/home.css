@@ -31,7 +31,7 @@
 
 .home__datos dt {
   font-weight: 600;
-  color: #555;
+  color: var(--color-text-muted);
 }
 
 .home__datos dd {

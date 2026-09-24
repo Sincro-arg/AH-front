@@ -3,6 +3,7 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { HttpErrorResponse } from '@angular/common/http';
 import { AuthService, Tema, Usuario } from '../../services/auth.service';
 import { UsuariosService } from '../../services/usuarios.service';
+import { ThemeService } from '../../services/theme.service';
 
 @Component({
   selector: 'app-configuracion',
@@ -15,6 +16,7 @@ export class Configuracion implements OnInit {
   private readonly fb = inject(FormBuilder);
   private readonly authSvc = inject(AuthService);
   private readonly usuariosSvc = inject(UsuariosService);
+  private readonly themeSvc = inject(ThemeService);
 
   readonly usuario = signal<Usuario | null>(null);
 
@@ -119,6 +121,7 @@ export class Configuracion implements OnInit {
           this.usuario.set(actualizado);
           this.authSvc.actualizarUsuarioActual(actualizado);
         }
+        this.themeSvc.set(tema);
         this.temaEnviando.set(false);
       },
       error: (err: HttpErrorResponse) => {
