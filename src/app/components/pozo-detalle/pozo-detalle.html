@@ -82,6 +82,9 @@
 
     <section class="pozo-detalle__inversiones">
       <h2 class="pozo-detalle__subtitulo">Inversores</h2>
+      @if (eliminarError(); as errElim) {
+        <p class="pozo-detalle__alerta" role="alert">{{ errElim }}</p>
+      }
       @if (p.inversiones.length === 0) {
         <p class="pozo-detalle__inversiones-vacio">Todavia no hay inversiones en este pozo.</p>
       } @else {
@@ -91,10 +94,113 @@
               <span class="pozo-detalle__item-nombre">{{ inv.nombreInversor }}</span>
               <span class="pozo-detalle__item-monto">{{ formatoMonto(inv.monto) }}</span>
               <span class="pozo-detalle__item-fecha">{{ formatoFecha(inv.fecha) }}</span>
+              @if (esMia(inv) && p.estado === 'Abierto') {
+                <div class="pozo-detalle__item-acciones">
+                  <button type="button" class="pozo-detalle__item-editar" (click)="abrirEditarInversion(inv)">
+                    Editar
+                  </button>
+                  <button type="button" class="pozo-detalle__item-eliminar" (click)="eliminarInversion(inv)">
+                    Eliminar
+                  </button>
+                </div>
+              }
             </li>
           }
         </ul>
       }
     </section>
+  }
+
+  @if (editandoInversion(); as invEditando) {
+    <div class="pozo-detalle__overlay" (click)="cerrarEditarInversion()">
+      <div
+        #editInversionModal
+        class="pozo-detalle__modal"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="inversion-edit-titulo"
+        (click)="$event.stopPropagation()"
+        (keydown)="onEditModalKeydown($event)"
+      >
+        <header class="pozo-detalle__modal-hd">
+          <h2 id="inversion-edit-titulo" class="pozo-detalle__modal-titulo">Editar inversion</h2>
+          <button type="button" class="pozo-detalle__modal-cerrar" (click)="cerrarEditarInversion()" aria-label="Cerrar">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" width="18" height="18">
+              <path d="M18 6 6 18M6 6l12 12" />
+            </svg>
+          </button>
+        </header>
+
+        <form class="pozo-detalle__form" [formGroup]="editForm" (ngSubmit)="guardarInversion()">
+          <label class="pozo-detalle__label" for="inversion-edit-monto">Monto</label>
+          <input
+            id="inversion-edit-monto"
+            class="pozo-detalle__input"
+            type="number"
+            min="1"
+            formControlName="monto"
+          />
+          @if (editError()) {
+            <p class="pozo-detalle__form-error" role="alert">{{ editError() }}</p>
+          }
+          @if (editExito()) {
+            <p class="pozo-detalle__form-exito" role="status">Inversion actualizada correctamente.</p>
+          }
+
+          <footer class="pozo-detalle__modal-footer">
+            <button type="button" class="pozo-detalle__modal-cancelar" (click)="cerrarEditarInversion()">
+              Cancelar
+            </button>
+            <button type="submit" class="pozo-detalle__modal-guardar" [disabled]="editEnviando()">
+              {{ editEnviando() ? 'Guardando...' : 'Guardar' }}
+            </button>
+          </footer>
+        </form>
+      </div>
+    </div>
+  }
+
+  @if (eliminarObjetivo(); as invAEliminar) {
+    <div class="pozo-detalle__overlay" (click)="cancelarEliminarInversion()">
+      <div
+        #confirmEliminarInversionModal
+        class="pozo-detalle__modal"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="inversion-confirm-titulo"
+        (click)="$event.stopPropagation()"
+        (keydown)="onEliminarModalKeydown($event)"
+      >
+        <header class="pozo-detalle__modal-hd">
+          <h2 id="inversion-confirm-titulo" class="pozo-detalle__modal-titulo">Eliminar inversion</h2>
+          <button
+            type="button"
+            class="pozo-detalle__modal-cerrar"
+            (click)="cancelarEliminarInversion()"
+            aria-label="Cerrar"
+          >
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" width="18" height="18">
+              <path d="M18 6 6 18M6 6l12 12" />
+            </svg>
+          </button>
+        </header>
+
+        <div class="pozo-detalle__modal-body">
+          <p>
+            Se va a eliminar tu inversion de {{ formatoMonto(invAEliminar.monto) }}. Esta accion no se puede
+            deshacer. ¿Queres continuar?
+          </p>
+        </div>
+
+        <footer class="pozo-detalle__modal-footer">
+          <button type="button" class="pozo-detalle__modal-cancelar" (click)="cancelarEliminarInversion()">
+            Cancelar
+          </button>
+          <button type="button" class="pozo-detalle__modal-confirmar" (click)="confirmarEliminarInversion()">
+            Eliminar
+          </button>
+        </footer>
+      </div>
+    </div>
   }
 </section>

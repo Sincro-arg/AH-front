@@ -36,4 +36,10 @@ export const routes: Routes = [
       import('./components/configuracion/configuracion').then((m) => m.Configuracion),
     canActivate: [authGuard],
   },
+  {
+    path: 'mis-inversiones',
+    loadComponent: () =>
+      import('./components/mis-inversiones/mis-inversiones').then((m) => m.MisInversiones),
+    canActivate: [authGuard],
+  },
 ];

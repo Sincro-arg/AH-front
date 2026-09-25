@@ -1,0 +1,179 @@
+.mis-inversiones {
+  padding: 1.5rem 1rem 2.5rem;
+  max-width: 960px;
+  margin: 0 auto;
+}
+
+.mis-inversiones__header {
+  margin-bottom: 1.5rem;
+}
+
+.mis-inversiones__titulo {
+  margin: 0 0 0.25rem;
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: var(--color-text);
+  letter-spacing: -0.02em;
+}
+
+.mis-inversiones__sub {
+  margin: 0;
+  color: var(--color-text-muted);
+}
+
+/* ── Estados: cargando / error / vacio ── */
+.mis-inversiones__cargando {
+  color: var(--color-text-muted);
+  padding: 2rem 0;
+}
+
+.mis-inversiones__estado {
+  padding: 1.5rem;
+  border-radius: 4px 14px 4px 14px;
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+  text-align: center;
+}
+
+.mis-inversiones__estado--error {
+  border-color: rgba(192, 57, 43, 0.3);
+}
+
+.mis-inversiones__estado--error p {
+  margin: 0 0 0.75rem;
+  color: var(--color-error);
+}
+
+.mis-inversiones__estado--vacio p {
+  margin: 0 0 0.75rem;
+  color: var(--color-text-muted);
+}
+
+.mis-inversiones__reintentar {
+  border: none;
+  border-radius: 999px;
+  padding: 0.5rem 1.25rem;
+  font-weight: 600;
+  color: #fff;
+  background: var(--color-primary);
+}
+
+.mis-inversiones__ir-pozos {
+  display: inline-block;
+  color: var(--color-primary);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.mis-inversiones__ir-pozos:hover {
+  text-decoration: underline;
+}
+
+/* ── Lista de inversiones ── */
+.mis-inversiones__lista {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 1rem;
+}
+
+.inversion-card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 4px 14px 4px 14px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.inversion-card:hover {
+  transform: translateY(-2px);
+  border-color: rgba(238, 79, 35, 0.4);
+  box-shadow: 0 10px 22px -14px rgba(238, 79, 35, 0.4);
+}
+
+.inversion-card__link {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding: 1.1rem 1.2rem;
+  color: inherit;
+  text-decoration: none;
+}
+
+.inversion-card__hd {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.6rem;
+}
+
+.inversion-card__titulo {
+  margin: 0;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--color-text);
+}
+
+.inversion-card__estado {
+  flex-shrink: 0;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  padding: 3px 10px;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+
+.inversion-card__estado--abierto {
+  color: var(--color-success);
+  background: rgba(46, 125, 50, 0.12);
+  border: 1px solid rgba(46, 125, 50, 0.25);
+}
+
+.inversion-card__estado--comprado {
+  color: var(--color-primary);
+  background: rgba(238, 79, 35, 0.1);
+  border: 1px solid rgba(238, 79, 35, 0.25);
+}
+
+.inversion-card__estado--vendido {
+  color: var(--color-text-muted);
+  background: color-mix(in srgb, var(--color-text-muted) 12%, transparent);
+  border: 1px solid color-mix(in srgb, var(--color-text-muted) 25%, transparent);
+}
+
+.inversion-card__datos {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.9rem;
+}
+
+.inversion-card__dato {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.inversion-card__dato-label {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: var(--color-text-muted);
+}
+
+.inversion-card__dato-valor {
+  font-weight: 700;
+  color: var(--color-text);
+}
+
+.inversion-card__dato-valor--ganancia {
+  color: var(--color-success);
+}
+
+@media (max-width: 480px) {
+  .mis-inversiones__lista {
+    grid-template-columns: 1fr;
+  }
+}
