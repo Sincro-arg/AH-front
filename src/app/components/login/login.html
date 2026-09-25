@@ -1,39 +1,78 @@
-<section class="login">
-  <h1>Ingresar</h1>
+<section class="login-page">
+  <div class="login-page__panel" aria-hidden="true">
+    <div class="login-page__panel-bg">
+      <span class="login-page__blob login-page__blob--1"></span>
+      <span class="login-page__blob login-page__blob--2"></span>
+    </div>
 
-  @if (cuentaCreada()) {
-    <p class="login__exito">Cuenta creada con exito. Ya podes ingresar.</p>
-  }
+    <div class="login-page__panel-content">
+      <span class="login-page__brand">
+        <svg class="login-page__brand-logo" viewBox="0 0 32 32" fill="none" focusable="false">
+          <rect x="1" y="1" width="30" height="30" rx="9" fill="var(--color-primary)" />
+          <text x="16" y="21.5" text-anchor="middle" font-family="Inter, sans-serif" font-size="13" font-weight="800" fill="#fff">AH</text>
+        </svg>
+        Account Hub
+      </span>
+      <p class="login-page__tagline">Todos tus datos de cuenta, en un solo lugar.</p>
 
-  <form class="login__form" [formGroup]="form" (ngSubmit)="onSubmit()">
-    <label class="login__label" for="login-email">Email</label>
-    <input
-      id="login-email"
-      class="login__input"
-      type="email"
-      formControlName="email"
-      autocomplete="email"
-    />
+      <svg class="login-page__illustration" viewBox="0 0 240 180" fill="none">
+        <circle cx="120" cy="90" r="46" fill="var(--color-primary)" opacity="0.12" />
+        <circle cx="120" cy="90" r="30" stroke="var(--color-primary)" stroke-width="3" opacity="0.35" />
+        <path
+          d="M40 150c26-34 60-51 80-51s54 17 80 51"
+          stroke="var(--color-primary)"
+          stroke-width="3"
+          stroke-linecap="round"
+          opacity="0.25"
+        />
+        <path
+          d="M70 150c18-22 38-33 50-33s32 11 50 33"
+          stroke="var(--color-primary)"
+          stroke-width="3"
+          stroke-linecap="round"
+          opacity="0.45"
+        />
+      </svg>
+    </div>
+  </div>
 
-    <label class="login__label" for="login-password">Contrasena</label>
-    <input
-      id="login-password"
-      class="login__input"
-      type="password"
-      formControlName="password"
-      autocomplete="current-password"
-    />
+  <div class="login-page__card">
+    <h1>Ingresar</h1>
 
-    @if (error()) {
-      <p class="login__error">{{ error() }}</p>
+    @if (cuentaCreada()) {
+      <p class="login__exito">Cuenta creada con exito. Ya podes ingresar.</p>
     }
 
-    <button class="login__submit" type="submit" [disabled]="enviando()">
-      {{ enviando() ? 'Ingresando...' : 'Ingresar' }}
-    </button>
-  </form>
+    <form class="login__form" [formGroup]="form" (ngSubmit)="onSubmit()">
+      <label class="login__label" for="login-email">Email</label>
+      <input
+        id="login-email"
+        class="login__input"
+        type="email"
+        formControlName="email"
+        autocomplete="email"
+      />
 
-  <p class="login__footer">
-    Todavia no tenes cuenta? <a routerLink="/registro">Registrate</a>
-  </p>
+      <label class="login__label" for="login-password">Contrasena</label>
+      <input
+        id="login-password"
+        class="login__input"
+        type="password"
+        formControlName="password"
+        autocomplete="current-password"
+      />
+
+      @if (error()) {
+        <p class="login__error">{{ error() }}</p>
+      }
+
+      <button class="login__submit" type="submit" [disabled]="enviando()">
+        {{ enviando() ? 'Ingresando...' : 'Ingresar' }}
+      </button>
+    </form>
+
+    <p class="login__footer">
+      Todavia no tenes cuenta? <a routerLink="/registro">Registrate</a>
+    </p>
+  </div>
 </section>
