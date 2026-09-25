@@ -70,7 +70,10 @@ export class AuthService {
   /** Trae el usuario autenticado con el token guardado, para restaurar sesion al recargar. */
   private cargarUsuarioActual(): void {
     this.http.get<Usuario>(`${environment.apiUrl}/usuarios/me`).subscribe({
-      next: (usuario) => this.usuarioActual.set(usuario),
+      next: (usuario) => {
+        this.usuarioActual.set(usuario);
+        this.themeSvc.set(usuario.tema);
+      },
       error: () => this.limpiarSesion(),
     });
   }
