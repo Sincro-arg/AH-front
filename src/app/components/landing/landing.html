@@ -33,19 +33,4 @@
       <p class="landing__paso-texto">Cuando el auto se vende, la ganancia se reparte entre los inversores segun lo que puso cada uno.</p>
     </div>
   </div>
-
-  <p class="landing__estado" [class.landing__estado--ok]="estadoConexion() === 'conectado'"
-     [class.landing__estado--error]="estadoConexion() === 'sinConexion'">
-    @switch (estadoConexion()) {
-      @case ('conectado') {
-        Servidor conectado ({{ cantidadPozos() }} {{ haySoloUnPozo() ? 'pozo' : 'pozos' }})
-      }
-      @case ('sinConexion') {
-        Sin conexion
-      }
-      @default {
-        Verificando conexion...
-      }
-    }
-  </p>
 </section>
