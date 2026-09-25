@@ -14,7 +14,6 @@ export const routes: Routes = [
   {
     path: 'pozos',
     loadComponent: () => import('./components/pozos/pozos').then((m) => m.Pozos),
-    canActivate: [authGuard],
   },
   {
     path: 'pozos/:id',

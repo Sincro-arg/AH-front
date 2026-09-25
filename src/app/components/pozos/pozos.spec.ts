@@ -3,6 +3,7 @@ import { provideHttpClient } from '@angular/common/http';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideRouter } from '@angular/router';
 import { environment } from '../../../environments/environment';
+import { routes } from '../../app.routes';
 import { Pozo } from '../../services/pozos.service';
 import { Pozos } from './pozos';
 
@@ -230,6 +231,14 @@ describe('Pozos', () => {
       expect(comp.eliminarError()).toBe('No se puede eliminar un pozo con inversiones.');
       expect(comp.eliminarEnviando()).toBeFalse();
       expect(comp.pozos()).toEqual([pozoMock]);
+    });
+  });
+
+  describe('ruta /pozos', () => {
+    it('es accesible sin usuario logueado, sin authGuard', () => {
+      const rutaPozos = routes.find((r) => r.path === 'pozos');
+      expect(rutaPozos).toBeTruthy();
+      expect(rutaPozos?.canActivate).toBeUndefined();
     });
   });
 });
