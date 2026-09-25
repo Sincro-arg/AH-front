@@ -31,7 +31,10 @@ describe('Registro', () => {
   });
 
   it('no envia el formulario si es invalido', () => {
-    fixture.componentInstance.onSubmit();
+    const component = fixture.componentInstance;
+    component.onSubmit();
+
+    expect(component.form.invalid).toBeTrue();
     httpMock.expectNone(`${environment.apiUrl}/auth/register`);
   });
 
