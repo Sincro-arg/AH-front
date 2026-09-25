@@ -109,6 +109,32 @@
           @if (temaError()) {
             <p class="config__error">{{ temaError() }}</p>
           }
+          @if (temaExito()) {
+            <p class="config__exito">Tema actualizado.</p>
+          }
+        </div>
+
+        <div class="config__notificaciones">
+          <label class="config__toggle" for="cfg-notificaciones">
+            <input
+              id="cfg-notificaciones"
+              class="config__toggle-input"
+              type="checkbox"
+              [checked]="u.notificacionesEmail"
+              [disabled]="notifEnviando()"
+              (change)="cambiarNotificaciones($event)"
+            />
+            <span class="config__toggle-track" aria-hidden="true">
+              <span class="config__toggle-thumb"></span>
+            </span>
+            <span class="config__toggle-texto">Recibir novedades por email</span>
+          </label>
+          @if (notifError()) {
+            <p class="config__error">{{ notifError() }}</p>
+          }
+          @if (notifExito()) {
+            <p class="config__exito">Preferencia actualizada.</p>
+          }
         </div>
       </article>
 

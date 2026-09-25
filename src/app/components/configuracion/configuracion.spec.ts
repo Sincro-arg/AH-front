@@ -173,6 +173,54 @@ describe('Configuracion', () => {
     expect(component.usuario()?.tema).toBe('claro');
   });
 
+  it('muestra la confirmacion al cambiar el tema con exito', () => {
+    fixture.detectChanges();
+    httpMock.expectOne(meUrl).flush(usuarioMock);
+
+    const component = fixture.componentInstance;
+    component.cambiarTema('oscuro');
+
+    const req = httpMock.expectOne(`${environment.apiUrl}/usuarios/me/tema`);
+    req.flush({ tema: 'oscuro' });
+
+    expect(component.temaExito()).toBeTrue();
+  });
+
+  it('cambia la preferencia de notificaciones por email', () => {
+    fixture.detectChanges();
+    httpMock.expectOne(meUrl).flush(usuarioMock);
+
+    const component = fixture.componentInstance;
+    const checkbox = { checked: false } as unknown as HTMLInputElement;
+    const evento = { target: checkbox } as unknown as Event;
+    component.cambiarNotificaciones(evento);
+
+    const req = httpMock.expectOne(`${environment.apiUrl}/usuarios/me/notificaciones`);
+    expect(req.request.method).toBe('PUT');
+    expect(req.request.body).toEqual({ notificacionesEmail: false });
+    req.flush({ notificacionesEmail: false });
+
+    expect(component.usuario()?.notificacionesEmail).toBeFalse();
+    expect(component.notifExito()).toBeTrue();
+  });
+
+  it('revierte el checkbox y muestra un error si falla el cambio de notificaciones', () => {
+    fixture.detectChanges();
+    httpMock.expectOne(meUrl).flush(usuarioMock);
+
+    const component = fixture.componentInstance;
+    const checkbox = { checked: false } as unknown as HTMLInputElement;
+    const evento = { target: checkbox } as unknown as Event;
+    component.cambiarNotificaciones(evento);
+
+    const req = httpMock.expectOne(`${environment.apiUrl}/usuarios/me/notificaciones`);
+    req.flush({ error: 'No se pudo actualizar' }, { status: 400, statusText: 'Bad Request' });
+
+    expect(component.notifError()).toBe('No se pudo actualizar');
+    expect(component.notifEnviando()).toBeFalse();
+    expect(checkbox.checked).toBeTrue();
+  });
+
   it('elimina la cuenta y cierra sesion si el usuario confirma', () => {
     spyOn(window, 'confirm').and.returnValue(true);
     const router = TestBed.inject(Router);

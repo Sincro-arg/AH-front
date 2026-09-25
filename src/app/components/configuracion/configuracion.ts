@@ -53,6 +53,11 @@ export class Configuracion implements OnInit {
 
   readonly temaEnviando = signal(false);
   readonly temaError = signal<string | null>(null);
+  readonly temaExito = signal(false);
+
+  readonly notifEnviando = signal(false);
+  readonly notifError = signal<string | null>(null);
+  readonly notifExito = signal(false);
 
   readonly eliminarEnviando = signal(false);
   readonly eliminarError = signal<string | null>(null);
@@ -134,6 +139,7 @@ export class Configuracion implements OnInit {
 
     this.temaEnviando.set(true);
     this.temaError.set(null);
+    this.temaExito.set(false);
 
     this.usuariosSvc.cambiarTema(tema).subscribe({
       next: ({ tema }) => {
@@ -145,10 +151,43 @@ export class Configuracion implements OnInit {
         }
         this.themeSvc.set(tema);
         this.temaEnviando.set(false);
+        this.temaExito.set(true);
       },
       error: (err: HttpErrorResponse) => {
         this.temaError.set(err.error?.error ?? 'No se pudo cambiar el tema.');
         this.temaEnviando.set(false);
+      },
+    });
+  }
+
+  cambiarNotificaciones(event: Event): void {
+    const checkbox = event.target as HTMLInputElement;
+    const valor = checkbox.checked;
+
+    if (this.notifEnviando()) {
+      checkbox.checked = !valor;
+      return;
+    }
+
+    this.notifEnviando.set(true);
+    this.notifError.set(null);
+    this.notifExito.set(false);
+
+    this.usuariosSvc.cambiarNotificaciones(valor).subscribe({
+      next: ({ notificacionesEmail }) => {
+        const actual = this.usuario();
+        if (actual) {
+          const actualizado = { ...actual, notificacionesEmail };
+          this.usuario.set(actualizado);
+          this.authSvc.actualizarUsuarioActual(actualizado);
+        }
+        this.notifEnviando.set(false);
+        this.notifExito.set(true);
+      },
+      error: (err: HttpErrorResponse) => {
+        checkbox.checked = !valor;
+        this.notifError.set(err.error?.error ?? 'No se pudo actualizar la preferencia.');
+        this.notifEnviando.set(false);
       },
     });
   }
