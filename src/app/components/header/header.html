@@ -23,6 +23,10 @@
     </a>
 
     @if (estaLogueado()) {
+      <nav class="header__nav">
+        <a class="header__nav-link" routerLink="/pozos">Pozos</a>
+      </nav>
+
       <div class="header__user">
         <span class="header__date">{{ fechaHoy() }}</span>
         <a class="header__user-link" routerLink="/configuracion">

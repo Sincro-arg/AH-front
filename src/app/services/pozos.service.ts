@@ -18,11 +18,27 @@ export interface Pozo {
   fechaVenta: string | null;
 }
 
+export interface InversionResumen {
+  id: string;
+  usuarioId: string;
+  nombreInversor: string;
+  monto: number;
+  fecha: string;
+}
+
+export interface PozoDetalle extends Pozo {
+  inversiones: InversionResumen[];
+}
+
 @Injectable({ providedIn: 'root' })
 export class PozosService {
   private readonly http = inject(HttpClient);
 
   listar() {
     return this.http.get<Pozo[]>(`${environment.apiUrl}/pozos`);
+  }
+
+  obtener(id: string) {
+    return this.http.get<PozoDetalle>(`${environment.apiUrl}/pozos/${id}`);
   }
 }

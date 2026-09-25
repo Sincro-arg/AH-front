@@ -12,6 +12,11 @@ export const routes: Routes = [
     canActivate: [authGuard],
   },
   {
+    path: 'pozos',
+    loadComponent: () => import('./components/pozos/pozos').then((m) => m.Pozos),
+    canActivate: [authGuard],
+  },
+  {
     path: 'login',
     loadComponent: () => import('./components/login/login').then((m) => m.Login),
   },

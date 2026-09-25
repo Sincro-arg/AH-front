@@ -1,0 +1,51 @@
+<section class="pozos">
+  <header class="pozos__header">
+    <h1 class="pozos__titulo">Pozos</h1>
+    <p class="pozos__sub">Los autos que estan en pozo ahora.</p>
+  </header>
+
+  @if (cargando()) {
+    <div class="pozos__cargando">
+      <app-spinner texto="Cargando pozos..." />
+    </div>
+  } @else if (error(); as msg) {
+    <div class="pozos__estado pozos__estado--error" role="alert">
+      <p>{{ msg }}</p>
+      <button type="button" class="pozos__reintentar" (click)="reintentar()">Reintentar</button>
+    </div>
+  } @else if (pozos().length === 0) {
+    <div class="pozos__estado pozos__estado--vacio">
+      <p>Todavia no hay pozos cargados.</p>
+    </div>
+  } @else {
+    <div class="pozos__grid">
+      @for (pozo of pozos(); track pozo.id) {
+        <article class="pozo-card">
+          <div class="pozo-card__hd">
+            <h2 class="pozo-card__titulo">{{ pozo.titulo }}</h2>
+            <span
+              class="pozo-card__estado"
+              [class.pozo-card__estado--abierto]="pozo.estado === 'Abierto'"
+              [class.pozo-card__estado--comprado]="pozo.estado === 'Comprado'"
+              [class.pozo-card__estado--vendido]="pozo.estado === 'Vendido'"
+            >
+              {{ pozo.estado }}
+            </span>
+          </div>
+
+          <p class="pozo-card__auto">{{ pozo.autoDescripcion }}</p>
+
+          <div class="pozo-card__progreso">
+            <div class="pozo-card__barra">
+              <div class="pozo-card__barra-relleno" [style.width.%]="progreso(pozo)"></div>
+            </div>
+            <div class="pozo-card__montos">
+              <span>{{ formatoMonto(pozo.montoRecaudado) }}</span>
+              <span class="pozo-card__monto-objetivo">de {{ formatoMonto(pozo.montoObjetivo) }}</span>
+            </div>
+          </div>
+        </article>
+      }
+    </div>
+  }
+</section>
