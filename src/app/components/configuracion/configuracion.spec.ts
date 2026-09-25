@@ -78,6 +78,26 @@ describe('Configuracion', () => {
     expect(component.perfilExito()).toBeTrue();
   });
 
+  it('muestra un error si falla el guardado del perfil', () => {
+    fixture.detectChanges();
+    httpMock.expectOne(meUrl).flush(usuarioMock);
+
+    const component = fixture.componentInstance;
+    component.perfilForm.setValue({
+      nombre: 'Ana',
+      apellido: 'Gomez',
+      telefono: '5599887766',
+      email: 'ana@test.com',
+    });
+    component.guardarPerfil();
+
+    const req = httpMock.expectOne(meUrl);
+    req.flush({ error: 'No se pudo actualizar' }, { status: 400, statusText: 'Bad Request' });
+
+    expect(component.perfilError()).toBe('No se pudo actualizar');
+    expect(component.perfilEnviando()).toBeFalse();
+  });
+
   it('cambia la contrasena', () => {
     fixture.detectChanges();
     httpMock.expectOne(meUrl).flush(usuarioMock);
@@ -91,6 +111,21 @@ describe('Configuracion', () => {
     req.flush({ mensaje: 'Contraseña actualizada' });
 
     expect(component.passwordExito()).toBeTrue();
+  });
+
+  it('muestra un error si falla el cambio de contrasena', () => {
+    fixture.detectChanges();
+    httpMock.expectOne(meUrl).flush(usuarioMock);
+
+    const component = fixture.componentInstance;
+    component.passwordForm.setValue({ passwordActual: 'vieja1234', passwordNueva: 'nueva1234' });
+    component.cambiarPassword();
+
+    const req = httpMock.expectOne(`${environment.apiUrl}/usuarios/me/password`);
+    req.flush({ error: 'La contraseña actual es incorrecta' }, { status: 400, statusText: 'Bad Request' });
+
+    expect(component.passwordError()).toBe('La contraseña actual es incorrecta');
+    expect(component.passwordEnviando()).toBeFalse();
   });
 
   it('cambia el tema', () => {
@@ -119,6 +154,21 @@ describe('Configuracion', () => {
     req.flush({ tema: 'oscuro' });
 
     expect(setSpy).toHaveBeenCalledWith('oscuro');
+  });
+
+  it('muestra un error si falla el cambio de tema', () => {
+    fixture.detectChanges();
+    httpMock.expectOne(meUrl).flush(usuarioMock);
+
+    const component = fixture.componentInstance;
+    component.cambiarTema('oscuro');
+
+    const req = httpMock.expectOne(`${environment.apiUrl}/usuarios/me/tema`);
+    req.flush({ error: 'No se pudo cambiar' }, { status: 400, statusText: 'Bad Request' });
+
+    expect(component.temaError()).toBe('No se pudo cambiar');
+    expect(component.temaEnviando()).toBeFalse();
+    expect(component.usuario()?.tema).toBe('claro');
   });
 
   it('elimina la cuenta y cierra sesion si el usuario confirma', () => {
