@@ -46,6 +46,18 @@ describe('Configuracion', () => {
     expect(fixture.componentInstance.perfilForm.value.nombre).toBe('Ana');
   });
 
+  it('muestra un error y deja de cargar si falla obtenerMe', () => {
+    fixture.detectChanges();
+    expect(fixture.componentInstance.meCargando()).toBeTrue();
+
+    const req = httpMock.expectOne(meUrl);
+    req.flush({ error: 'No se pudo cargar' }, { status: 500, statusText: 'Server Error' });
+
+    expect(fixture.componentInstance.meCargando()).toBeFalse();
+    expect(fixture.componentInstance.meError()).toBe('No se pudo cargar');
+    expect(fixture.componentInstance.usuario()).toBeNull();
+  });
+
   it('guarda el perfil actualizado', () => {
     fixture.detectChanges();
     httpMock.expectOne(meUrl).flush(usuarioMock);

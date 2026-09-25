@@ -1,6 +1,12 @@
 <section class="configuracion">
   <h1>Mi cuenta</h1>
 
+  @if (meCargando()) {
+    <p class="configuracion__cargando">Cargando...</p>
+  } @else if (meError()) {
+    <p class="configuracion__error">{{ meError() }}</p>
+  }
+
   @if (usuario(); as u) {
     <form class="configuracion__form" [formGroup]="perfilForm" (ngSubmit)="guardarPerfil()">
       <h2>Datos personales</h2>

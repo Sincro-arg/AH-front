@@ -46,6 +46,9 @@ export class Configuracion implements OnInit {
   readonly eliminarEnviando = signal(false);
   readonly eliminarError = signal<string | null>(null);
 
+  readonly meCargando = signal(true);
+  readonly meError = signal<string | null>(null);
+
   ngOnInit(): void {
     this.usuariosSvc.obtenerMe().subscribe({
       next: (usuario) => {
@@ -57,6 +60,11 @@ export class Configuracion implements OnInit {
           telefono: usuario.telefono,
           email: usuario.email,
         });
+        this.meCargando.set(false);
+      },
+      error: (err: HttpErrorResponse) => {
+        this.meError.set(err.error?.error ?? 'No se pudo cargar tu cuenta.');
+        this.meCargando.set(false);
       },
     });
   }
