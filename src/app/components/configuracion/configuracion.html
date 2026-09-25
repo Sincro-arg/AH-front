@@ -174,4 +174,45 @@
       </article>
     </div>
   }
+
+  @if (confirmEliminarVisible()) {
+    <div class="config__overlay" (click)="cancelarEliminarCuenta()">
+      <div
+        #confirmEliminarModal
+        class="config__modal"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="cfg-confirm-titulo"
+        (click)="$event.stopPropagation()"
+        (keydown)="onModalKeydown($event)"
+      >
+        <header class="config__modal-hd">
+          <h2 id="cfg-confirm-titulo" class="config__modal-titulo">Eliminar cuenta</h2>
+          <button
+            type="button"
+            class="config__modal-cerrar"
+            (click)="cancelarEliminarCuenta()"
+            aria-label="Cerrar"
+          >
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" width="18" height="18">
+              <path d="M18 6 6 18M6 6l12 12" />
+            </svg>
+          </button>
+        </header>
+
+        <div class="config__modal-body">
+          <p>Esta accion es irreversible: se va a borrar tu cuenta y todos tus datos. ¿Queres continuar?</p>
+        </div>
+
+        <footer class="config__modal-footer">
+          <button type="button" class="config__modal-cancelar" (click)="cancelarEliminarCuenta()">
+            Cancelar
+          </button>
+          <button type="button" class="config__modal-confirmar" (click)="confirmarEliminarCuenta()">
+            Eliminar cuenta
+          </button>
+        </footer>
+      </div>
+    </div>
+  }
 </section>

@@ -1,4 +1,4 @@
-import { Component, computed, inject, OnInit, signal } from '@angular/core';
+import { Component, computed, ElementRef, HostListener, inject, OnInit, signal, ViewChild } from '@angular/core';
 import { DatePipe } from '@angular/common';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { HttpErrorResponse } from '@angular/common/http';
@@ -61,6 +61,10 @@ export class Configuracion implements OnInit {
 
   readonly eliminarEnviando = signal(false);
   readonly eliminarError = signal<string | null>(null);
+  readonly confirmEliminarVisible = signal(false);
+
+  @ViewChild('confirmEliminarModal') private confirmEliminarModalRef?: ElementRef<HTMLElement>;
+  private elementoConFocoPrevio: HTMLElement | null = null;
 
   readonly meCargando = signal(true);
   readonly meError = signal<string | null>(null);
@@ -197,13 +201,22 @@ export class Configuracion implements OnInit {
       return;
     }
 
-    const confirmado = confirm(
-      'Esta accion es irreversible: se va a borrar tu cuenta y todos tus datos. ¿Queres continuar?',
-    );
-    if (!confirmado) {
-      return;
-    }
+    this.elementoConFocoPrevio = document.activeElement as HTMLElement | null;
+    this.confirmEliminarVisible.set(true);
 
+    setTimeout(() => {
+      this.obtenerFocosDelModal()[0]?.focus();
+    });
+  }
+
+  cancelarEliminarCuenta(): void {
+    this.confirmEliminarVisible.set(false);
+    this.elementoConFocoPrevio?.focus();
+    this.elementoConFocoPrevio = null;
+  }
+
+  confirmarEliminarCuenta(): void {
+    this.confirmEliminarVisible.set(false);
     this.eliminarEnviando.set(true);
     this.eliminarError.set(null);
 
@@ -217,5 +230,44 @@ export class Configuracion implements OnInit {
         this.eliminarEnviando.set(false);
       },
     });
+  }
+
+  @HostListener('document:keydown.escape')
+  onEscape(): void {
+    if (this.confirmEliminarVisible()) {
+      this.cancelarEliminarCuenta();
+    }
+  }
+
+  onModalKeydown(event: KeyboardEvent): void {
+    if (event.key !== 'Tab') {
+      return;
+    }
+    const focosables = this.obtenerFocosDelModal();
+    if (focosables.length === 0) {
+      return;
+    }
+    const primero = focosables[0];
+    const ultimo = focosables[focosables.length - 1];
+
+    if (event.shiftKey && document.activeElement === primero) {
+      event.preventDefault();
+      ultimo.focus();
+    } else if (!event.shiftKey && document.activeElement === ultimo) {
+      event.preventDefault();
+      primero.focus();
+    }
+  }
+
+  private obtenerFocosDelModal(): HTMLElement[] {
+    const modal = this.confirmEliminarModalRef?.nativeElement;
+    if (!modal) {
+      return [];
+    }
+    return Array.from(
+      modal.querySelectorAll<HTMLElement>(
+        'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])',
+      ),
+    );
   }
 }

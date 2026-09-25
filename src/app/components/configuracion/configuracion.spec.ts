@@ -221,8 +221,18 @@ describe('Configuracion', () => {
     expect(checkbox.checked).toBeTrue();
   });
 
-  it('elimina la cuenta y cierra sesion si el usuario confirma', () => {
-    spyOn(window, 'confirm').and.returnValue(true);
+  it('abre el modal de confirmacion al pedir eliminar la cuenta', () => {
+    fixture.detectChanges();
+    httpMock.expectOne(meUrl).flush(usuarioMock);
+
+    const component = fixture.componentInstance;
+    component.eliminarCuenta();
+
+    expect(component.confirmEliminarVisible()).toBeTrue();
+    httpMock.expectNone(meUrl);
+  });
+
+  it('elimina la cuenta y cierra sesion si el usuario confirma en el modal', () => {
     const router = TestBed.inject(Router);
     const navigateSpy = spyOn(router, 'navigate');
 
@@ -232,6 +242,9 @@ describe('Configuracion', () => {
     localStorage.setItem('ah_token', 'un-token');
     const component = fixture.componentInstance;
     component.eliminarCuenta();
+    component.confirmarEliminarCuenta();
+
+    expect(component.confirmEliminarVisible()).toBeFalse();
 
     const req = httpMock.expectOne(meUrl);
     expect(req.request.method).toBe('DELETE');
@@ -241,26 +254,26 @@ describe('Configuracion', () => {
     expect(navigateSpy).toHaveBeenCalledWith(['/']);
   });
 
-  it('no elimina la cuenta si el usuario cancela la confirmacion', () => {
-    spyOn(window, 'confirm').and.returnValue(false);
-
-    fixture.detectChanges();
-    httpMock.expectOne(meUrl).flush(usuarioMock);
-
-    fixture.componentInstance.eliminarCuenta();
-
-    expect(fixture.componentInstance.eliminarEnviando()).toBeFalse();
-    httpMock.expectNone(meUrl);
-  });
-
-  it('muestra un error si falla la eliminacion de la cuenta', () => {
-    spyOn(window, 'confirm').and.returnValue(true);
-
+  it('no elimina la cuenta si el usuario cancela en el modal', () => {
     fixture.detectChanges();
     httpMock.expectOne(meUrl).flush(usuarioMock);
 
     const component = fixture.componentInstance;
     component.eliminarCuenta();
+    component.cancelarEliminarCuenta();
+
+    expect(component.confirmEliminarVisible()).toBeFalse();
+    expect(component.eliminarEnviando()).toBeFalse();
+    httpMock.expectNone(meUrl);
+  });
+
+  it('muestra un error si falla la eliminacion de la cuenta', () => {
+    fixture.detectChanges();
+    httpMock.expectOne(meUrl).flush(usuarioMock);
+
+    const component = fixture.componentInstance;
+    component.eliminarCuenta();
+    component.confirmarEliminarCuenta();
 
     const req = httpMock.expectOne(meUrl);
     req.flush({ error: 'No se pudo eliminar' }, { status: 400, statusText: 'Bad Request' });
