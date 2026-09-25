@@ -43,6 +43,9 @@ export class Configuracion implements OnInit {
   readonly temaEnviando = signal(false);
   readonly temaError = signal<string | null>(null);
 
+  readonly eliminarEnviando = signal(false);
+  readonly eliminarError = signal<string | null>(null);
+
   ngOnInit(): void {
     this.usuariosSvc.obtenerMe().subscribe({
       next: (usuario) => {
@@ -127,6 +130,33 @@ export class Configuracion implements OnInit {
       error: (err: HttpErrorResponse) => {
         this.temaError.set(err.error?.error ?? 'No se pudo cambiar el tema.');
         this.temaEnviando.set(false);
+      },
+    });
+  }
+
+  eliminarCuenta(): void {
+    if (this.eliminarEnviando()) {
+      return;
+    }
+
+    const confirmado = confirm(
+      'Esta accion es irreversible: se va a borrar tu cuenta y todos tus datos. ¿Queres continuar?',
+    );
+    if (!confirmado) {
+      return;
+    }
+
+    this.eliminarEnviando.set(true);
+    this.eliminarError.set(null);
+
+    this.usuariosSvc.eliminarMe().subscribe({
+      next: () => {
+        this.eliminarEnviando.set(false);
+        this.authSvc.logout();
+      },
+      error: (err: HttpErrorResponse) => {
+        this.eliminarError.set(err.error?.error ?? 'No se pudo eliminar la cuenta.');
+        this.eliminarEnviando.set(false);
       },
     });
   }

@@ -88,5 +88,23 @@
         <p class="configuracion__error">{{ temaError() }}</p>
       }
     </div>
+
+    <div class="configuracion__peligro">
+      <h2>Eliminar cuenta</h2>
+      <p>Esta accion borra tu cuenta y todos tus datos de forma permanente.</p>
+
+      @if (eliminarError()) {
+        <p class="configuracion__error">{{ eliminarError() }}</p>
+      }
+
+      <button
+        type="button"
+        class="configuracion__eliminar"
+        [disabled]="eliminarEnviando()"
+        (click)="eliminarCuenta()"
+      >
+        {{ eliminarEnviando() ? 'Eliminando...' : 'Eliminar mi cuenta' }}
+      </button>
+    </div>
   }
 </section>

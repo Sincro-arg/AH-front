@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideHttpClient } from '@angular/common/http';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
-import { provideRouter } from '@angular/router';
+import { provideRouter, Router } from '@angular/router';
 import { environment } from '../../../environments/environment';
 import { ThemeService } from '../../services/theme.service';
 import { Configuracion } from './configuracion';
@@ -107,5 +107,52 @@ describe('Configuracion', () => {
     req.flush({ tema: 'oscuro' });
 
     expect(setSpy).toHaveBeenCalledWith('oscuro');
+  });
+
+  it('elimina la cuenta y cierra sesion si el usuario confirma', () => {
+    spyOn(window, 'confirm').and.returnValue(true);
+    const router = TestBed.inject(Router);
+    const navigateSpy = spyOn(router, 'navigate');
+
+    fixture.detectChanges();
+    httpMock.expectOne(meUrl).flush(usuarioMock);
+
+    localStorage.setItem('ah_token', 'un-token');
+    const component = fixture.componentInstance;
+    component.eliminarCuenta();
+
+    const req = httpMock.expectOne(meUrl);
+    expect(req.request.method).toBe('DELETE');
+    req.flush(null, { status: 204, statusText: 'No Content' });
+
+    expect(localStorage.getItem('ah_token')).toBeNull();
+    expect(navigateSpy).toHaveBeenCalledWith(['/']);
+  });
+
+  it('no elimina la cuenta si el usuario cancela la confirmacion', () => {
+    spyOn(window, 'confirm').and.returnValue(false);
+
+    fixture.detectChanges();
+    httpMock.expectOne(meUrl).flush(usuarioMock);
+
+    fixture.componentInstance.eliminarCuenta();
+
+    expect(fixture.componentInstance.eliminarEnviando()).toBeFalse();
+    httpMock.expectNone(meUrl);
+  });
+
+  it('muestra un error si falla la eliminacion de la cuenta', () => {
+    spyOn(window, 'confirm').and.returnValue(true);
+
+    fixture.detectChanges();
+    httpMock.expectOne(meUrl).flush(usuarioMock);
+
+    const component = fixture.componentInstance;
+    component.eliminarCuenta();
+
+    const req = httpMock.expectOne(meUrl);
+    req.flush({ error: 'No se pudo eliminar' }, { status: 400, statusText: 'Bad Request' });
+
+    expect(component.eliminarError()).toBe('No se pudo eliminar');
   });
 });

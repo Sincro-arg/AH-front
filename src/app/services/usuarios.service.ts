@@ -34,4 +34,8 @@ export class UsuariosService {
   cambiarTema(tema: Tema) {
     return this.http.put<{ tema: Tema }>(`${environment.apiUrl}/usuarios/me/tema`, { tema });
   }
+
+  eliminarMe() {
+    return this.http.delete<void>(`${environment.apiUrl}/usuarios/me`);
+  }
 }

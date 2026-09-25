@@ -102,3 +102,25 @@
   opacity: 0.6;
   cursor: default;
 }
+
+.configuracion__peligro {
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--color-border);
+}
+
+.configuracion__eliminar {
+  margin-top: 0.6rem;
+  padding: 0.7rem 1rem;
+  border: 1px solid var(--color-error);
+  border-radius: 6px;
+  background: transparent;
+  color: var(--color-error);
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.configuracion__eliminar:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
