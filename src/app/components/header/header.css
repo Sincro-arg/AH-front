@@ -24,16 +24,34 @@
 }
 
 .header__brand {
-  font-size: 1.15rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-width: 0;
+  font-size: 1.05rem;
   font-weight: 800;
   color: var(--color-text);
   text-decoration: none;
   letter-spacing: -0.02em;
-  flex-shrink: 0;
+  flex-shrink: 1;
+  border-radius: 8px;
 }
 
 .header__brand:hover {
   text-decoration: none;
+  color: var(--color-primary);
+}
+
+.header__logo {
+  width: 30px;
+  height: 30px;
+  flex-shrink: 0;
+}
+
+.header__brand-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .header__nav {
@@ -47,6 +65,8 @@
   font-weight: 500;
   color: var(--color-text-muted);
   text-decoration: none;
+  border-radius: 6px;
+  padding: 0.2rem 0.1rem;
 }
 
 .header__nav-link:hover {
@@ -60,6 +80,13 @@
   min-width: 0;
 }
 
+.header__date {
+  font-size: 0.82rem;
+  color: var(--color-text-muted);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
 .header__user-link {
   font-size: 0.9rem;
   font-weight: 600;
@@ -68,6 +95,8 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  border-radius: 6px;
+  padding: 0.2rem 0.1rem;
 }
 
 .header__user-link:hover {
@@ -91,6 +120,20 @@
   border-color: color-mix(in srgb, var(--color-error) 35%, white);
 }
 
+.header__brand:focus-visible,
+.header__nav-link:focus-visible,
+.header__user-link:focus-visible,
+.header__logout:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+@media (max-width: 640px) {
+  .header__date {
+    display: none;
+  }
+}
+
 @media (max-width: 480px) {
   .header__inner {
     padding: 0 1rem;
@@ -99,6 +142,10 @@
 
   .header__brand {
     font-size: 1rem;
+  }
+
+  .header__brand-name {
+    display: none;
   }
 
   .header__user {

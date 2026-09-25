@@ -1,9 +1,30 @@
 <header class="header">
   <div class="header__inner">
-    <a class="header__brand" routerLink="/">AH</a>
+    <a class="header__brand" routerLink="/">
+      <svg
+        class="header__logo"
+        viewBox="0 0 32 32"
+        fill="none"
+        aria-hidden="true"
+        focusable="false"
+      >
+        <rect x="1" y="1" width="30" height="30" rx="9" fill="var(--color-primary)" />
+        <text
+          x="16"
+          y="21.5"
+          text-anchor="middle"
+          font-family="Inter, sans-serif"
+          font-size="13"
+          font-weight="800"
+          fill="#fff"
+        >AH</text>
+      </svg>
+      <span class="header__brand-name">Account Hub</span>
+    </a>
 
     @if (estaLogueado()) {
       <div class="header__user">
+        <span class="header__date">{{ fechaHoy() }}</span>
         <a class="header__user-link" routerLink="/configuracion">
           {{ usuario()?.nombre }} {{ usuario()?.apellido }}
         </a>

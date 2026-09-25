@@ -16,6 +16,16 @@ export class Header {
   readonly estaLogueado = this.authSvc.estaLogueado;
   readonly usuario = computed(() => this.authSvc.usuarioActual());
 
+  /** Fecha de hoy, corta y en español, para mostrar junto al usuario. */
+  readonly fechaHoy = computed(() => {
+    const txt = new Date().toLocaleDateString('es-AR', {
+      weekday: 'long',
+      day: 'numeric',
+      month: 'long',
+    });
+    return txt.charAt(0).toUpperCase() + txt.slice(1);
+  });
+
   logout(): void {
     this.authSvc.logout();
   }
