@@ -13,87 +13,63 @@ describe('Registro', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [Registro],
-      providers: [
-        provideHttpClient(),
-        provideHttpClientTesting(),
-        provideRouter([{ path: 'login', children: [] }]),
-      ],
+      providers: [provideHttpClient(), provideHttpClientTesting(), provideRouter([])],
     }).compileComponents();
 
     fixture = TestBed.createComponent(Registro);
     httpMock = TestBed.inject(HttpTestingController);
     router = TestBed.inject(Router);
-    fixture.detectChanges();
   });
 
   afterEach(() => {
     httpMock.verify();
+    localStorage.clear();
   });
-
-  function completarForm(): void {
-    fixture.componentInstance.form.setValue({
-      nombre: 'Ana',
-      apellido: 'Gomez',
-      email: 'ana@test.com',
-      telefono: '1122334455',
-      password: 'password123',
-    });
-  }
 
   it('deberia crearse', () => {
     expect(fixture.componentInstance).toBeTruthy();
   });
 
-  it('no envia si el formulario es invalido', () => {
-    fixture.componentInstance.enviar();
-
+  it('no envia el formulario si es invalido', () => {
+    fixture.componentInstance.onSubmit();
     httpMock.expectNone(`${environment.apiUrl}/auth/register`);
-    expect(fixture.componentInstance.form.controls.nombre.touched).toBe(true);
   });
 
-  it('al registrarse con exito redirige a login', () => {
-    const navigateSpy = spyOn(router, 'navigate');
-    completarForm();
+  it('navega a login cuando el registro es correcto', () => {
+    const navigateSpy = spyOn(router, 'navigateByUrl');
+    const component = fixture.componentInstance;
 
-    fixture.componentInstance.enviar();
-
-    const req = httpMock.expectOne(`${environment.apiUrl}/auth/register`);
-    expect(req.request.method).toBe('POST');
-    req.flush({
-      id: '1',
+    component.form.setValue({
       nombre: 'Ana',
       apellido: 'Gomez',
       email: 'ana@test.com',
       telefono: '1122334455',
-      fechaAlta: new Date().toISOString(),
+      password: 'unaPassword1',
     });
-
-    expect(navigateSpy).toHaveBeenCalledWith(['/login'], { queryParams: { registrado: '1' } });
-  });
-
-  it('muestra el error de email duplicado que devuelve el back', () => {
-    completarForm();
-    fixture.componentInstance.enviar();
+    component.onSubmit();
 
     const req = httpMock.expectOne(`${environment.apiUrl}/auth/register`);
-    req.flush({ error: 'El email ya esta registrado' }, { status: 409, statusText: 'Conflict' });
-    fixture.detectChanges();
+    expect(req.request.method).toBe('POST');
+    req.flush({ mensaje: 'Usuario registrado correctamente' });
 
-    expect(fixture.componentInstance.error()).toBe('El email ya esta registrado');
-    expect(fixture.componentInstance.enviando()).toBe(false);
+    expect(navigateSpy).toHaveBeenCalledWith('/login');
   });
 
-  it('muestra el error de password corta que devuelve el back', () => {
-    completarForm();
-    fixture.componentInstance.enviar();
+  it('muestra el error cuando el email ya esta registrado', () => {
+    const component = fixture.componentInstance;
+    component.form.setValue({
+      nombre: 'Ana',
+      apellido: 'Gomez',
+      email: 'ana@test.com',
+      telefono: '1122334455',
+      password: 'unaPassword1',
+    });
+    component.onSubmit();
 
     const req = httpMock.expectOne(`${environment.apiUrl}/auth/register`);
-    req.flush(
-      { error: 'La contraseña debe tener al menos 8 caracteres' },
-      { status: 400, statusText: 'Bad Request' },
-    );
-    fixture.detectChanges();
+    req.flush({ error: 'El email ya está registrado' }, { status: 409, statusText: 'Conflict' });
 
-    expect(fixture.componentInstance.error()).toBe('La contraseña debe tener al menos 8 caracteres');
+    expect(component.error()).toBe('El email ya está registrado');
+    expect(component.enviando()).toBeFalse();
   });
 });

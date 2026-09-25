@@ -1,167 +1,104 @@
-.config {
-  max-width: 640px;
+.configuracion {
+  padding: 2rem 1.5rem;
+  max-width: 480px;
   margin: 0 auto;
-  padding: 32px 20px;
+  font-family: system-ui, sans-serif;
 }
 
-.config__title {
-  margin: 0 0 20px;
-  font-size: 1.5rem;
+.configuracion__form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--color-border);
+}
+
+.configuracion__form:first-of-type {
+  border-top: none;
+  padding-top: 0;
+  margin-top: 1rem;
+}
+
+.configuracion__label {
+  font-size: 0.85rem;
+  font-weight: 600;
   color: var(--color-text);
+  margin-top: 0.6rem;
 }
 
-.config__card {
-  background: var(--color-surface);
+.configuracion__input {
+  padding: 0.6rem 0.7rem;
   border: 1px solid var(--color-border);
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-sm);
-  padding: 20px 24px;
-  transition: background var(--transition), border-color var(--transition);
-}
-
-.config__subtitle {
-  margin: 0 0 16px;
-  font-size: 1rem;
-  font-weight: 700;
-  color: var(--color-text);
-}
-
-.config__row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 16px;
-}
-
-.config__label {
-  margin: 0;
+  border-radius: 6px;
   font-size: 0.95rem;
-  font-weight: 600;
+  background-color: var(--color-surface);
   color: var(--color-text);
 }
 
-.config__desc {
-  margin: 4px 0 0;
+.configuracion__input:focus {
+  outline: none;
+  border-color: var(--color-primary);
+}
+
+.configuracion__error {
+  color: var(--color-error);
   font-size: 0.85rem;
-  color: var(--color-text-muted);
+  margin: 0.4rem 0 0;
 }
 
-.config__form {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-}
-
-.campo {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-
-.campo__label {
-  font-size: 0.85rem;
-  font-weight: 600;
-  color: var(--color-text);
-}
-
-.campo__error {
-  margin: 0;
-  font-size: 0.8rem;
-  color: var(--color-danger);
-}
-
-.config__mensaje {
-  margin: 0;
-  padding: 10px 12px;
-  border-radius: var(--radius-md);
-  font-size: 0.85rem;
-}
-
-.config__mensaje--error {
-  background: var(--color-danger-light);
-  color: var(--color-danger);
-}
-
-.config__mensaje--exito {
-  background: var(--color-success-light);
+.configuracion__exito {
   color: var(--color-success);
+  font-size: 0.85rem;
+  margin: 0.4rem 0 0;
 }
 
-.config__submit {
-  align-self: flex-start;
-  margin-top: 4px;
-  padding: 10px 20px;
+.configuracion__submit {
+  margin-top: 1.2rem;
+  padding: 0.7rem;
   border: none;
-  border-radius: var(--radius-md);
-  background: var(--color-primary);
+  border-radius: 6px;
+  background-color: var(--color-primary);
   color: #fff;
-  font-size: 0.9rem;
   font-weight: 600;
-  transition: background var(--transition);
-}
-
-.config__submit:hover:not(:disabled) {
-  background: var(--color-primary-dark);
-}
-
-.config__submit:disabled {
-  opacity: 0.7;
-  cursor: not-allowed;
-}
-
-/* Toggle: mismo patron que sincroresto (checkbox + track deslizante) */
-.toggle {
-  position: relative;
-  display: inline-flex;
-  align-items: center;
   cursor: pointer;
-  flex-shrink: 0;
+  align-self: flex-start;
 }
 
-.toggle input {
-  display: none;
+.configuracion__submit:disabled {
+  opacity: 0.6;
+  cursor: default;
 }
 
-.toggle-track {
-  width: 40px;
-  height: 22px;
-  background: var(--color-border);
-  border-radius: 99px;
-  position: relative;
-  transition: background var(--transition);
+.configuracion__tema {
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--color-border);
 }
 
-.toggle-track::after {
-  content: '';
-  position: absolute;
-  top: 3px;
-  left: 3px;
-  width: 16px;
-  height: 16px;
-  background: #fff;
-  border-radius: 50%;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
-  transition: transform var(--transition);
+.configuracion__tema-opciones {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 0.6rem;
 }
 
-.toggle input:checked + .toggle-track {
-  background: var(--color-primary);
+.configuracion__tema-boton {
+  padding: 0.5rem 1rem;
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  background: var(--color-surface);
+  color: var(--color-text);
+  cursor: pointer;
+  font-size: 0.9rem;
 }
 
-.toggle input:checked + .toggle-track::after {
-  transform: translateX(18px);
+.configuracion__tema-boton--activo {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+  font-weight: 600;
 }
 
-@media (max-width: 480px) {
-  .config {
-    padding: 20px 16px;
-  }
-
-  .config__card {
-    padding: 16px 18px;
-  }
-
-  .config__row {
-    flex-wrap: wrap;
-  }
+.configuracion__tema-boton:disabled {
+  opacity: 0.6;
+  cursor: default;
 }

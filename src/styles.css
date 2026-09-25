@@ -1,194 +1,86 @@
-/* ── Identidad visual de AH ──────────────────────────────────────────────
-   Variables globales de color y tipografia. Todos los componentes usan
-   estas variables en vez de valores sueltos, para que la paleta se pueda
-   ajustar desde un solo lugar. */
 :root {
-  /* Color primario de marca */
-  --color-primary: #2563eb;
-  --color-primary-dark: #1d4ed8;
-  --color-primary-light: #dbeafe;
-
-  /* Estados */
-  --color-success: #16a34a;
-  --color-success-light: #dcfce7;
-  --color-danger: #dc2626;
-  --color-danger-light: #fee2e2;
-  --color-warning: #d97706;
-  --color-warning-light: #fef3c7;
-
-  /* Superficies y texto */
-  --color-bg: #f8fafc;
+  /* Paleta unica del proyecto: la usan todos los componentes, en vez de
+     repetir los mismos hex sueltos en cada .css. */
+  --color-primary: #ee4f23;
+  --color-text: #1a1412;
+  --color-text-muted: #475569;
+  --color-text-subtle: #94a3b8;
+  --color-border: #e5e7eb;
   --color-surface: #ffffff;
-  --color-border: #e2e8f0;
-  --color-text: #0f172a;
-  --color-text-muted: #64748b;
-
-  /* Tipografia */
-  --font-family-base: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto,
-    Helvetica, Arial, sans-serif;
-  --font-family-mono: ui-monospace, 'SF Mono', Consolas, 'Cascadia Mono',
-    monospace;
-
-  /* Bordes y sombras */
-  --radius-sm: 6px;
-  --radius-md: 10px;
-  --radius-lg: 16px;
-  --shadow-sm: 0 1px 2px rgba(15, 23, 42, 0.06);
-  --shadow-md: 0 4px 12px rgba(15, 23, 42, 0.08);
-
-  --transition: 150ms ease;
+  --color-error: #c0392b;
+  --color-success: #2e7d32;
+  --color-bg: #ffffff;
+  --font-family-base: system-ui, sans-serif;
 }
 
-/* Modo oscuro: mismas variables, otros valores. Se activa poniendo
-   data-theme="oscuro" en <html> (lo hace ThemeService). */
-:root[data-theme='oscuro'] {
-  --color-primary: #3b82f6;
-  --color-primary-dark: #60a5fa;
-  --color-primary-light: #1e3a5f;
-
-  --color-success: #22c55e;
-  --color-success-light: #14532d;
-  --color-danger: #ef4444;
-  --color-danger-light: #450a0a;
-  --color-warning: #f59e0b;
-  --color-warning-light: #451a03;
-
-  --color-bg: #0f172a;
-  --color-surface: #1e293b;
-  --color-border: #334155;
+:root[data-tema='oscuro'] {
   --color-text: #f1f5f9;
-  --color-text-muted: #94a3b8;
-
-  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
-  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.4);
+  --color-text-muted: #cbd5e1;
+  --color-text-subtle: #94a3b8;
+  --color-border: #334155;
+  --color-surface: #1e293b;
+  --color-error: #f87171;
+  --color-success: #4ade80;
+  --color-bg: #0f172a;
 }
 
-*,
-*::before,
-*::after {
+* {
   box-sizing: border-box;
 }
 
 body {
   margin: 0;
   font-family: var(--font-family-base);
-  background: var(--color-bg);
+  background-color: var(--color-bg);
   color: var(--color-text);
-  line-height: 1.5;
-  -webkit-font-smoothing: antialiased;
-  transition: background var(--transition), color var(--transition);
 }
 
-a {
-  color: var(--color-primary);
-  text-decoration: none;
-}
-
-a:hover {
-  color: var(--color-primary-dark);
+/* Estados de interactividad globales: cualquier boton, link o campo que se
+   agregue en la app hereda hover/foco/transicion sin tener que repetirlo. */
+button,
+a,
+input,
+select,
+textarea {
+  transition: background-color .15s ease, color .15s ease, border-color .15s ease,
+    box-shadow .15s ease, transform .15s ease, opacity .15s ease;
 }
 
 button {
-  font-family: inherit;
   cursor: pointer;
 }
 
-input,
-textarea,
-select {
-  font-family: inherit;
+button:hover:not(:disabled) {
+  filter: brightness(0.95);
 }
 
-/* ── Controles nativos del navegador ─────────────────────────────────────
-   Reset de apariencia para que ningun input, select o checkbox se vea
-   "crudo" al lado de los controles cuidados. Vale para todos los
-   formularios de la app, existan hoy o se agreguen despues. */
-input[type='text'],
-input[type='email'],
-input[type='tel'],
-input[type='password'],
-input[type='number'],
-input[type='search'],
-input[type='date'],
-select,
-textarea {
-  width: 100%;
-  padding: 10px 14px;
-  background: var(--color-surface);
-  border: 1.5px solid var(--color-border);
-  border-radius: var(--radius-md);
-  color: var(--color-text);
-  font-size: 0.95rem;
-  font-family: inherit;
-  transition: border-color var(--transition), box-shadow var(--transition),
-    background var(--transition);
+button:active:not(:disabled) {
+  transform: translateY(1px);
 }
 
-input[type='text']:hover:not(:focus),
-input[type='email']:hover:not(:focus),
-input[type='tel']:hover:not(:focus),
-input[type='password']:hover:not(:focus),
-input[type='number']:hover:not(:focus),
-input[type='search']:hover:not(:focus),
-input[type='date']:hover:not(:focus),
-select:hover:not(:focus),
-textarea:hover:not(:focus) {
-  border-color: var(--color-text-muted);
+button:disabled {
+  cursor: not-allowed;
+  opacity: .6;
 }
 
-input[type='text']:focus,
-input[type='email']:focus,
-input[type='tel']:focus,
-input[type='password']:focus,
-input[type='number']:focus,
-input[type='search']:focus,
-input[type='date']:focus,
-select:focus,
-textarea:focus {
-  outline: none;
-  border-color: var(--color-primary);
-  box-shadow: 0 0 0 3px var(--color-primary-light);
+a {
+  color: inherit;
 }
 
-/* Select: se saca la flecha nativa y se dibuja una propia, del mismo tono
-   que el resto del texto secundario. */
-select {
-  appearance: none;
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  cursor: pointer;
-  padding-right: 36px;
-  background-repeat: no-repeat;
-  background-position: right 12px center;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 20 20' fill='%2364748b'%3E%3Cpath d='M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z'/%3E%3C/svg%3E");
+a:hover {
+  text-decoration: underline;
 }
 
-:root[data-theme='oscuro'] select {
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 20 20' fill='%2394a3b8'%3E%3Cpath d='M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z'/%3E%3C/svg%3E");
+:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
 }
 
-/* Password: saca el ojo y la cruz que dibuja Edge/IE sobre el input,
-   asi no compite con un boton de mostrar/ocultar propio. */
-input[type='password']::-ms-reveal,
-input[type='password']::-ms-clear {
-  display: none;
-}
-
-/* Autofill de Chrome/Safari: sin el fondo amarillo que rompe el tema. */
-input:-webkit-autofill,
-input:-webkit-autofill:hover,
-input:-webkit-autofill:focus {
-  -webkit-text-fill-color: var(--color-text);
-  -webkit-box-shadow: 0 0 0 1000px var(--color-surface) inset;
-  transition: background-color 9999s ease-in-out 0s;
-}
-
-/* Checkbox y radio sueltos (los que no arman su propio switch, como el
-   toggle de tema en Configuracion, que ya se dibuja a mano). */
-input[type='checkbox'],
-input[type='radio'] {
-  width: 18px;
-  height: 18px;
-  accent-color: var(--color-primary);
-  cursor: pointer;
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
 }

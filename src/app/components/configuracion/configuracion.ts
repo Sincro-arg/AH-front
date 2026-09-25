@@ -1,20 +1,9 @@
-import { Component, OnInit, computed, inject, signal } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
+import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { HttpErrorResponse } from '@angular/common/http';
-import {
-  AbstractControl,
-  FormBuilder,
-  ReactiveFormsModule,
-  ValidationErrors,
-  Validators,
-} from '@angular/forms';
-import { ThemeService } from '../../services/theme.service';
+import { AuthService, Tema, Usuario } from '../../services/auth.service';
 import { UsuariosService } from '../../services/usuarios.service';
-
-function passwordsCoinciden(control: AbstractControl): ValidationErrors | null {
-  const nueva = control.get('passwordNueva')?.value;
-  const confirmacion = control.get('passwordConfirmacion')?.value;
-  return nueva === confirmacion ? null : { noCoincide: true };
-}
+import { ThemeService } from '../../services/theme.service';
 
 @Component({
   selector: 'app-configuracion',
@@ -24,102 +13,120 @@ function passwordsCoinciden(control: AbstractControl): ValidationErrors | null {
   styleUrl: './configuracion.css',
 })
 export class Configuracion implements OnInit {
-  protected readonly theme = inject(ThemeService);
-  private readonly usuariosSvc = inject(UsuariosService);
   private readonly fb = inject(FormBuilder);
+  private readonly authSvc = inject(AuthService);
+  private readonly usuariosSvc = inject(UsuariosService);
+  private readonly themeSvc = inject(ThemeService);
 
-  protected readonly esOscuro = computed(() => this.theme.tema() === 'oscuro');
+  readonly usuario = signal<Usuario | null>(null);
 
-  protected readonly cargando = signal(true);
-  protected readonly guardando = signal(false);
-  protected readonly error = signal<string | null>(null);
-  protected readonly exito = signal<string | null>(null);
-
-  protected readonly form = this.fb.nonNullable.group({
-    nombre: ['', Validators.required],
-    apellido: ['', Validators.required],
+  readonly perfilForm = this.fb.nonNullable.group({
+    nombre: ['', [Validators.required]],
+    apellido: ['', [Validators.required]],
+    telefono: ['', [Validators.required]],
     email: ['', [Validators.required, Validators.email]],
-    telefono: ['', Validators.required],
   });
 
-  protected readonly cambiandoPassword = signal(false);
-  protected readonly errorPassword = signal<string | null>(null);
-  protected readonly exitoPassword = signal<string | null>(null);
+  readonly passwordForm = this.fb.nonNullable.group({
+    passwordActual: ['', [Validators.required]],
+    passwordNueva: ['', [Validators.required, Validators.minLength(8)]],
+  });
 
-  protected readonly passwordForm = this.fb.nonNullable.group(
-    {
-      passwordActual: ['', Validators.required],
-      passwordNueva: ['', [Validators.required, Validators.minLength(8)]],
-      passwordConfirmacion: ['', Validators.required],
-    },
-    { validators: passwordsCoinciden },
-  );
+  readonly perfilEnviando = signal(false);
+  readonly perfilError = signal<string | null>(null);
+  readonly perfilExito = signal(false);
+
+  readonly passwordEnviando = signal(false);
+  readonly passwordError = signal<string | null>(null);
+  readonly passwordExito = signal(false);
+
+  readonly temaEnviando = signal(false);
+  readonly temaError = signal<string | null>(null);
 
   ngOnInit(): void {
-    this.usuariosSvc.getMe().subscribe({
+    this.usuariosSvc.obtenerMe().subscribe({
       next: (usuario) => {
-        this.form.setValue({
+        this.usuario.set(usuario);
+        this.authSvc.actualizarUsuarioActual(usuario);
+        this.perfilForm.setValue({
           nombre: usuario.nombre,
           apellido: usuario.apellido,
-          email: usuario.email,
           telefono: usuario.telefono,
+          email: usuario.email,
         });
-        this.cargando.set(false);
-      },
-      error: () => {
-        this.error.set('No se pudieron cargar los datos de tu cuenta.');
-        this.cargando.set(false);
       },
     });
   }
 
-  guardar(): void {
-    if (this.form.invalid) {
-      this.form.markAllAsTouched();
+  guardarPerfil(): void {
+    if (this.perfilForm.invalid || this.perfilEnviando()) {
+      this.perfilForm.markAllAsTouched();
       return;
     }
 
-    this.error.set(null);
-    this.exito.set(null);
-    this.guardando.set(true);
+    this.perfilEnviando.set(true);
+    this.perfilError.set(null);
+    this.perfilExito.set(false);
 
-    this.usuariosSvc.actualizarPerfil(this.form.getRawValue()).subscribe({
-      next: () => {
-        this.guardando.set(false);
-        this.exito.set('Tus datos se actualizaron correctamente.');
+    this.usuariosSvc.actualizarMe(this.perfilForm.getRawValue()).subscribe({
+      next: (usuario) => {
+        this.usuario.set(usuario);
+        this.authSvc.actualizarUsuarioActual(usuario);
+        this.perfilEnviando.set(false);
+        this.perfilExito.set(true);
       },
       error: (err: HttpErrorResponse) => {
-        this.guardando.set(false);
-        this.error.set(err.error?.error ?? 'No se pudieron guardar los cambios.');
+        this.perfilError.set(err.error?.error ?? 'No se pudo actualizar el perfil.');
+        this.perfilEnviando.set(false);
       },
     });
   }
 
   cambiarPassword(): void {
-    if (this.passwordForm.invalid) {
+    if (this.passwordForm.invalid || this.passwordEnviando()) {
       this.passwordForm.markAllAsTouched();
       return;
     }
 
-    this.errorPassword.set(null);
-    this.exitoPassword.set(null);
-    this.cambiandoPassword.set(true);
+    this.passwordEnviando.set(true);
+    this.passwordError.set(null);
+    this.passwordExito.set(false);
 
-    const { passwordActual, passwordNueva } = this.passwordForm.getRawValue();
-
-    this.usuariosSvc.cambiarPassword({ passwordActual, passwordNueva }).subscribe({
+    this.usuariosSvc.cambiarPassword(this.passwordForm.getRawValue()).subscribe({
       next: () => {
-        this.cambiandoPassword.set(false);
-        this.exitoPassword.set('Contraseña actualizada.');
-        this.passwordForm.reset({
-          passwordActual: '',
-          passwordNueva: '',
-          passwordConfirmacion: '',
-        });
+        this.passwordEnviando.set(false);
+        this.passwordExito.set(true);
+        this.passwordForm.reset({ passwordActual: '', passwordNueva: '' });
       },
       error: (err: HttpErrorResponse) => {
-        this.cambiandoPassword.set(false);
-        this.errorPassword.set(err.error?.error ?? 'No se pudo cambiar la contraseña.');
+        this.passwordError.set(err.error?.error ?? 'No se pudo cambiar la contraseña.');
+        this.passwordEnviando.set(false);
+      },
+    });
+  }
+
+  cambiarTema(tema: Tema): void {
+    if (this.temaEnviando() || this.usuario()?.tema === tema) {
+      return;
+    }
+
+    this.temaEnviando.set(true);
+    this.temaError.set(null);
+
+    this.usuariosSvc.cambiarTema(tema).subscribe({
+      next: ({ tema }) => {
+        const actual = this.usuario();
+        if (actual) {
+          const actualizado = { ...actual, tema };
+          this.usuario.set(actualizado);
+          this.authSvc.actualizarUsuarioActual(actualizado);
+        }
+        this.themeSvc.set(tema);
+        this.temaEnviando.set(false);
+      },
+      error: (err: HttpErrorResponse) => {
+        this.temaError.set(err.error?.error ?? 'No se pudo cambiar el tema.');
+        this.temaEnviando.set(false);
       },
     });
   }

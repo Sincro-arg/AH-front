@@ -1,3 +1,13 @@
 <app-header></app-header>
-<router-outlet></router-outlet>
+
+<div class="app__shell">
+  @if (connectionError.mensaje(); as mensaje) {
+    <div class="app__connection-error" role="alert">{{ mensaje }}</div>
+  }
+
+  <main class="app__main">
+    <router-outlet></router-outlet>
+  </main>
+</div>
+
 <app-footer></app-footer>

@@ -3,32 +3,25 @@ import { provideHttpClient } from '@angular/common/http';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideRouter, Router } from '@angular/router';
 import { environment } from '../../../environments/environment';
-import { Login } from './login';
 import { ThemeService } from '../../services/theme.service';
+import { Login } from './login';
 
 describe('Login', () => {
   let fixture: ComponentFixture<Login>;
   let httpMock: HttpTestingController;
   let router: Router;
-  let themeService: ThemeService;
+  let themeSvc: ThemeService;
 
   beforeEach(async () => {
-    localStorage.clear();
-
     await TestBed.configureTestingModule({
       imports: [Login],
-      providers: [
-        provideHttpClient(),
-        provideHttpClientTesting(),
-        provideRouter([{ path: '', children: [] }]),
-      ],
+      providers: [provideHttpClient(), provideHttpClientTesting(), provideRouter([])],
     }).compileComponents();
 
     fixture = TestBed.createComponent(Login);
     httpMock = TestBed.inject(HttpTestingController);
     router = TestBed.inject(Router);
-    themeService = TestBed.inject(ThemeService);
-    fixture.detectChanges();
+    themeSvc = TestBed.inject(ThemeService);
   });
 
   afterEach(() => {
@@ -36,99 +29,73 @@ describe('Login', () => {
     localStorage.clear();
   });
 
-  function completarForm(): void {
-    fixture.componentInstance.form.setValue({
-      email: 'ana@test.com',
-      password: 'password123',
-    });
-  }
-
   it('deberia crearse', () => {
     expect(fixture.componentInstance).toBeTruthy();
   });
 
-  it('no envia si el formulario es invalido', () => {
-    fixture.componentInstance.enviar();
-
+  it('no envia el formulario si es invalido', () => {
+    fixture.componentInstance.onSubmit();
     httpMock.expectNone(`${environment.apiUrl}/auth/login`);
-    expect(fixture.componentInstance.form.controls.email.touched).toBe(true);
   });
 
-  it('al loguearse con exito guarda el token y redirige a home', () => {
-    const navigateSpy = spyOn(router, 'navigate');
-    spyOn(themeService, 'set');
-    completarForm();
+  it('navega a home cuando el login es correcto', () => {
+    const navigateSpy = spyOn(router, 'navigateByUrl');
+    const component = fixture.componentInstance;
 
-    fixture.componentInstance.enviar();
+    component.form.setValue({ email: 'a@test.com', password: 'unaPassword1' });
+    component.onSubmit();
 
     const req = httpMock.expectOne(`${environment.apiUrl}/auth/login`);
     expect(req.request.method).toBe('POST');
     req.flush({
-      token: 'un-token-jwt',
+      token: 'un-token',
       usuario: {
         id: '1',
         nombre: 'Ana',
         apellido: 'Gomez',
-        email: 'ana@test.com',
-        telefono: '1122334455',
+        email: 'a@test.com',
+        telefono: '',
         tema: 'claro',
         fechaAlta: new Date().toISOString(),
       },
     });
 
-    expect(localStorage.getItem('ah-token')).toBe('un-token-jwt');
-    expect(navigateSpy).toHaveBeenCalledWith(['/']);
+    expect(navigateSpy).toHaveBeenCalledWith('/');
   });
 
-  it('sincroniza el tema del usuario con ThemeService al loguearse', () => {
-    spyOn(themeService, 'set');
-    completarForm();
+  it('sincroniza el tema del usuario al loguearse', () => {
+    const setSpy = spyOn(themeSvc, 'set');
+    const component = fixture.componentInstance;
 
-    fixture.componentInstance.enviar();
+    component.form.setValue({ email: 'a@test.com', password: 'unaPassword1' });
+    component.onSubmit();
 
     const req = httpMock.expectOne(`${environment.apiUrl}/auth/login`);
     req.flush({
-      token: 'un-token-jwt',
+      token: 'un-token',
       usuario: {
         id: '1',
         nombre: 'Ana',
         apellido: 'Gomez',
-        email: 'ana@test.com',
-        telefono: '1122334455',
+        email: 'a@test.com',
+        telefono: '',
         tema: 'oscuro',
         fechaAlta: new Date().toISOString(),
       },
     });
 
-    expect(themeService.set).toHaveBeenCalledWith('oscuro');
+    expect(setSpy).toHaveBeenCalledWith('oscuro');
   });
 
-  it('muestra un mensaje generico si las credenciales son incorrectas', () => {
-    completarForm();
-    fixture.componentInstance.enviar();
+  it('muestra el error cuando el login falla', () => {
+    const component = fixture.componentInstance;
+    component.form.setValue({ email: 'a@test.com', password: 'mala' });
+    component.onSubmit();
 
     const req = httpMock.expectOne(`${environment.apiUrl}/auth/login`);
-    req.flush(
-      { error: 'Email o contraseña incorrectos' },
-      { status: 401, statusText: 'Unauthorized' },
-    );
-    fixture.detectChanges();
+    req.flush({ error: 'Email o contraseña incorrectos' }, { status: 401, statusText: 'Unauthorized' });
 
-    expect(fixture.componentInstance.error()).toBe('Email o contraseña incorrectos');
-    expect(fixture.componentInstance.enviando()).toBe(false);
-    expect(localStorage.getItem('ah-token')).toBeNull();
-  });
-
-  it('muestra un aviso si no hay conexion con el back', () => {
-    completarForm();
-    fixture.componentInstance.enviar();
-
-    const req = httpMock.expectOne(`${environment.apiUrl}/auth/login`);
-    req.error(new ProgressEvent('error'), { status: 0, statusText: 'Unknown Error' });
-    fixture.detectChanges();
-
-    expect(fixture.componentInstance.error()).toBe(
-      'No se pudo conectar con el servidor. Probá de nuevo en un momento.',
-    );
+    expect(component.error()).toBe('Email o contraseña incorrectos');
+    expect(component.enviando()).toBeFalse();
   });
 });

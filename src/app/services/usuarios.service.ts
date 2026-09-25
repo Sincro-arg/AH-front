@@ -1,16 +1,16 @@
 import { inject, Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment';
-import { AuthService, UsuarioSesion } from './auth.service';
+import { Tema, Usuario } from './auth.service';
 
-export interface ActualizarPerfilRequest {
+export interface DatosActualizarPerfil {
   nombre: string;
   apellido: string;
   telefono: string;
   email: string;
 }
 
-export interface CambiarPasswordRequest {
+export interface DatosCambiarPassword {
   passwordActual: string;
   passwordNueva: string;
 }
@@ -18,27 +18,20 @@ export interface CambiarPasswordRequest {
 @Injectable({ providedIn: 'root' })
 export class UsuariosService {
   private readonly http = inject(HttpClient);
-  private readonly authSvc = inject(AuthService);
 
-  getMe() {
-    return this.http.get<UsuarioSesion>(`${environment.apiUrl}/usuarios/me`, {
-      headers: this.authHeaders(),
-    });
+  obtenerMe() {
+    return this.http.get<Usuario>(`${environment.apiUrl}/usuarios/me`);
   }
 
-  actualizarPerfil(datos: ActualizarPerfilRequest) {
-    return this.http.put<UsuarioSesion>(`${environment.apiUrl}/usuarios/me`, datos, {
-      headers: this.authHeaders(),
-    });
+  actualizarMe(datos: DatosActualizarPerfil) {
+    return this.http.put<Usuario>(`${environment.apiUrl}/usuarios/me`, datos);
   }
 
-  cambiarPassword(datos: CambiarPasswordRequest) {
-    return this.http.put<{ mensaje: string }>(`${environment.apiUrl}/usuarios/me/password`, datos, {
-      headers: this.authHeaders(),
-    });
+  cambiarPassword(datos: DatosCambiarPassword) {
+    return this.http.put<{ mensaje: string }>(`${environment.apiUrl}/usuarios/me/password`, datos);
   }
 
-  private authHeaders(): HttpHeaders {
-    return new HttpHeaders({ Authorization: `Bearer ${this.authSvc.getToken()}` });
+  cambiarTema(tema: Tema) {
+    return this.http.put<{ tema: Tema }>(`${environment.apiUrl}/usuarios/me/tema`, { tema });
   }
 }

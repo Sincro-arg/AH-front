@@ -1,12 +1,19 @@
 <header class="header">
-  <a routerLink="/" class="header__marca">AH</a>
+  <div class="header__inner">
+    <a class="header__brand" routerLink="/">AH</a>
 
-  @if (auth.estaLogueado()) {
-    <nav class="header__nav">
-      <a routerLink="/configuracion" class="header__link">Configuración</a>
-      <button type="button" class="header__link header__link--salir" (click)="cerrarSesion()">
-        Cerrar sesión
-      </button>
-    </nav>
-  }
+    @if (estaLogueado()) {
+      <div class="header__user">
+        <a class="header__user-link" routerLink="/configuracion">
+          {{ usuario()?.nombre }} {{ usuario()?.apellido }}
+        </a>
+        <button class="header__logout" type="button" (click)="logout()">Salir</button>
+      </div>
+    } @else {
+      <nav class="header__nav">
+        <a class="header__nav-link" routerLink="/login">Ingresar</a>
+        <a class="header__nav-link" routerLink="/registro">Registrarme</a>
+      </nav>
+    }
+  </div>
 </header>

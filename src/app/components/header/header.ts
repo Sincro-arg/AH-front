@@ -1,5 +1,5 @@
-import { Component, inject } from '@angular/core';
-import { Router, RouterLink } from '@angular/router';
+import { Component, computed, inject, ChangeDetectionStrategy } from '@angular/core';
+import { RouterLink } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 
 @Component({
@@ -7,14 +7,16 @@ import { AuthService } from '../../services/auth.service';
   standalone: true,
   imports: [RouterLink],
   templateUrl: './header.html',
+  changeDetection: ChangeDetectionStrategy.Default,
   styleUrl: './header.css',
 })
 export class Header {
-  protected readonly auth = inject(AuthService);
-  private readonly router = inject(Router);
+  private readonly authSvc = inject(AuthService);
 
-  cerrarSesion(): void {
-    this.auth.logout();
-    this.router.navigate(['/login']);
+  readonly estaLogueado = this.authSvc.estaLogueado;
+  readonly usuario = computed(() => this.authSvc.usuarioActual());
+
+  logout(): void {
+    this.authSvc.logout();
   }
 }
