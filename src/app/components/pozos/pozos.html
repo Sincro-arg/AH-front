@@ -30,29 +30,31 @@
     <div class="pozos__grid">
       @for (pozo of pozos(); track pozo.id) {
         <article class="pozo-card">
-          <div class="pozo-card__hd">
-            <h2 class="pozo-card__titulo">{{ pozo.titulo }}</h2>
-            <span
-              class="pozo-card__estado"
-              [class.pozo-card__estado--abierto]="pozo.estado === 'Abierto'"
-              [class.pozo-card__estado--comprado]="pozo.estado === 'Comprado'"
-              [class.pozo-card__estado--vendido]="pozo.estado === 'Vendido'"
-            >
-              {{ pozo.estado }}
-            </span>
-          </div>
-
-          <p class="pozo-card__auto">{{ pozo.autoDescripcion }}</p>
-
-          <div class="pozo-card__progreso">
-            <div class="pozo-card__barra">
-              <div class="pozo-card__barra-relleno" [style.width.%]="progreso(pozo)"></div>
+          <a class="pozo-card__link" [routerLink]="['/pozos', pozo.id]">
+            <div class="pozo-card__hd">
+              <h2 class="pozo-card__titulo">{{ pozo.titulo }}</h2>
+              <span
+                class="pozo-card__estado"
+                [class.pozo-card__estado--abierto]="pozo.estado === 'Abierto'"
+                [class.pozo-card__estado--comprado]="pozo.estado === 'Comprado'"
+                [class.pozo-card__estado--vendido]="pozo.estado === 'Vendido'"
+              >
+                {{ pozo.estado }}
+              </span>
             </div>
-            <div class="pozo-card__montos">
-              <span>{{ formatoMonto(pozo.montoRecaudado) }}</span>
-              <span class="pozo-card__monto-objetivo">de {{ formatoMonto(pozo.montoObjetivo) }}</span>
+
+            <p class="pozo-card__auto">{{ pozo.autoDescripcion }}</p>
+
+            <div class="pozo-card__progreso">
+              <div class="pozo-card__barra">
+                <div class="pozo-card__barra-relleno" [style.width.%]="progreso(pozo)"></div>
+              </div>
+              <div class="pozo-card__montos">
+                <span>{{ formatoMonto(pozo.montoRecaudado) }}</span>
+                <span class="pozo-card__monto-objetivo">de {{ formatoMonto(pozo.montoObjetivo) }}</span>
+              </div>
             </div>
-          </div>
+          </a>
 
           @if (authSvc.estaLogueado()) {
             <div class="pozo-card__acciones">

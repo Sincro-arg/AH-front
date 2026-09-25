@@ -1,0 +1,100 @@
+<section class="pozo-detalle">
+  <a class="pozo-detalle__volver" routerLink="/pozos">&larr; Volver a pozos</a>
+
+  @if (cargando()) {
+    <div class="pozo-detalle__cargando">
+      <app-spinner texto="Cargando pozo..." />
+    </div>
+  } @else if (error(); as msg) {
+    <div class="pozo-detalle__estado pozo-detalle__estado--error" role="alert">
+      <p>{{ msg }}</p>
+      <button type="button" class="pozo-detalle__reintentar" (click)="reintentar()">Reintentar</button>
+    </div>
+  } @else if (pozo(); as p) {
+    <header class="pozo-detalle__header">
+      <div class="pozo-detalle__header-texto">
+        <h1 class="pozo-detalle__titulo">{{ p.titulo }}</h1>
+        <p class="pozo-detalle__auto">{{ p.autoDescripcion }}</p>
+      </div>
+      <span
+        class="pozo-detalle__estado-badge"
+        [class.pozo-detalle__estado-badge--abierto]="p.estado === 'Abierto'"
+        [class.pozo-detalle__estado-badge--comprado]="p.estado === 'Comprado'"
+        [class.pozo-detalle__estado-badge--vendido]="p.estado === 'Vendido'"
+      >
+        {{ p.estado }}
+      </span>
+    </header>
+
+    <div class="pozo-detalle__progreso">
+      <div class="pozo-detalle__barra">
+        <div class="pozo-detalle__barra-relleno" [style.width.%]="progreso()"></div>
+      </div>
+      <div class="pozo-detalle__montos">
+        <span>{{ formatoMonto(p.montoRecaudado) }}</span>
+        <span class="pozo-detalle__monto-objetivo">de {{ formatoMonto(p.montoObjetivo) }}</span>
+      </div>
+    </div>
+
+    <dl class="pozo-detalle__datos">
+      <div class="pozo-detalle__dato">
+        <dt>Creado</dt>
+        <dd>{{ formatoFecha(p.fechaCreacion) }}</dd>
+      </div>
+      @if (p.precioCompra !== null && p.fechaCompra !== null) {
+        <div class="pozo-detalle__dato">
+          <dt>Compra</dt>
+          <dd>{{ formatoMonto(p.precioCompra) }} el {{ formatoFecha(p.fechaCompra) }}</dd>
+        </div>
+      }
+      @if (p.precioVenta !== null && p.fechaVenta !== null) {
+        <div class="pozo-detalle__dato">
+          <dt>Venta</dt>
+          <dd>{{ formatoMonto(p.precioVenta) }} el {{ formatoFecha(p.fechaVenta) }}</dd>
+        </div>
+      }
+    </dl>
+
+    @if (p.estado === 'Abierto') {
+      <section class="pozo-detalle__invertir">
+        <h2 class="pozo-detalle__subtitulo">Invertir en este pozo</h2>
+        <form class="pozo-detalle__form" [formGroup]="invertirForm" (ngSubmit)="invertir()">
+          <label class="pozo-detalle__label" for="inversion-monto">Monto a invertir</label>
+          <input
+            id="inversion-monto"
+            class="pozo-detalle__input"
+            type="number"
+            min="1"
+            formControlName="monto"
+          />
+          @if (invertirError()) {
+            <p class="pozo-detalle__form-error" role="alert">{{ invertirError() }}</p>
+          }
+          @if (invertirExito()) {
+            <p class="pozo-detalle__form-exito" role="status">Inversion registrada correctamente.</p>
+          }
+          <button type="submit" class="pozo-detalle__invertir-btn" [disabled]="invirtiendo()">
+            {{ invirtiendo() ? 'Invirtiendo...' : 'Invertir' }}
+          </button>
+        </form>
+      </section>
+    }
+
+    <section class="pozo-detalle__inversiones">
+      <h2 class="pozo-detalle__subtitulo">Inversores</h2>
+      @if (p.inversiones.length === 0) {
+        <p class="pozo-detalle__inversiones-vacio">Todavia no hay inversiones en este pozo.</p>
+      } @else {
+        <ul class="pozo-detalle__lista">
+          @for (inv of p.inversiones; track inv.id) {
+            <li class="pozo-detalle__item">
+              <span class="pozo-detalle__item-nombre">{{ inv.nombreInversor }}</span>
+              <span class="pozo-detalle__item-monto">{{ formatoMonto(inv.monto) }}</span>
+              <span class="pozo-detalle__item-fecha">{{ formatoFecha(inv.fecha) }}</span>
+            </li>
+          }
+        </ul>
+      }
+    </section>
+  }
+</section>

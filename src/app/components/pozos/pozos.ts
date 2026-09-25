@@ -1,6 +1,7 @@
 import { Component, ElementRef, HostListener, OnInit, ViewChild, inject, signal } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { RouterLink } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { Pozo, PozosService } from '../../services/pozos.service';
 import { Spinner } from '../spinner/spinner';
@@ -8,7 +9,7 @@ import { Spinner } from '../spinner/spinner';
 @Component({
   selector: 'app-pozos',
   standalone: true,
-  imports: [Spinner, ReactiveFormsModule],
+  imports: [Spinner, ReactiveFormsModule, RouterLink],
   templateUrl: './pozos.html',
   styleUrl: './pozos.css',
 })

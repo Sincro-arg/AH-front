@@ -17,6 +17,12 @@ export const routes: Routes = [
     canActivate: [authGuard],
   },
   {
+    path: 'pozos/:id',
+    loadComponent: () =>
+      import('./components/pozo-detalle/pozo-detalle').then((m) => m.PozoDetalle),
+    canActivate: [authGuard],
+  },
+  {
     path: 'login',
     loadComponent: () => import('./components/login/login').then((m) => m.Login),
   },
