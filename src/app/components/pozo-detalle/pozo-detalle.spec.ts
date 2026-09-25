@@ -153,4 +153,158 @@ describe('PozoDetalle', () => {
 
     expect(fixture.componentInstance.estadoExito()).toBeTrue();
   });
+
+  it('muestra un error si falla marcar el pozo como comprado', () => {
+    fixture.detectChanges();
+    httpMock.expectOne(pozoUrl).flush(pozoMock);
+    fixture.detectChanges();
+
+    fixture.componentInstance.abrirFormComprado();
+    fixture.componentInstance.compradoForm.setValue({ precioCompra: 8000, fechaCompra: '2026-01-01' });
+    fixture.componentInstance.marcarComprado();
+
+    httpMock
+      .expectOne(`${environment.apiUrl}/pozos/1/estado`)
+      .flush({ error: 'El pozo no esta abierto.' }, { status: 409, statusText: 'Conflict' });
+
+    expect(fixture.componentInstance.compradoError()).toBe('El pozo no esta abierto.');
+    expect(fixture.componentInstance.marcandoComprado()).toBeFalse();
+  });
+
+  it('muestra un error si falla invertir en el pozo', () => {
+    fixture.detectChanges();
+    httpMock.expectOne(pozoUrl).flush(pozoMock);
+    fixture.detectChanges();
+
+    fixture.componentInstance.invertirForm.setValue({ monto: 500 });
+    fixture.componentInstance.invertir();
+
+    httpMock
+      .expectOne(inversionesUrl)
+      .flush({ error: 'El pozo ya no esta abierto.' }, { status: 409, statusText: 'Conflict' });
+
+    expect(fixture.componentInstance.invertirError()).toBe('El pozo ya no esta abierto.');
+    expect(fixture.componentInstance.invirtiendo()).toBeFalse();
+  });
+
+  it('marca el pozo como vendido y muestra confirmacion', () => {
+    fixture.detectChanges();
+    httpMock
+      .expectOne(pozoUrl)
+      .flush({ ...pozoMock, estado: 'Comprado', precioCompra: 8000, fechaCompra: '2026-01-01' });
+    fixture.detectChanges();
+
+    fixture.componentInstance.abrirFormVendido();
+    fixture.componentInstance.ventaForm.setValue({ precioVenta: 12000, fechaVenta: '2026-02-01' });
+    fixture.componentInstance.marcarVendido();
+
+    const req = httpMock.expectOne(`${environment.apiUrl}/pozos/1/estado`);
+    expect(req.request.body).toEqual({ accion: 'marcarVendido', precioVenta: 12000, fechaVenta: '2026-02-01' });
+    req.flush({ ...pozoMock, estado: 'Vendido', precioVenta: 12000, fechaVenta: '2026-02-01' });
+
+    httpMock
+      .expectOne(pozoUrl)
+      .flush({ ...pozoMock, estado: 'Vendido', precioVenta: 12000, fechaVenta: '2026-02-01' });
+    fixture.detectChanges();
+
+    httpMock.expectOne(`${environment.apiUrl}/pozos/1/reparto`).flush({ gananciaTotal: 4000, reparto: [] });
+    fixture.detectChanges();
+
+    expect(fixture.componentInstance.estadoExito()).toBeTrue();
+  });
+
+  it('muestra un error si falla marcar el pozo como vendido', () => {
+    fixture.detectChanges();
+    httpMock
+      .expectOne(pozoUrl)
+      .flush({ ...pozoMock, estado: 'Comprado', precioCompra: 8000, fechaCompra: '2026-01-01' });
+    fixture.detectChanges();
+
+    fixture.componentInstance.abrirFormVendido();
+    fixture.componentInstance.ventaForm.setValue({ precioVenta: 12000, fechaVenta: '2026-02-01' });
+    fixture.componentInstance.marcarVendido();
+
+    httpMock
+      .expectOne(`${environment.apiUrl}/pozos/1/estado`)
+      .flush({ error: 'El pozo no esta comprado.' }, { status: 409, statusText: 'Conflict' });
+
+    expect(fixture.componentInstance.ventaError()).toBe('El pozo no esta comprado.');
+    expect(fixture.componentInstance.marcandoVendido()).toBeFalse();
+  });
+
+  it('guarda la edicion de una inversion propia y recarga el pozo', () => {
+    fixture.detectChanges();
+    httpMock.expectOne(pozoUrl).flush(pozoMock);
+    fixture.detectChanges();
+
+    const inv = pozoMock.inversiones[0];
+    fixture.componentInstance.abrirEditarInversion(inv);
+    fixture.componentInstance.editForm.setValue({ monto: 6000 });
+    fixture.componentInstance.guardarInversion();
+
+    const req = httpMock.expectOne(`${environment.apiUrl}/inversiones/${inv.id}`);
+    expect(req.request.method).toBe('PUT');
+    expect(req.request.body).toEqual({ monto: 6000 });
+    req.flush({ id: inv.id, pozoId: '1', usuarioId: 'u1', monto: 6000, fecha: new Date().toISOString() });
+
+    httpMock.expectOne(pozoUrl).flush({ ...pozoMock, montoRecaudado: 6000 });
+    fixture.detectChanges();
+
+    expect(fixture.componentInstance.editExito()).toBeTrue();
+  });
+
+  it('muestra un error si falla la edicion de una inversion propia', () => {
+    fixture.detectChanges();
+    httpMock.expectOne(pozoUrl).flush(pozoMock);
+    fixture.detectChanges();
+
+    const inv = pozoMock.inversiones[0];
+    fixture.componentInstance.abrirEditarInversion(inv);
+    fixture.componentInstance.editForm.setValue({ monto: 6000 });
+    fixture.componentInstance.guardarInversion();
+
+    httpMock
+      .expectOne(`${environment.apiUrl}/inversiones/${inv.id}`)
+      .flush({ error: 'El pozo dejo de estar abierto.' }, { status: 409, statusText: 'Conflict' });
+
+    expect(fixture.componentInstance.editError()).toBe('El pozo dejo de estar abierto.');
+    expect(fixture.componentInstance.editEnviando()).toBeFalse();
+  });
+
+  it('elimina una inversion propia tras confirmar y recarga el pozo', () => {
+    fixture.detectChanges();
+    httpMock.expectOne(pozoUrl).flush(pozoMock);
+    fixture.detectChanges();
+
+    const inv = pozoMock.inversiones[0];
+    fixture.componentInstance.eliminarInversion(inv);
+    fixture.componentInstance.confirmarEliminarInversion();
+
+    const req = httpMock.expectOne(`${environment.apiUrl}/inversiones/${inv.id}`);
+    expect(req.request.method).toBe('DELETE');
+    req.flush(null);
+
+    httpMock.expectOne(pozoUrl).flush({ ...pozoMock, montoRecaudado: 0, inversiones: [] });
+    fixture.detectChanges();
+
+    expect(fixture.componentInstance.eliminarEnviando()).toBeFalse();
+    expect(fixture.componentInstance.eliminarError()).toBeNull();
+  });
+
+  it('muestra un error si falla la eliminacion de una inversion propia', () => {
+    fixture.detectChanges();
+    httpMock.expectOne(pozoUrl).flush(pozoMock);
+    fixture.detectChanges();
+
+    const inv = pozoMock.inversiones[0];
+    fixture.componentInstance.eliminarInversion(inv);
+    fixture.componentInstance.confirmarEliminarInversion();
+
+    httpMock
+      .expectOne(`${environment.apiUrl}/inversiones/${inv.id}`)
+      .flush({ error: 'No podes eliminar esta inversion.' }, { status: 403, statusText: 'Forbidden' });
+
+    expect(fixture.componentInstance.eliminarError()).toBe('No podes eliminar esta inversion.');
+    expect(fixture.componentInstance.eliminarEnviando()).toBeFalse();
+  });
 });
