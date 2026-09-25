@@ -46,6 +46,21 @@ describe('Header', () => {
     expect(fixture.nativeElement.textContent).toContain('Cerrar sesión');
   });
 
+  it('muestra el link a configuracion si hay token guardado', () => {
+    localStorage.setItem('ah-token', 'un-token-jwt');
+    fixture.detectChanges();
+
+    const link = fixture.nativeElement.querySelector('a[href="/configuracion"]');
+    expect(link).toBeTruthy();
+  });
+
+  it('no muestra el link a configuracion si no hay token', () => {
+    fixture.detectChanges();
+
+    const link = fixture.nativeElement.querySelector('a[href="/configuracion"]');
+    expect(link).toBeFalsy();
+  });
+
   it('cerrar sesion borra el token y redirige a login', () => {
     localStorage.setItem('ah-token', 'un-token-jwt');
     fixture.detectChanges();
