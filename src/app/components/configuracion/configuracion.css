@@ -2,7 +2,7 @@
   padding: 2rem 1.5rem;
   max-width: 480px;
   margin: 0 auto;
-  font-family: system-ui, sans-serif;
+  font-family: var(--font-family-base);
 }
 
 .configuracion__form {

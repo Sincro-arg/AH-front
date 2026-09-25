@@ -10,7 +10,7 @@
   --color-error: #c0392b;
   --color-success: #2e7d32;
   --color-bg: #ffffff;
-  --font-family-base: system-ui, sans-serif;
+  --font-family-base: 'Inter', system-ui, sans-serif;
 }
 
 :root[data-tema='oscuro'] {
