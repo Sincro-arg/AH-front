@@ -1,18 +1,66 @@
 <section class="home">
-  @if (usuario(); as u) {
-    <h1>Hola, {{ u.nombre }}</h1>
-    <p>Bienvenido a tu cuenta.</p>
+  <div class="home-hero">
+    <div class="home-hero__bg" aria-hidden="true">
+      <span class="home-hero__blob home-hero__blob--1"></span>
+      <span class="home-hero__blob home-hero__blob--2"></span>
+      <svg class="home-hero__illustration" viewBox="0 0 240 180" fill="none">
+        <circle cx="120" cy="90" r="46" fill="var(--color-primary)" opacity="0.12" />
+        <circle cx="120" cy="90" r="30" stroke="var(--color-primary)" stroke-width="3" opacity="0.35" />
+        <path
+          d="M40 150c26-34 60-51 80-51s54 17 80 51"
+          stroke="var(--color-primary)"
+          stroke-width="3"
+          stroke-linecap="round"
+          opacity="0.25"
+        />
+        <path
+          d="M70 150c18-22 38-33 50-33s32 11 50 33"
+          stroke="var(--color-primary)"
+          stroke-width="3"
+          stroke-linecap="round"
+          opacity="0.45"
+        />
+      </svg>
+    </div>
 
-    <dl class="home__datos">
-      <dt>Email</dt>
-      <dd>{{ u.email }}</dd>
-      <dt>Telefono</dt>
-      <dd>{{ u.telefono || 'Sin cargar' }}</dd>
-      <dt>Miembro desde</dt>
-      <dd>{{ u.fechaAlta | date: 'longDate' }}</dd>
-    </dl>
+    <div class="home-hero__content">
+      <span class="home-hero__date">{{ fechaHoy() }}</span>
+      <h1 class="home-hero__title">
+        {{ saludo() }}{{ usuario() ? ', ' + usuario()!.nombre : '' }}
+        <span class="home-hero__wave" aria-hidden="true">👋</span>
+      </h1>
+      <p class="home-hero__sub">Bienvenido a tu cuenta.</p>
+    </div>
+  </div>
+
+  @if (usuario(); as u) {
+    <div class="home__cards">
+      <article class="home__card">
+        <span class="home__card-label">Email</span>
+        <span class="home__card-value">{{ u.email }}</span>
+      </article>
+      <article class="home__card">
+        <span class="home__card-label">Telefono</span>
+        <span class="home__card-value">{{ u.telefono || 'Sin cargar' }}</span>
+      </article>
+      <article class="home__card">
+        <span class="home__card-label">Miembro desde</span>
+        <span class="home__card-value">{{ u.fechaAlta | date: 'longDate' }}</span>
+      </article>
+      <article class="home__card">
+        <span class="home__card-label">Ultimo acceso</span>
+        <span class="home__card-value">
+          {{ u.ultimoAcceso ? (u.ultimoAcceso | date: 'medium') : 'Primera vez' }}
+        </span>
+      </article>
+    </div>
 
     <a class="home__link" routerLink="/configuracion">Editar mi cuenta</a>
+  } @else if (error(); as msg) {
+    <div class="home__estado home__estado--error" role="alert">
+      <p>{{ msg }}</p>
+      <button type="button" class="home__reintentar" (click)="reintentar()">Reintentar</button>
+    </div>
   } @else {
     <p class="home__cargando">Cargando...</p>
   }
