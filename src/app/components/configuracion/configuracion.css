@@ -70,6 +70,13 @@
   border: 1px solid var(--color-border);
   border-radius: 10px;
   background-color: var(--color-surface);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.config__card:hover {
+  transform: translateY(-2px);
+  border-color: rgba(238, 79, 35, 0.4);
+  box-shadow: 0 10px 22px -14px rgba(238, 79, 35, 0.4);
 }
 
 .config__card-titulo {
