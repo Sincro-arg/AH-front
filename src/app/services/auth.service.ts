@@ -15,6 +15,8 @@ export interface Usuario {
   telefono: string;
   tema: Tema;
   fechaAlta: string;
+  ultimoAcceso: string | null;
+  notificacionesEmail: boolean;
 }
 
 export interface DatosRegistro {

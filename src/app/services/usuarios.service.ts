@@ -38,4 +38,11 @@ export class UsuariosService {
   eliminarMe() {
     return this.http.delete<void>(`${environment.apiUrl}/usuarios/me`);
   }
+
+  cambiarNotificaciones(valor: boolean) {
+    return this.http.put<{ notificacionesEmail: boolean }>(
+      `${environment.apiUrl}/usuarios/me/notificaciones`,
+      { notificacionesEmail: valor },
+    );
+  }
 }

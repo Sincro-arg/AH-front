@@ -57,6 +57,8 @@ describe('Login', () => {
         telefono: '',
         tema: 'claro',
         fechaAlta: new Date().toISOString(),
+        ultimoAcceso: new Date().toISOString(),
+        notificacionesEmail: true,
       },
     });
 
@@ -81,6 +83,8 @@ describe('Login', () => {
         telefono: '',
         tema: 'oscuro',
         fechaAlta: new Date().toISOString(),
+        ultimoAcceso: new Date().toISOString(),
+        notificacionesEmail: true,
       },
     });
 

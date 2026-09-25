@@ -17,6 +17,8 @@ describe('Home', () => {
     telefono: '1122334455',
     tema: 'claro' as const,
     fechaAlta: new Date().toISOString(),
+    ultimoAcceso: new Date().toISOString(),
+    notificacionesEmail: true,
   };
 
   beforeEach(async () => {

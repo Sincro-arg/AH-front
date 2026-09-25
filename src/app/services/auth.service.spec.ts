@@ -19,6 +19,8 @@ describe('AuthService', () => {
     telefono: '',
     tema: 'oscuro' as const,
     fechaAlta: new Date().toISOString(),
+    ultimoAcceso: new Date().toISOString(),
+    notificacionesEmail: true,
   };
 
   beforeEach(() => {
@@ -97,6 +99,8 @@ describe('AuthService al recargar la app con sesion activa', () => {
       telefono: '',
       tema: 'oscuro',
       fechaAlta: new Date().toISOString(),
+      ultimoAcceso: new Date().toISOString(),
+      notificacionesEmail: true,
     });
 
     expect(setSpy).toHaveBeenCalledWith('oscuro');
