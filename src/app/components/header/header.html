@@ -1,0 +1,12 @@
+<header class="header">
+  <a routerLink="/" class="header__marca">AH</a>
+
+  @if (auth.estaLogueado()) {
+    <nav class="header__nav">
+      <a routerLink="/configuracion" class="header__link">Configuración</a>
+      <button type="button" class="header__link header__link--salir" (click)="cerrarSesion()">
+        Cerrar sesión
+      </button>
+    </nav>
+  }
+</header>
