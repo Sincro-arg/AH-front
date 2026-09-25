@@ -49,6 +49,10 @@
   margin-top: 1rem;
 }
 
+.home__cargando {
+  color: var(--color-text-muted);
+}
+
 @media (prefers-reduced-motion: reduce) {
   .home > * {
     animation: none;

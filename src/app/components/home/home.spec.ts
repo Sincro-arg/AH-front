@@ -34,6 +34,13 @@ describe('Home', () => {
     expect(fixture.componentInstance).toBeTruthy();
   });
 
+  it('muestra un estado de carga cuando todavia no hay usuario', () => {
+    fixture.detectChanges();
+
+    const texto = (fixture.nativeElement as HTMLElement).textContent ?? '';
+    expect(texto).toContain('Cargando');
+  });
+
   it('muestra los datos del usuario logueado', () => {
     authSvc.actualizarUsuarioActual(usuarioMock);
     fixture.detectChanges();
