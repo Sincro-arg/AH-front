@@ -108,4 +108,128 @@ describe('Pozos', () => {
     ).toBe(100);
     expect(fixture.componentInstance.progreso({ ...pozoMock, montoObjetivo: 0 })).toBe(0);
   });
+
+  describe('guardarPozo', () => {
+    it('crea un pozo nuevo y lo agrega al principio de la lista', () => {
+      fixture.detectChanges();
+      httpMock.expectOne(pozosUrl).flush([]);
+      fixture.detectChanges();
+
+      const comp = fixture.componentInstance;
+      comp.pozoForm.setValue({
+        titulo: 'Renault Sandero 2020',
+        autoDescripcion: 'Renault Sandero 2020, 50.000km',
+        montoObjetivo: 8000,
+      });
+      comp.guardarPozo();
+
+      const req = httpMock.expectOne({ url: pozosUrl, method: 'POST' });
+      expect(req.request.body).toEqual({
+        titulo: 'Renault Sandero 2020',
+        autoDescripcion: 'Renault Sandero 2020, 50.000km',
+        montoObjetivo: 8000,
+      });
+
+      const nuevoPozo: Pozo = {
+        ...pozoMock,
+        id: '2',
+        titulo: 'Renault Sandero 2020',
+        autoDescripcion: 'Renault Sandero 2020, 50.000km',
+        montoObjetivo: 8000,
+        montoRecaudado: 0,
+      };
+      req.flush(nuevoPozo);
+
+      expect(comp.pozos()).toEqual([nuevoPozo]);
+      expect(comp.formEnviando()).toBeFalse();
+      expect(comp.formExito()).toBeTrue();
+    });
+
+    it('edita un pozo existente y lo reemplaza en la lista', () => {
+      fixture.detectChanges();
+      httpMock.expectOne(pozosUrl).flush([pozoMock]);
+      fixture.detectChanges();
+
+      const comp = fixture.componentInstance;
+      comp.abrirEditar(pozoMock);
+      comp.pozoForm.patchValue({ titulo: 'Fiat Cronos 2022 (actualizado)' });
+      comp.guardarPozo();
+
+      const req = httpMock.expectOne({ url: `${pozosUrl}/${pozoMock.id}`, method: 'PUT' });
+      expect(req.request.body).toEqual({
+        titulo: 'Fiat Cronos 2022 (actualizado)',
+        autoDescripcion: pozoMock.autoDescripcion,
+        montoObjetivo: pozoMock.montoObjetivo,
+      });
+
+      const pozoActualizado: Pozo = { ...pozoMock, titulo: 'Fiat Cronos 2022 (actualizado)' };
+      req.flush(pozoActualizado);
+
+      expect(comp.pozos()).toEqual([pozoActualizado]);
+      expect(comp.formEnviando()).toBeFalse();
+      expect(comp.formExito()).toBeTrue();
+    });
+
+    it('muestra un error si falla el guardado del pozo', () => {
+      fixture.detectChanges();
+      httpMock.expectOne(pozosUrl).flush([]);
+      fixture.detectChanges();
+
+      const comp = fixture.componentInstance;
+      comp.pozoForm.setValue({
+        titulo: 'Renault Sandero 2020',
+        autoDescripcion: 'Renault Sandero 2020, 50.000km',
+        montoObjetivo: 8000,
+      });
+      comp.guardarPozo();
+
+      httpMock.expectOne({ url: pozosUrl, method: 'POST' }).flush(
+        { error: 'El monto objetivo es invalido.' },
+        { status: 400, statusText: 'Bad Request' },
+      );
+
+      expect(comp.formError()).toBe('El monto objetivo es invalido.');
+      expect(comp.formEnviando()).toBeFalse();
+      expect(comp.formExito()).toBeFalse();
+      expect(comp.pozos()).toEqual([]);
+    });
+  });
+
+  describe('confirmarEliminarPozo', () => {
+    it('elimina un pozo confirmado y lo saca de la lista', () => {
+      fixture.detectChanges();
+      httpMock.expectOne(pozosUrl).flush([pozoMock]);
+      fixture.detectChanges();
+
+      const comp = fixture.componentInstance;
+      comp.eliminarPozo(pozoMock);
+      comp.confirmarEliminarPozo();
+
+      httpMock.expectOne({ url: `${pozosUrl}/${pozoMock.id}`, method: 'DELETE' }).flush(null);
+
+      expect(comp.pozos()).toEqual([]);
+      expect(comp.eliminarEnviando()).toBeFalse();
+      expect(comp.eliminarObjetivo()).toBeNull();
+      expect(comp.eliminarError()).toBeNull();
+    });
+
+    it('muestra un error si falla la eliminacion del pozo', () => {
+      fixture.detectChanges();
+      httpMock.expectOne(pozosUrl).flush([pozoMock]);
+      fixture.detectChanges();
+
+      const comp = fixture.componentInstance;
+      comp.eliminarPozo(pozoMock);
+      comp.confirmarEliminarPozo();
+
+      httpMock.expectOne({ url: `${pozosUrl}/${pozoMock.id}`, method: 'DELETE' }).flush(
+        { error: 'No se puede eliminar un pozo con inversiones.' },
+        { status: 409, statusText: 'Conflict' },
+      );
+
+      expect(comp.eliminarError()).toBe('No se puede eliminar un pozo con inversiones.');
+      expect(comp.eliminarEnviando()).toBeFalse();
+      expect(comp.pozos()).toEqual([pozoMock]);
+    });
+  });
 });
