@@ -5,11 +5,12 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { AuthService, Tema, Usuario } from '../../services/auth.service';
 import { UsuariosService } from '../../services/usuarios.service';
 import { ThemeService } from '../../services/theme.service';
+import { Spinner } from '../spinner/spinner';
 
 @Component({
   selector: 'app-configuracion',
   standalone: true,
-  imports: [ReactiveFormsModule, DatePipe],
+  imports: [ReactiveFormsModule, DatePipe, Spinner],
   templateUrl: './configuracion.html',
   styleUrl: './configuracion.css',
 })

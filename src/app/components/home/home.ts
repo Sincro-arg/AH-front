@@ -4,11 +4,12 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { RouterLink } from '@angular/router';
 import { AuthService, Usuario } from '../../services/auth.service';
 import { UsuariosService } from '../../services/usuarios.service';
+import { Spinner } from '../spinner/spinner';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [DatePipe, RouterLink],
+  imports: [DatePipe, RouterLink, Spinner],
   templateUrl: './home.html',
   styleUrl: './home.css',
 })

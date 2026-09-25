@@ -62,6 +62,8 @@
       <button type="button" class="home__reintentar" (click)="reintentar()">Reintentar</button>
     </div>
   } @else {
-    <p class="home__cargando">Cargando...</p>
+    <div class="home__cargando">
+      <app-spinner />
+    </div>
   }
 </section>

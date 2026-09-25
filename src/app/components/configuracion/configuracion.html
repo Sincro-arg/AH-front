@@ -2,7 +2,9 @@
   <h1 class="config__titulo">Mi cuenta</h1>
 
   @if (meCargando()) {
-    <p class="config__cargando">Cargando...</p>
+    <div class="config__cargando">
+      <app-spinner />
+    </div>
   } @else if (meError()) {
     <p class="config__error">{{ meError() }}</p>
   }
