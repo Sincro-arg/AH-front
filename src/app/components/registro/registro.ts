@@ -41,7 +41,7 @@ export class Registro {
       next: () => {
         this.exito.set(true);
         this.enviando.set(false);
-        this.router.navigateByUrl('/login');
+        this.router.navigateByUrl('/login', { state: { cuentaCreada: true } });
       },
       error: (err: HttpErrorResponse) => {
         this.error.set(err.error?.error ?? 'No se pudo completar el registro.');

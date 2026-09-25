@@ -23,6 +23,7 @@ export class Login {
 
   readonly enviando = signal(false);
   readonly error = signal<string | null>(null);
+  readonly cuentaCreada = signal(!!(this.router.getCurrentNavigation()?.extras.state?.['cuentaCreada']));
 
   onSubmit(): void {
     if (this.form.invalid || this.enviando()) {

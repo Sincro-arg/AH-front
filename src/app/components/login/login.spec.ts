@@ -87,6 +87,16 @@ describe('Login', () => {
     expect(setSpy).toHaveBeenCalledWith('oscuro');
   });
 
+  it('muestra el aviso de cuenta creada cuando llega desde el registro', () => {
+    spyOn(router, 'getCurrentNavigation').and.returnValue({
+      extras: { state: { cuentaCreada: true } },
+    } as unknown as ReturnType<Router['getCurrentNavigation']>);
+
+    const testFixture = TestBed.createComponent(Login);
+
+    expect(testFixture.componentInstance.cuentaCreada()).toBeTrue();
+  });
+
   it('muestra el error cuando el login falla', () => {
     const component = fixture.componentInstance;
     component.form.setValue({ email: 'a@test.com', password: 'mala' });

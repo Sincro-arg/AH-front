@@ -52,7 +52,7 @@ describe('Registro', () => {
     expect(req.request.method).toBe('POST');
     req.flush({ mensaje: 'Usuario registrado correctamente' });
 
-    expect(navigateSpy).toHaveBeenCalledWith('/login');
+    expect(navigateSpy).toHaveBeenCalledWith('/login', { state: { cuentaCreada: true } });
   });
 
   it('muestra el error cuando el email ya esta registrado', () => {

@@ -1,6 +1,10 @@
 <section class="login">
   <h1>Ingresar</h1>
 
+  @if (cuentaCreada()) {
+    <p class="login__exito">Cuenta creada con exito. Ya podes ingresar.</p>
+  }
+
   <form class="login__form" [formGroup]="form" (ngSubmit)="onSubmit()">
     <label class="login__label" for="login-email">Email</label>
     <input
