@@ -1,5 +1,15 @@
 <footer class="footer">
   <div class="footer__inner">
-    <span>© {{ anio }} AH</span>
+    <div class="footer__brand">
+      <span class="footer__brand-name">Account Hub</span>
+      <span class="footer__tagline">Tu cuenta, simple y segura.</span>
+    </div>
+
+    <nav class="footer__links" aria-label="Enlaces del pie de pagina">
+      <a class="footer__link" routerLink="/configuracion">Mi cuenta</a>
+      <a class="footer__link" href="mailto:soporte@accounthub.com">Ayuda / Contacto</a>
+    </nav>
+
+    <span class="footer__copy">© {{ anio }} Account Hub</span>
   </div>
 </footer>
