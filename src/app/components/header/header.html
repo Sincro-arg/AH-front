@@ -1,6 +1,6 @@
 <header class="header">
   <div class="header__inner">
-    <a class="header__brand" routerLink="/">
+    <a class="header__brand" [routerLink]="estaLogueado() ? '/cuenta' : '/'">
       <svg
         class="header__logo"
         viewBox="0 0 32 32"
@@ -17,9 +17,9 @@
           font-size="13"
           font-weight="800"
           fill="#fff"
-        >AH</text>
+        >PA</text>
       </svg>
-      <span class="header__brand-name">Account Hub</span>
+      <span class="header__brand-name">PozoAuto</span>
     </a>
 
     @if (estaLogueado()) {

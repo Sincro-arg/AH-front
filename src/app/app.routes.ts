@@ -4,6 +4,10 @@ import { authGuard } from './guards/auth.guard';
 export const routes: Routes = [
   {
     path: '',
+    loadComponent: () => import('./components/landing/landing').then((m) => m.Landing),
+  },
+  {
+    path: 'cuenta',
     loadComponent: () => import('./components/home/home').then((m) => m.Home),
     canActivate: [authGuard],
   },

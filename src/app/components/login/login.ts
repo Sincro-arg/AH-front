@@ -37,7 +37,7 @@ export class Login {
     const { email, password } = this.form.getRawValue();
 
     this.authSvc.login(email, password).subscribe({
-      next: () => this.router.navigateByUrl('/'),
+      next: () => this.router.navigateByUrl('/cuenta'),
       error: (err: HttpErrorResponse) => {
         this.error.set(err.error?.error ?? 'No se pudo iniciar sesion.');
         this.enviando.set(false);

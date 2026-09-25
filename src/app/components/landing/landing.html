@@ -1,0 +1,21 @@
+<section class="landing">
+  <div class="landing__cartel">
+    <h1 class="landing__titulo">PozoAuto</h1>
+    <p class="landing__subtitulo">En construccion</p>
+  </div>
+
+  <p class="landing__estado" [class.landing__estado--ok]="estadoConexion() === 'conectado'"
+     [class.landing__estado--error]="estadoConexion() === 'sinConexion'">
+    @switch (estadoConexion()) {
+      @case ('conectado') {
+        Servidor conectado ({{ cantidadPozos() }} pozos)
+      }
+      @case ('sinConexion') {
+        Sin conexion
+      }
+      @default {
+        Verificando conexion...
+      }
+    }
+  </p>
+</section>

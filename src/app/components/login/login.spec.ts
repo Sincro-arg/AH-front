@@ -65,7 +65,7 @@ describe('Login', () => {
       },
     });
 
-    expect(navigateSpy).toHaveBeenCalledWith('/');
+    expect(navigateSpy).toHaveBeenCalledWith('/cuenta');
   });
 
   it('sincroniza el tema del usuario al loguearse', () => {
