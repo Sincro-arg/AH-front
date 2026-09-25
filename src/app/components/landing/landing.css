@@ -2,35 +2,107 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  gap: 1rem;
-  min-height: 60vh;
-  padding: 2rem 1rem;
+  gap: 2.5rem;
+  padding: 3rem 1rem 2rem;
   text-align: center;
 }
 
-.landing__cartel {
-  padding: clamp(2rem, 6vw, 3.5rem) clamp(1.5rem, 5vw, 3rem);
+.landing__hero {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  max-width: 640px;
+}
+
+.landing__titulo {
+  font-size: clamp(2.2rem, 7vw, 3.4rem);
+  font-weight: 800;
+  color: var(--color-primary);
+  margin: 0;
+  letter-spacing: -0.02em;
+}
+
+.landing__bajada {
+  font-size: clamp(1rem, 2.5vw, 1.15rem);
+  color: var(--color-text-muted);
+  margin: 0;
+  line-height: 1.5;
+}
+
+.landing__cta {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.75rem;
+  margin-top: 0.5rem;
+}
+
+.landing__boton {
+  padding: 0.7rem 1.6rem;
+  border-radius: 999px;
+  font-weight: 700;
+  text-decoration: none;
+  transition: opacity 0.15s ease;
+}
+
+.landing__boton:hover {
+  opacity: 0.85;
+}
+
+.landing__boton--primario {
+  background: var(--color-primary);
+  color: #fff;
+}
+
+.landing__boton--secundario {
+  background: transparent;
+  color: var(--color-primary);
+  border: 1px solid var(--color-primary);
+}
+
+.landing__pasos {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.25rem;
+  max-width: 900px;
+  width: 100%;
+}
+
+.landing__paso {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 1.5rem 1.25rem;
   border-radius: 8px 28px 8px 28px;
   border: 1px solid var(--color-border);
   background: var(--color-surface);
 }
 
-.landing__titulo {
-  font-size: clamp(2rem, 6vw, 3.2rem);
+.landing__paso-numero {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  background: var(--color-primary);
+  color: #fff;
   font-weight: 800;
-  color: var(--color-primary);
-  margin: 0 0 0.5rem;
-  letter-spacing: -0.02em;
 }
 
-.landing__subtitulo {
-  font-size: clamp(1rem, 2.5vw, 1.3rem);
-  font-weight: 600;
+.landing__paso-titulo {
+  font-size: 1.05rem;
+  font-weight: 700;
+  margin: 0;
+}
+
+.landing__paso-texto {
+  font-size: 0.9rem;
   color: var(--color-text-muted);
   margin: 0;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
+  line-height: 1.4;
 }
 
 .landing__estado {

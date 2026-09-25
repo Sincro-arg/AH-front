@@ -1,14 +1,44 @@
 <section class="landing">
-  <div class="landing__cartel">
+  <div class="landing__hero">
     <h1 class="landing__titulo">PozoAuto</h1>
-    <p class="landing__subtitulo">En construccion</p>
+    <p class="landing__bajada">
+      Invertí junto a otras personas en la compra y venta de autos. Poné la plata que quieras
+      en un pozo, y cuando el auto se vende cobrás tu parte de la ganancia segun cuanto pusiste.
+    </p>
+
+    <div class="landing__cta">
+      @if (estaLogueado()) {
+        <a class="landing__boton landing__boton--primario" routerLink="/pozos">Ver pozos disponibles</a>
+      } @else {
+        <a class="landing__boton landing__boton--primario" routerLink="/registro">Quiero invertir</a>
+        <a class="landing__boton landing__boton--secundario" routerLink="/login">Ya tengo cuenta</a>
+      }
+    </div>
+  </div>
+
+  <div class="landing__pasos">
+    <div class="landing__paso">
+      <span class="landing__paso-numero">1</span>
+      <h2 class="landing__paso-titulo">Elegí un pozo</h2>
+      <p class="landing__paso-texto">Cada pozo es un auto puntual que se va a comprar y despues revender.</p>
+    </div>
+    <div class="landing__paso">
+      <span class="landing__paso-numero">2</span>
+      <h2 class="landing__paso-titulo">Invertí lo que quieras</h2>
+      <p class="landing__paso-texto">Aportas el monto que decidas, junto a otros inversores, hasta juntar el objetivo.</p>
+    </div>
+    <div class="landing__paso">
+      <span class="landing__paso-numero">3</span>
+      <h2 class="landing__paso-titulo">Cobrá tu parte</h2>
+      <p class="landing__paso-texto">Cuando el auto se vende, la ganancia se reparte entre los inversores segun lo que puso cada uno.</p>
+    </div>
   </div>
 
   <p class="landing__estado" [class.landing__estado--ok]="estadoConexion() === 'conectado'"
      [class.landing__estado--error]="estadoConexion() === 'sinConexion'">
     @switch (estadoConexion()) {
       @case ('conectado') {
-        Servidor conectado ({{ cantidadPozos() }} pozos)
+        Servidor conectado ({{ cantidadPozos() }} {{ haySoloUnPozo() ? 'pozo' : 'pozos' }})
       }
       @case ('sinConexion') {
         Sin conexion

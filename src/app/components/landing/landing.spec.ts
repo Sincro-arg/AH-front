@@ -1,23 +1,47 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideHttpClient } from '@angular/common/http';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
+import { provideRouter } from '@angular/router';
 import { environment } from '../../../environments/environment';
+import { AuthService } from '../../services/auth.service';
 import { Landing } from './landing';
 
 describe('Landing', () => {
   let fixture: ComponentFixture<Landing>;
   let httpMock: HttpTestingController;
+  let authSvc: AuthService;
 
   const pozosUrl = `${environment.apiUrl}/pozos`;
+
+  const usuarioMock = {
+    id: '1',
+    nombre: 'Ana',
+    apellido: 'Gomez',
+    email: 'ana@test.com',
+    telefono: '1122334455',
+    tema: 'claro' as const,
+    fechaAlta: new Date().toISOString(),
+    ultimoAcceso: new Date().toISOString(),
+    notificacionesEmail: true,
+  };
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [Landing],
-      providers: [provideHttpClient(), provideHttpClientTesting()],
+      providers: [
+        provideHttpClient(),
+        provideHttpClientTesting(),
+        provideRouter([
+          { path: 'pozos', children: [] },
+          { path: 'login', children: [] },
+          { path: 'registro', children: [] },
+        ]),
+      ],
     }).compileComponents();
 
     fixture = TestBed.createComponent(Landing);
     httpMock = TestBed.inject(HttpTestingController);
+    authSvc = TestBed.inject(AuthService);
   });
 
   afterEach(() => {
@@ -30,13 +54,34 @@ describe('Landing', () => {
     expect(fixture.componentInstance).toBeTruthy();
   });
 
-  it('muestra siempre el cartel principal, sin depender de la conexion', () => {
+  it('muestra la presentacion del producto, sin el cartel de en construccion', () => {
     fixture.detectChanges();
     const texto = (fixture.nativeElement as HTMLElement).textContent ?? '';
     expect(texto).toContain('PozoAuto');
-    expect(texto).toContain('En construccion');
+    expect(texto.toLowerCase()).not.toContain('en construccion');
+    expect(texto).toContain('Invertí');
 
     httpMock.expectOne(pozosUrl).flush([]);
+  });
+
+  it('ofrece registrarse o ingresar si no hay usuario logueado', () => {
+    fixture.detectChanges();
+    httpMock.expectOne(pozosUrl).flush([]);
+    fixture.detectChanges();
+
+    const texto = (fixture.nativeElement as HTMLElement).textContent ?? '';
+    expect(texto).toContain('Quiero invertir');
+    expect(texto).toContain('Ya tengo cuenta');
+  });
+
+  it('ofrece ver los pozos si el usuario ya esta logueado', () => {
+    authSvc.actualizarUsuarioActual(usuarioMock);
+    fixture.detectChanges();
+    httpMock.expectOne(pozosUrl).flush([]);
+    fixture.detectChanges();
+
+    const texto = (fixture.nativeElement as HTMLElement).textContent ?? '';
+    expect(texto).toContain('Ver pozos disponibles');
   });
 
   it('muestra la cantidad de pozos cuando el servidor responde', () => {
