@@ -36,6 +36,33 @@ export interface DatosPozo {
   montoObjetivo: number;
 }
 
+export interface MarcarCompradoDto {
+  accion: 'marcarComprado';
+  precioCompra: number;
+  fechaCompra: string;
+}
+
+export interface MarcarVendidoDto {
+  accion: 'marcarVendido';
+  precioVenta: number;
+  fechaVenta: string;
+}
+
+export type CambiarEstadoDto = MarcarCompradoDto | MarcarVendidoDto;
+
+export interface RepartoItem {
+  usuarioId: string;
+  nombreInversor: string;
+  montoInvertido: number;
+  porcentaje: number;
+  ganancia: number;
+}
+
+export interface Reparto {
+  gananciaTotal: number;
+  reparto: RepartoItem[];
+}
+
 @Injectable({ providedIn: 'root' })
 export class PozosService {
   private readonly http = inject(HttpClient);
@@ -58,5 +85,13 @@ export class PozosService {
 
   eliminar(id: string) {
     return this.http.delete<void>(`${environment.apiUrl}/pozos/${id}`);
+  }
+
+  cambiarEstado(id: string, datos: CambiarEstadoDto) {
+    return this.http.put<Pozo>(`${environment.apiUrl}/pozos/${id}/estado`, datos);
+  }
+
+  reparto(id: string) {
+    return this.http.get<Reparto>(`${environment.apiUrl}/pozos/${id}/reparto`);
   }
 }

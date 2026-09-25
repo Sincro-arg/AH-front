@@ -4,7 +4,12 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { InversionesService } from '../../services/inversiones.service';
-import { InversionResumen, PozoDetalle as PozoDetalleModelo, PozosService } from '../../services/pozos.service';
+import {
+  InversionResumen,
+  PozoDetalle as PozoDetalleModelo,
+  PozosService,
+  Reparto,
+} from '../../services/pozos.service';
 import { Spinner } from '../spinner/spinner';
 
 @Component({
@@ -48,6 +53,30 @@ export class PozoDetalle implements OnInit {
   readonly eliminarEnviando = signal(false);
   readonly eliminarError = signal<string | null>(null);
 
+  readonly compradoForm = this.fb.nonNullable.group({
+    precioCompra: [0, [Validators.required, Validators.min(1)]],
+    fechaCompra: ['', [Validators.required]],
+  });
+
+  readonly mostrandoFormComprado = signal(false);
+  readonly marcandoComprado = signal(false);
+  readonly compradoError = signal<string | null>(null);
+
+  readonly ventaForm = this.fb.nonNullable.group({
+    precioVenta: [0, [Validators.required, Validators.min(1)]],
+    fechaVenta: ['', [Validators.required]],
+  });
+
+  readonly mostrandoFormVendido = signal(false);
+  readonly marcandoVendido = signal(false);
+  readonly ventaError = signal<string | null>(null);
+
+  readonly estadoExito = signal(false);
+
+  readonly reparto = signal<Reparto | null>(null);
+  readonly cargandoReparto = signal(false);
+  readonly repartoError = signal<string | null>(null);
+
   @ViewChild('editInversionModal') private editInversionModalRef?: ElementRef<HTMLElement>;
   @ViewChild('confirmEliminarInversionModal') private confirmEliminarInversionModalRef?: ElementRef<HTMLElement>;
   private elementoConFocoPrevio: HTMLElement | null = null;
@@ -86,6 +115,105 @@ export class PozoDetalle implements OnInit {
   /** Si la inversion pertenece al usuario logueado. */
   esMia(inv: InversionResumen): boolean {
     return inv.usuarioId === this.authSvc.usuarioActual()?.id;
+  }
+
+  /** Porcentaje formateado (recibe un valor 0-1). */
+  formatoPorcentaje(valor: number): string {
+    return `${(valor * 100).toFixed(1)}%`;
+  }
+
+  abrirFormComprado(): void {
+    this.compradoError.set(null);
+    this.estadoExito.set(false);
+    this.mostrandoFormComprado.set(true);
+  }
+
+  cancelarFormComprado(): void {
+    this.mostrandoFormComprado.set(false);
+    this.compradoForm.reset({ precioCompra: 0, fechaCompra: '' });
+  }
+
+  marcarComprado(): void {
+    if (this.compradoForm.invalid || this.marcandoComprado()) {
+      this.compradoForm.markAllAsTouched();
+      return;
+    }
+
+    this.marcandoComprado.set(true);
+    this.compradoError.set(null);
+    this.estadoExito.set(false);
+
+    const { precioCompra, fechaCompra } = this.compradoForm.getRawValue();
+
+    this.pozosSvc
+      .cambiarEstado(this.pozoId, { accion: 'marcarComprado', precioCompra, fechaCompra })
+      .subscribe({
+        next: () => {
+          this.marcandoComprado.set(false);
+          this.mostrandoFormComprado.set(false);
+          this.estadoExito.set(true);
+          this.cargarPozo();
+        },
+        error: (err: HttpErrorResponse) => {
+          this.compradoError.set(err.error?.error ?? 'No se pudo marcar el pozo como comprado.');
+          this.marcandoComprado.set(false);
+        },
+      });
+  }
+
+  abrirFormVendido(): void {
+    this.ventaError.set(null);
+    this.estadoExito.set(false);
+    this.mostrandoFormVendido.set(true);
+  }
+
+  cancelarFormVendido(): void {
+    this.mostrandoFormVendido.set(false);
+    this.ventaForm.reset({ precioVenta: 0, fechaVenta: '' });
+  }
+
+  marcarVendido(): void {
+    if (this.ventaForm.invalid || this.marcandoVendido()) {
+      this.ventaForm.markAllAsTouched();
+      return;
+    }
+
+    this.marcandoVendido.set(true);
+    this.ventaError.set(null);
+    this.estadoExito.set(false);
+
+    const { precioVenta, fechaVenta } = this.ventaForm.getRawValue();
+
+    this.pozosSvc
+      .cambiarEstado(this.pozoId, { accion: 'marcarVendido', precioVenta, fechaVenta })
+      .subscribe({
+        next: () => {
+          this.marcandoVendido.set(false);
+          this.mostrandoFormVendido.set(false);
+          this.estadoExito.set(true);
+          this.cargarPozo();
+        },
+        error: (err: HttpErrorResponse) => {
+          this.ventaError.set(err.error?.error ?? 'No se pudo marcar el pozo como vendido.');
+          this.marcandoVendido.set(false);
+        },
+      });
+  }
+
+  private cargarReparto(): void {
+    this.cargandoReparto.set(true);
+    this.repartoError.set(null);
+
+    this.pozosSvc.reparto(this.pozoId).subscribe({
+      next: (reparto) => {
+        this.reparto.set(reparto);
+        this.cargandoReparto.set(false);
+      },
+      error: (err: HttpErrorResponse) => {
+        this.repartoError.set(err.error?.error ?? 'No se pudo cargar el reparto de ganancias.');
+        this.cargandoReparto.set(false);
+      },
+    });
   }
 
   invertir(): void {
@@ -259,6 +387,9 @@ export class PozoDetalle implements OnInit {
       next: (pozo) => {
         this.pozo.set(pozo);
         this.cargando.set(false);
+        if (pozo.estado === 'Vendido') {
+          this.cargarReparto();
+        }
       },
       error: (err: HttpErrorResponse) => {
         this.error.set(err.error?.error ?? 'No se pudo cargar el pozo. Revisa tu conexion.');

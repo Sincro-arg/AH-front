@@ -55,6 +55,80 @@
       }
     </dl>
 
+    @if (estadoExito()) {
+      <p class="pozo-detalle__form-exito" role="status">Estado del pozo actualizado correctamente.</p>
+    }
+
+    @if (p.estado === 'Abierto' || p.estado === 'Comprado') {
+      <section class="pozo-detalle__acciones-estado">
+        <h2 class="pozo-detalle__subtitulo">Administrar pozo</h2>
+
+        @if (p.estado === 'Abierto') {
+          @if (!mostrandoFormComprado()) {
+            <button type="button" class="pozo-detalle__estado-btn" (click)="abrirFormComprado()">
+              Marcar comprado
+            </button>
+          } @else {
+            <form class="pozo-detalle__form" [formGroup]="compradoForm" (ngSubmit)="marcarComprado()">
+              <label class="pozo-detalle__label" for="precio-compra">Precio de compra</label>
+              <input
+                id="precio-compra"
+                class="pozo-detalle__input"
+                type="number"
+                min="1"
+                formControlName="precioCompra"
+              />
+              <label class="pozo-detalle__label" for="fecha-compra">Fecha de compra</label>
+              <input id="fecha-compra" class="pozo-detalle__input" type="date" formControlName="fechaCompra" />
+              @if (compradoError()) {
+                <p class="pozo-detalle__form-error" role="alert">{{ compradoError() }}</p>
+              }
+              <div class="pozo-detalle__estado-form-acciones">
+                <button type="button" class="pozo-detalle__modal-cancelar" (click)="cancelarFormComprado()">
+                  Cancelar
+                </button>
+                <button type="submit" class="pozo-detalle__estado-btn" [disabled]="marcandoComprado()">
+                  {{ marcandoComprado() ? 'Guardando...' : 'Confirmar compra' }}
+                </button>
+              </div>
+            </form>
+          }
+        }
+
+        @if (p.estado === 'Comprado') {
+          @if (!mostrandoFormVendido()) {
+            <button type="button" class="pozo-detalle__estado-btn" (click)="abrirFormVendido()">
+              Marcar vendido
+            </button>
+          } @else {
+            <form class="pozo-detalle__form" [formGroup]="ventaForm" (ngSubmit)="marcarVendido()">
+              <label class="pozo-detalle__label" for="precio-venta">Precio de venta</label>
+              <input
+                id="precio-venta"
+                class="pozo-detalle__input"
+                type="number"
+                min="1"
+                formControlName="precioVenta"
+              />
+              <label class="pozo-detalle__label" for="fecha-venta">Fecha de venta</label>
+              <input id="fecha-venta" class="pozo-detalle__input" type="date" formControlName="fechaVenta" />
+              @if (ventaError()) {
+                <p class="pozo-detalle__form-error" role="alert">{{ ventaError() }}</p>
+              }
+              <div class="pozo-detalle__estado-form-acciones">
+                <button type="button" class="pozo-detalle__modal-cancelar" (click)="cancelarFormVendido()">
+                  Cancelar
+                </button>
+                <button type="submit" class="pozo-detalle__estado-btn" [disabled]="marcandoVendido()">
+                  {{ marcandoVendido() ? 'Guardando...' : 'Confirmar venta' }}
+                </button>
+              </div>
+            </form>
+          }
+        }
+      </section>
+    }
+
     @if (p.estado === 'Abierto') {
       <section class="pozo-detalle__invertir">
         <h2 class="pozo-detalle__subtitulo">Invertir en este pozo</h2>
@@ -109,6 +183,42 @@
         </ul>
       }
     </section>
+
+    @if (p.estado === 'Vendido') {
+      <section class="pozo-detalle__reparto">
+        <h2 class="pozo-detalle__subtitulo">Reparto de ganancias</h2>
+
+        @if (cargandoReparto()) {
+          <app-spinner texto="Calculando reparto..." />
+        } @else if (repartoError(); as errReparto) {
+          <p class="pozo-detalle__form-error" role="alert">{{ errReparto }}</p>
+        } @else if (reparto(); as rep) {
+          <p class="pozo-detalle__reparto-total">
+            Ganancia total: <strong>{{ formatoMonto(rep.gananciaTotal) }}</strong>
+          </p>
+          <table class="pozo-detalle__tabla-reparto">
+            <thead>
+              <tr>
+                <th>Inversor</th>
+                <th>Monto invertido</th>
+                <th>%</th>
+                <th>Ganancia</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (item of rep.reparto; track item.usuarioId) {
+                <tr>
+                  <td>{{ item.nombreInversor }}</td>
+                  <td>{{ formatoMonto(item.montoInvertido) }}</td>
+                  <td>{{ formatoPorcentaje(item.porcentaje) }}</td>
+                  <td>{{ formatoMonto(item.ganancia) }}</td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        }
+      </section>
+    }
   }
 
   @if (editandoInversion(); as invEditando) {

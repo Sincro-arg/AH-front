@@ -92,9 +92,28 @@ describe('PozoDetalle', () => {
     fixture.detectChanges();
     httpMock.expectOne(pozoUrl).flush({ ...pozoMock, estado: 'Vendido' });
     fixture.detectChanges();
+    httpMock.expectOne(`${environment.apiUrl}/pozos/1/reparto`).flush({ gananciaTotal: 0, reparto: [] });
 
     const texto = (fixture.nativeElement as HTMLElement).textContent ?? '';
     expect(texto).not.toContain('Invertir en este pozo');
+  });
+
+  it('muestra la tabla de reparto cuando el pozo esta Vendido', () => {
+    fixture.detectChanges();
+    httpMock
+      .expectOne(pozoUrl)
+      .flush({ ...pozoMock, estado: 'Vendido', precioCompra: 8000, fechaCompra: new Date().toISOString(), precioVenta: 12000, fechaVenta: new Date().toISOString() });
+    fixture.detectChanges();
+
+    httpMock.expectOne(`${environment.apiUrl}/pozos/1/reparto`).flush({
+      gananciaTotal: 4000,
+      reparto: [{ usuarioId: 'u1', nombreInversor: 'Juan Perez', montoInvertido: 4000, porcentaje: 1, ganancia: 4000 }],
+    });
+    fixture.detectChanges();
+
+    const texto = (fixture.nativeElement as HTMLElement).textContent ?? '';
+    expect(texto).toContain('Reparto de ganancias');
+    expect(texto).toContain('Juan Perez');
   });
 
   it('invierte y muestra confirmacion, recargando el pozo', () => {
@@ -114,5 +133,24 @@ describe('PozoDetalle', () => {
     expect(fixture.componentInstance.invertirExito()).toBeTrue();
     const texto = (fixture.nativeElement as HTMLElement).textContent ?? '';
     expect(texto).toContain('Inversion registrada correctamente');
+  });
+
+  it('marca el pozo como comprado y muestra confirmacion', () => {
+    fixture.detectChanges();
+    httpMock.expectOne(pozoUrl).flush(pozoMock);
+    fixture.detectChanges();
+
+    fixture.componentInstance.abrirFormComprado();
+    fixture.componentInstance.compradoForm.setValue({ precioCompra: 8000, fechaCompra: '2026-01-01' });
+    fixture.componentInstance.marcarComprado();
+
+    const req = httpMock.expectOne(`${environment.apiUrl}/pozos/1/estado`);
+    expect(req.request.body).toEqual({ accion: 'marcarComprado', precioCompra: 8000, fechaCompra: '2026-01-01' });
+    req.flush({ ...pozoMock, estado: 'Comprado', precioCompra: 8000, fechaCompra: '2026-01-01' });
+
+    httpMock.expectOne(pozoUrl).flush({ ...pozoMock, estado: 'Comprado', precioCompra: 8000, fechaCompra: '2026-01-01' });
+    fixture.detectChanges();
+
+    expect(fixture.componentInstance.estadoExito()).toBeTrue();
   });
 });
