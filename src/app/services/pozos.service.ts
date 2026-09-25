@@ -30,6 +30,12 @@ export interface PozoDetalle extends Pozo {
   inversiones: InversionResumen[];
 }
 
+export interface DatosPozo {
+  titulo: string;
+  autoDescripcion: string;
+  montoObjetivo: number;
+}
+
 @Injectable({ providedIn: 'root' })
 export class PozosService {
   private readonly http = inject(HttpClient);
@@ -40,5 +46,17 @@ export class PozosService {
 
   obtener(id: string) {
     return this.http.get<PozoDetalle>(`${environment.apiUrl}/pozos/${id}`);
+  }
+
+  crear(datos: DatosPozo) {
+    return this.http.post<Pozo>(`${environment.apiUrl}/pozos`, datos);
+  }
+
+  actualizar(id: string, datos: DatosPozo) {
+    return this.http.put<Pozo>(`${environment.apiUrl}/pozos/${id}`, datos);
+  }
+
+  eliminar(id: string) {
+    return this.http.delete<void>(`${environment.apiUrl}/pozos/${id}`);
   }
 }
