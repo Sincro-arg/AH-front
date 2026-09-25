@@ -1,116 +1,151 @@
-<section class="configuracion">
-  <h1>Mi cuenta</h1>
+<section class="config">
+  <h1 class="config__titulo">Mi cuenta</h1>
 
   @if (meCargando()) {
-    <p class="configuracion__cargando">Cargando...</p>
+    <p class="config__cargando">Cargando...</p>
   } @else if (meError()) {
-    <p class="configuracion__error">{{ meError() }}</p>
+    <p class="config__error">{{ meError() }}</p>
   }
 
   @if (usuario(); as u) {
-    <form class="configuracion__form" [formGroup]="perfilForm" (ngSubmit)="guardarPerfil()">
-      <h2>Datos personales</h2>
-
-      <label class="configuracion__label" for="cfg-nombre">Nombre</label>
-      <input id="cfg-nombre" class="configuracion__input" type="text" formControlName="nombre" />
-
-      <label class="configuracion__label" for="cfg-apellido">Apellido</label>
-      <input id="cfg-apellido" class="configuracion__input" type="text" formControlName="apellido" />
-
-      <label class="configuracion__label" for="cfg-telefono">Telefono</label>
-      <input id="cfg-telefono" class="configuracion__input" type="tel" formControlName="telefono" />
-
-      <label class="configuracion__label" for="cfg-email">Email</label>
-      <input id="cfg-email" class="configuracion__input" type="email" formControlName="email" />
-
-      @if (perfilError()) {
-        <p class="configuracion__error">{{ perfilError() }}</p>
-      }
-      @if (perfilExito()) {
-        <p class="configuracion__exito">Datos actualizados.</p>
-      }
-
-      <button class="configuracion__submit" type="submit" [disabled]="perfilEnviando()">
-        {{ perfilEnviando() ? 'Guardando...' : 'Guardar cambios' }}
-      </button>
-    </form>
-
-    <form class="configuracion__form" [formGroup]="passwordForm" (ngSubmit)="cambiarPassword()">
-      <h2>Cambiar contrasena</h2>
-
-      <label class="configuracion__label" for="cfg-password-actual">Contrasena actual</label>
-      <input
-        id="cfg-password-actual"
-        class="configuracion__input"
-        type="password"
-        formControlName="passwordActual"
-        autocomplete="current-password"
-      />
-
-      <label class="configuracion__label" for="cfg-password-nueva">Contrasena nueva</label>
-      <input
-        id="cfg-password-nueva"
-        class="configuracion__input"
-        type="password"
-        formControlName="passwordNueva"
-        autocomplete="new-password"
-      />
-
-      @if (passwordError()) {
-        <p class="configuracion__error">{{ passwordError() }}</p>
-      }
-      @if (passwordExito()) {
-        <p class="configuracion__exito">Contrasena actualizada.</p>
-      }
-
-      <button class="configuracion__submit" type="submit" [disabled]="passwordEnviando()">
-        {{ passwordEnviando() ? 'Guardando...' : 'Cambiar contrasena' }}
-      </button>
-    </form>
-
-    <div class="configuracion__tema">
-      <h2>Tema</h2>
-      <div class="configuracion__tema-opciones">
-        <button
-          type="button"
-          class="configuracion__tema-boton"
-          [class.configuracion__tema-boton--activo]="u.tema === 'claro'"
-          [disabled]="temaEnviando()"
-          (click)="cambiarTema('claro')"
-        >
-          Claro
-        </button>
-        <button
-          type="button"
-          class="configuracion__tema-boton"
-          [class.configuracion__tema-boton--activo]="u.tema === 'oscuro'"
-          [disabled]="temaEnviando()"
-          (click)="cambiarTema('oscuro')"
-        >
-          Oscuro
-        </button>
+    <div class="config__resumen">
+      <div class="config__avatar" aria-hidden="true">{{ iniciales() }}</div>
+      <div class="config__resumen-datos">
+        <p class="config__resumen-nombre">{{ u.nombre }} {{ u.apellido }}</p>
+        <p class="config__resumen-email">{{ u.email }}</p>
       </div>
-      @if (temaError()) {
-        <p class="configuracion__error">{{ temaError() }}</p>
-      }
     </div>
 
-    <div class="configuracion__peligro">
-      <h2>Eliminar cuenta</h2>
-      <p>Esta accion borra tu cuenta y todos tus datos de forma permanente.</p>
+    <div class="config__grid">
+      <article class="config__card">
+        <h2 class="config__card-titulo">Perfil</h2>
 
-      @if (eliminarError()) {
-        <p class="configuracion__error">{{ eliminarError() }}</p>
-      }
+        <form class="config__form" [formGroup]="perfilForm" (ngSubmit)="guardarPerfil()">
+          <label class="config__label" for="cfg-nombre">Nombre</label>
+          <input id="cfg-nombre" class="config__input" type="text" formControlName="nombre" />
 
-      <button
-        type="button"
-        class="configuracion__eliminar"
-        [disabled]="eliminarEnviando()"
-        (click)="eliminarCuenta()"
-      >
-        {{ eliminarEnviando() ? 'Eliminando...' : 'Eliminar mi cuenta' }}
-      </button>
+          <label class="config__label" for="cfg-apellido">Apellido</label>
+          <input id="cfg-apellido" class="config__input" type="text" formControlName="apellido" />
+
+          <label class="config__label" for="cfg-telefono">Telefono</label>
+          <input id="cfg-telefono" class="config__input" type="tel" formControlName="telefono" />
+
+          <label class="config__label" for="cfg-email">Email</label>
+          <input id="cfg-email" class="config__input" type="email" formControlName="email" />
+
+          @if (perfilError()) {
+            <p class="config__error">{{ perfilError() }}</p>
+          }
+          @if (perfilExito()) {
+            <p class="config__exito">Datos actualizados.</p>
+          }
+
+          <button class="config__submit" type="submit" [disabled]="perfilEnviando()">
+            {{ perfilEnviando() ? 'Guardando...' : 'Guardar cambios' }}
+          </button>
+        </form>
+      </article>
+
+      <article class="config__card">
+        <h2 class="config__card-titulo">Seguridad</h2>
+
+        <form class="config__form" [formGroup]="passwordForm" (ngSubmit)="cambiarPassword()">
+          <label class="config__label" for="cfg-password-actual">Contrasena actual</label>
+          <input
+            id="cfg-password-actual"
+            class="config__input"
+            type="password"
+            formControlName="passwordActual"
+            autocomplete="current-password"
+          />
+
+          <label class="config__label" for="cfg-password-nueva">Contrasena nueva</label>
+          <input
+            id="cfg-password-nueva"
+            class="config__input"
+            type="password"
+            formControlName="passwordNueva"
+            autocomplete="new-password"
+          />
+
+          @if (passwordError()) {
+            <p class="config__error">{{ passwordError() }}</p>
+          }
+          @if (passwordExito()) {
+            <p class="config__exito">Contrasena actualizada.</p>
+          }
+
+          <button class="config__submit" type="submit" [disabled]="passwordEnviando()">
+            {{ passwordEnviando() ? 'Guardando...' : 'Cambiar contrasena' }}
+          </button>
+        </form>
+      </article>
+
+      <article class="config__card">
+        <h2 class="config__card-titulo">Preferencias</h2>
+
+        <div class="config__tema">
+          <span class="config__label">Tema</span>
+          <div class="config__tema-opciones">
+            <button
+              type="button"
+              class="config__tema-boton"
+              [class.config__tema-boton--activo]="u.tema === 'claro'"
+              [disabled]="temaEnviando()"
+              (click)="cambiarTema('claro')"
+            >
+              Claro
+            </button>
+            <button
+              type="button"
+              class="config__tema-boton"
+              [class.config__tema-boton--activo]="u.tema === 'oscuro'"
+              [disabled]="temaEnviando()"
+              (click)="cambiarTema('oscuro')"
+            >
+              Oscuro
+            </button>
+          </div>
+          @if (temaError()) {
+            <p class="config__error">{{ temaError() }}</p>
+          }
+        </div>
+      </article>
+
+      <article class="config__card">
+        <h2 class="config__card-titulo">Actividad</h2>
+
+        <dl class="config__actividad">
+          <div class="config__actividad-item">
+            <dt class="config__actividad-etiqueta">Miembro desde</dt>
+            <dd class="config__actividad-valor">{{ u.fechaAlta | date: 'dd/MM/yyyy' }}</dd>
+          </div>
+          <div class="config__actividad-item">
+            <dt class="config__actividad-etiqueta">Ultimo acceso</dt>
+            <dd class="config__actividad-valor">
+              {{ u.ultimoAcceso ? (u.ultimoAcceso | date: 'dd/MM/yyyy HH:mm') : 'Todavia sin registrar' }}
+            </dd>
+          </div>
+        </dl>
+      </article>
+
+      <article class="config__card config__card--peligro">
+        <h2 class="config__card-titulo">Zona de peligro</h2>
+        <p class="config__peligro-texto">Esta accion borra tu cuenta y todos tus datos de forma permanente.</p>
+
+        @if (eliminarError()) {
+          <p class="config__error">{{ eliminarError() }}</p>
+        }
+
+        <button
+          type="button"
+          class="config__eliminar"
+          [disabled]="eliminarEnviando()"
+          (click)="eliminarCuenta()"
+        >
+          {{ eliminarEnviando() ? 'Eliminando...' : 'Eliminar mi cuenta' }}
+        </button>
+      </article>
     </div>
   }
 </section>

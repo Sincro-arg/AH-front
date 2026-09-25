@@ -1,4 +1,5 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, computed, inject, OnInit, signal } from '@angular/core';
+import { DatePipe } from '@angular/common';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { HttpErrorResponse } from '@angular/common/http';
 import { AuthService, Tema, Usuario } from '../../services/auth.service';
@@ -8,7 +9,7 @@ import { ThemeService } from '../../services/theme.service';
 @Component({
   selector: 'app-configuracion',
   standalone: true,
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, DatePipe],
   templateUrl: './configuracion.html',
   styleUrl: './configuracion.css',
 })
@@ -19,6 +20,16 @@ export class Configuracion implements OnInit {
   private readonly themeSvc = inject(ThemeService);
 
   readonly usuario = signal<Usuario | null>(null);
+
+  readonly iniciales = computed(() => {
+    const u = this.usuario();
+    if (!u) {
+      return '';
+    }
+    const n = u.nombre?.trim().charAt(0) ?? '';
+    const a = u.apellido?.trim().charAt(0) ?? '';
+    return (n + a).toUpperCase();
+  });
 
   readonly perfilForm = this.fb.nonNullable.group({
     nombre: ['', [Validators.required]],
