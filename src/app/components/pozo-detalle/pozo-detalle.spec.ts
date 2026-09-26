@@ -309,4 +309,47 @@ describe('PozoDetalle', () => {
     expect(fixture.componentInstance.eliminarError()).toBe('No podes eliminar esta inversion.');
     expect(fixture.componentInstance.eliminarEnviando()).toBeFalse();
   });
+
+  describe('gananciaEstimada', () => {
+    it('devuelve null si el pozo no tiene precioVentaEstimado cargado', () => {
+      fixture.detectChanges();
+      httpMock.expectOne(pozoUrl).flush(pozoMock);
+      fixture.detectChanges();
+
+      fixture.componentInstance.invertirForm.setValue({ monto: 2000 });
+
+      expect(fixture.componentInstance.gananciaEstimada()).toBeNull();
+    });
+
+    it('calcula la ganancia proporcional al monto sobre el objetivo del pozo', () => {
+      fixture.detectChanges();
+      httpMock.expectOne(pozoUrl).flush({ ...pozoMock, precioVentaEstimado: 15000 });
+      fixture.detectChanges();
+
+      fixture.componentInstance.invertirForm.setValue({ monto: 2000 });
+
+      // gananciaTotalEstimada = 15000 - 10000 = 5000; proporcional = 5000 * (2000/10000)
+      expect(fixture.componentInstance.gananciaEstimada()).toBe(1000);
+    });
+
+    it('devuelve 0 si el monto ingresado es 0', () => {
+      fixture.detectChanges();
+      httpMock.expectOne(pozoUrl).flush({ ...pozoMock, precioVentaEstimado: 15000 });
+      fixture.detectChanges();
+
+      fixture.componentInstance.invertirForm.setValue({ monto: 0 });
+
+      expect(fixture.componentInstance.gananciaEstimada()).toBe(0);
+    });
+
+    it('devuelve 0 si el monto ingresado es negativo', () => {
+      fixture.detectChanges();
+      httpMock.expectOne(pozoUrl).flush({ ...pozoMock, precioVentaEstimado: 15000 });
+      fixture.detectChanges();
+
+      fixture.componentInstance.invertirForm.setValue({ monto: -100 });
+
+      expect(fixture.componentInstance.gananciaEstimada()).toBe(0);
+    });
+  });
 });
