@@ -9,11 +9,14 @@ import { authInterceptor } from './auth.interceptor';
 describe('authInterceptor', () => {
   let http: HttpClient;
   let httpMock: HttpTestingController;
-  let authServiceMock: { getToken: jasmine.Spy };
+  let authServiceMock: { getToken: jasmine.Spy; sesionExpirada: jasmine.Spy };
   let connectionErrorMock: { mostrar: jasmine.Spy; limpiar: jasmine.Spy };
 
   beforeEach(() => {
-    authServiceMock = { getToken: jasmine.createSpy('getToken').and.returnValue(null) };
+    authServiceMock = {
+      getToken: jasmine.createSpy('getToken').and.returnValue(null),
+      sesionExpirada: jasmine.createSpy('sesionExpirada'),
+    };
     connectionErrorMock = {
       mostrar: jasmine.createSpy('mostrar'),
       limpiar: jasmine.createSpy('limpiar'),
@@ -55,5 +58,16 @@ describe('authInterceptor', () => {
     expect(connectionErrorMock.mostrar).toHaveBeenCalledWith(
       'No se pudo conectar con el servidor. Revisa tu conexion e intenta de nuevo.',
     );
+  });
+
+  it('llama a AuthService.sesionExpirada() ante un 401 con token presente', () => {
+    authServiceMock.getToken.and.returnValue('un-token');
+
+    http.get(`${environment.apiUrl}/usuarios/me`).subscribe({ error: () => {} });
+
+    const req = httpMock.expectOne(`${environment.apiUrl}/usuarios/me`);
+    req.flush({ mensaje: 'Token expirado' }, { status: 401, statusText: 'Unauthorized' });
+
+    expect(authServiceMock.sesionExpirada).toHaveBeenCalled();
   });
 });

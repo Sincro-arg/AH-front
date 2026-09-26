@@ -93,4 +93,10 @@ export class AuthService {
     this.limpiarSesion();
     this.router.navigate(['/']);
   }
+
+  /** Limpia la sesion y redirige a /login cuando el back rechaza el token por vencido o invalido. */
+  sesionExpirada(): void {
+    this.limpiarSesion();
+    this.router.navigate(['/login']);
+  }
 }

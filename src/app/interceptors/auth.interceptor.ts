@@ -24,8 +24,12 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
   return next(req).pipe(
     tap(() => connectionError.limpiar()),
     catchError((err: unknown) => {
-      if (err instanceof HttpErrorResponse && esApiPropia && err.status === 0) {
-        connectionError.mostrar('No se pudo conectar con el servidor. Revisa tu conexion e intenta de nuevo.');
+      if (err instanceof HttpErrorResponse && esApiPropia) {
+        if (err.status === 0) {
+          connectionError.mostrar('No se pudo conectar con el servidor. Revisa tu conexion e intenta de nuevo.');
+        } else if (err.status === 401) {
+          auth.sesionExpirada();
+        }
       }
       return throwError(() => err);
     }),
