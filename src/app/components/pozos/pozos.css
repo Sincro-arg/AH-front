@@ -153,6 +153,8 @@
 
 .pozo-card__titulo {
   margin: 0;
+  min-width: 0;
+  overflow-wrap: break-word;
   font-size: 1.05rem;
   font-weight: 700;
   color: var(--color-text);
@@ -196,7 +198,8 @@
 .pozo-card__precio {
   margin: 0;
   display: flex;
-  gap: 0.75rem;
+  flex-wrap: wrap;
+  gap: 0.4rem 0.75rem;
   font-size: 0.85rem;
   color: var(--color-text-muted);
 }
@@ -277,6 +280,16 @@
 
   .pozos__header {
     flex-direction: column;
+  }
+
+  .pozos__modal-footer {
+    flex-direction: column-reverse;
+  }
+
+  .pozos__modal-cancelar,
+  .pozos__modal-guardar,
+  .pozos__modal-confirmar {
+    width: 100%;
   }
 }
 
