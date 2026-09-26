@@ -24,6 +24,19 @@
   max-width: 640px;
 }
 
+.landing__hero-contenido {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  width: 100%;
+}
+
+/* Panel lateral (mismo patron que login-page__panel): solo se ve en desktop grande */
+.landing__hero-panel {
+  display: none;
+}
+
 .landing__titulo {
   font-size: clamp(2.2rem, 7vw, 3.4rem);
   font-weight: 800;
@@ -113,4 +126,118 @@
   color: var(--color-text-muted);
   margin: 0;
   line-height: 1.4;
+}
+
+/* ── Desktop grande: el hero suma un panel lateral y la grilla de pasos
+   aprovecha el ancho, en vez de quedar en una columna angosta y centrada.
+   Por debajo de este breakpoint el layout mobile queda tal cual estaba. ── */
+@media (min-width: 1000px) {
+  .landing {
+    max-width: 1180px;
+    padding: 4rem 2rem 3rem;
+  }
+
+  .landing__hero {
+    flex-direction: row;
+    align-items: stretch;
+    max-width: 100%;
+    gap: 3rem;
+    text-align: left;
+  }
+
+  .landing__hero-contenido {
+    flex: 1 1 52%;
+    align-items: flex-start;
+    justify-content: center;
+    text-align: left;
+  }
+
+  .landing__cta {
+    justify-content: flex-start;
+  }
+
+  .landing__hero-panel {
+    display: flex;
+    position: relative;
+    flex: 1 1 48%;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    border-radius: 16px 48px 16px 48px;
+    border: 1px solid var(--color-border);
+    background:
+      radial-gradient(700px 320px at 85% -10%, rgba(238, 79, 35, 0.1), transparent 60%),
+      var(--color-surface);
+  }
+
+  .landing__hero-panel-bg {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    overflow: hidden;
+    pointer-events: none;
+  }
+
+  .landing__hero-blob {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(60px);
+    opacity: 0.5;
+    will-change: transform;
+  }
+
+  .landing__hero-blob--1 {
+    width: 240px;
+    height: 240px;
+    top: -90px;
+    right: -60px;
+    background: radial-gradient(circle, rgba(238, 79, 35, 0.32), transparent 70%);
+    animation: landing-blob-drift-1 20s ease-in-out infinite alternate;
+  }
+
+  .landing__hero-blob--2 {
+    width: 200px;
+    height: 200px;
+    bottom: -80px;
+    left: -50px;
+    background: radial-gradient(circle, rgba(14, 165, 233, 0.18), transparent 70%);
+    animation: landing-blob-drift-2 24s ease-in-out infinite alternate;
+  }
+
+  .landing__hero-illustration {
+    position: relative;
+    z-index: 1;
+    width: 78%;
+    max-width: 320px;
+  }
+
+  .landing__pasos {
+    max-width: 100%;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+  }
+}
+
+@keyframes landing-blob-drift-1 {
+  from {
+    transform: translate(0, 0) scale(1);
+  }
+  to {
+    transform: translate(-24px, 22px) scale(1.1);
+  }
+}
+
+@keyframes landing-blob-drift-2 {
+  from {
+    transform: translate(0, 0) scale(1);
+  }
+  to {
+    transform: translate(24px, -18px) scale(1.08);
+  }
+}
+
+@media (min-width: 1000px) and (prefers-reduced-motion: reduce) {
+  .landing__hero-blob {
+    animation: none;
+  }
 }
