@@ -92,11 +92,6 @@
   color: var(--color-text);
 }
 
-.login-page__brand-logo {
-  width: 30px;
-  height: 30px;
-}
-
 .login-page__tagline {
   margin: 1rem 0 0;
   max-width: 26ch;

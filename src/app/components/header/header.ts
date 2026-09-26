@@ -1,11 +1,12 @@
 import { Component, computed, inject, ChangeDetectionStrategy } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
+import { Logo } from '../logo/logo';
 
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [RouterLink],
+  imports: [RouterLink, Logo],
   templateUrl: './header.html',
   changeDetection: ChangeDetectionStrategy.Default,
   styleUrl: './header.css',
