@@ -122,6 +122,23 @@ export class PozoDetalle implements OnInit {
     return `${(valor * 100).toFixed(1)}%`;
   }
 
+  /**
+   * Ganancia estimada para el monto que el usuario esta por invertir, si el
+   * pozo se termina vendiendo al precio acordado (precioVentaEstimado).
+   * Se reparte proporcional al monto sobre el objetivo total del pozo.
+   * Devuelve null si el pozo no tiene precio de venta estimado cargado.
+   */
+  gananciaEstimada(): number | null {
+    const pozo = this.pozo();
+    if (!pozo || pozo.precioVentaEstimado === null || pozo.montoObjetivo <= 0) return null;
+
+    const monto = this.invertirForm.getRawValue().monto;
+    if (!monto || monto <= 0) return 0;
+
+    const gananciaTotalEstimada = pozo.precioVentaEstimado - pozo.montoObjetivo;
+    return gananciaTotalEstimada * (monto / pozo.montoObjetivo);
+  }
+
   abrirFormComprado(): void {
     this.compradoError.set(null);
     this.estadoExito.set(false);

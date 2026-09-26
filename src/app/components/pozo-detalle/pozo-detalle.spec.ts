@@ -26,6 +26,8 @@ describe('PozoDetalle', () => {
     fechaCompra: null,
     precioVenta: null,
     fechaVenta: null,
+    imagenUrl: null,
+    precioVentaEstimado: null,
     inversiones: [
       { id: 'i1', usuarioId: 'u1', nombreInversor: 'Juan Perez', monto: 4000, fecha: new Date().toISOString() },
     ],

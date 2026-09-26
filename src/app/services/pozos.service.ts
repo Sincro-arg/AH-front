@@ -16,6 +16,8 @@ export interface Pozo {
   fechaCompra: string | null;
   precioVenta: number | null;
   fechaVenta: string | null;
+  imagenUrl: string | null;
+  precioVentaEstimado: number | null;
 }
 
 export interface InversionResumen {
@@ -34,6 +36,8 @@ export interface DatosPozo {
   titulo: string;
   autoDescripcion: string;
   montoObjetivo: number;
+  imagenUrl: string;
+  precioVentaEstimado: number | null;
 }
 
 export interface MarcarCompradoDto {

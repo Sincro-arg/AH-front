@@ -34,28 +34,62 @@
   </div>
 
   @if (usuario(); as u) {
-    <div class="home__cards">
-      <article class="home__card">
-        <span class="home__card-label">Email</span>
-        <span class="home__card-value">{{ u.email }}</span>
-      </article>
-      <article class="home__card">
-        <span class="home__card-label">Telefono</span>
-        <span class="home__card-value">{{ u.telefono || 'Sin cargar' }}</span>
-      </article>
-      <article class="home__card">
-        <span class="home__card-label">Miembro desde</span>
-        <span class="home__card-value">{{ u.fechaAlta | date: 'longDate' }}</span>
-      </article>
-      <article class="home__card">
-        <span class="home__card-label">Ultimo acceso</span>
-        <span class="home__card-value">
-          {{ u.ultimoAcceso ? (u.ultimoAcceso | date: 'medium') : 'Primera vez' }}
-        </span>
-      </article>
-    </div>
+    <div class="home__layout">
+      <div class="home__principal">
+        <div class="home__cards">
+          <article class="home__card">
+            <span class="home__card-label">Email</span>
+            <span class="home__card-value">{{ u.email }}</span>
+          </article>
+          <article class="home__card">
+            <span class="home__card-label">Telefono</span>
+            <span class="home__card-value">{{ u.telefono || 'Sin cargar' }}</span>
+          </article>
+          <article class="home__card">
+            <span class="home__card-label">Miembro desde</span>
+            <span class="home__card-value">{{ u.fechaAlta | date: 'longDate' }}</span>
+          </article>
+          <article class="home__card">
+            <span class="home__card-label">Ultimo acceso</span>
+            <span class="home__card-value">
+              {{ u.ultimoAcceso ? (u.ultimoAcceso | date: 'medium') : 'Primera vez' }}
+            </span>
+          </article>
+        </div>
 
-    <a class="home__link" routerLink="/configuracion">Editar mi cuenta</a>
+        <a class="home__link" routerLink="/configuracion">Editar mi cuenta</a>
+      </div>
+
+      <aside class="home__sidebar">
+        <div class="home__resumen">
+          <h2 class="home__resumen-titulo">Mis inversiones</h2>
+          @if (cargandoInversiones()) {
+            <p class="home__resumen-cargando">Cargando...</p>
+          } @else {
+            <div class="home__resumen-item">
+              <span class="home__resumen-label">Invertido en pozos activos</span>
+              <span class="home__resumen-valor">{{ formatoMonto(totalInvertido()) }}</span>
+            </div>
+            <div class="home__resumen-item">
+              <span class="home__resumen-label">Pozos activos</span>
+              <span class="home__resumen-valor">{{ cantidadPozosActivos() }}</span>
+            </div>
+            <div class="home__resumen-item">
+              <span class="home__resumen-label">Ganancia obtenida</span>
+              <span class="home__resumen-valor home__resumen-valor--ganancia">
+                {{ formatoMonto(gananciaTotal()) }}
+              </span>
+            </div>
+          }
+          <a class="home__resumen-link" routerLink="/mis-inversiones">Ver todas mis inversiones</a>
+        </div>
+
+        <a class="home__acceso" routerLink="/pozos">
+          <span class="home__acceso-titulo">Explorar pozos</span>
+          <span class="home__acceso-sub">Encontra un auto para invertir</span>
+        </a>
+      </aside>
+    </div>
   } @else if (error(); as msg) {
     <div class="home__estado home__estado--error" role="alert">
       <p>{{ msg }}</p>

@@ -31,6 +31,18 @@
       @for (pozo of pozos(); track pozo.id) {
         <article class="pozo-card">
           <a class="pozo-card__link" [routerLink]="['/pozos', pozo.id]">
+            <div class="pozo-card__imagen">
+              @if (pozo.imagenUrl) {
+                <img [src]="pozo.imagenUrl" [alt]="pozo.titulo" loading="lazy" />
+              } @else {
+                <svg viewBox="0 0 48 32" fill="none" aria-hidden="true">
+                  <rect x="1" y="12" width="46" height="14" rx="3" fill="currentColor" opacity="0.18" />
+                  <circle cx="14" cy="27" r="4" fill="currentColor" opacity="0.35" />
+                  <circle cx="34" cy="27" r="4" fill="currentColor" opacity="0.35" />
+                  <path d="M6 12l4-7h20l6 7" stroke="currentColor" stroke-width="2" opacity="0.35" />
+                </svg>
+              }
+            </div>
             <div class="pozo-card__hd">
               <h2 class="pozo-card__titulo">{{ pozo.titulo }}</h2>
               <span
@@ -44,6 +56,21 @@
             </div>
 
             <p class="pozo-card__auto">{{ pozo.autoDescripcion }}</p>
+
+            @if (pozo.estado === 'Abierto' && pozo.precioVentaEstimado !== null) {
+              <p class="pozo-card__precio">
+                Venta estimada: <strong>{{ formatoMonto(pozo.precioVentaEstimado) }}</strong>
+              </p>
+            } @else if (pozo.estado === 'Comprado' || pozo.estado === 'Vendido') {
+              <p class="pozo-card__precio">
+                @if (pozo.precioCompra !== null) {
+                  <span>Compra: <strong>{{ formatoMonto(pozo.precioCompra) }}</strong></span>
+                }
+                @if (pozo.precioVenta !== null) {
+                  <span>Venta: <strong>{{ formatoMonto(pozo.precioVenta) }}</strong></span>
+                }
+              </p>
+            }
 
             <div class="pozo-card__progreso">
               <div class="pozo-card__barra">
@@ -100,6 +127,24 @@
 
           <label class="pozos__label" for="pozo-monto">Monto objetivo</label>
           <input id="pozo-monto" class="pozos__input" type="number" min="1" formControlName="montoObjetivo" />
+
+          <label class="pozos__label" for="pozo-imagen">URL de la imagen</label>
+          <input
+            id="pozo-imagen"
+            class="pozos__input"
+            type="url"
+            placeholder="https://..."
+            formControlName="imagenUrl"
+          />
+
+          <label class="pozos__label" for="pozo-precio-estimado">Precio de venta estimado (opcional)</label>
+          <input
+            id="pozo-precio-estimado"
+            class="pozos__input"
+            type="number"
+            min="0"
+            formControlName="precioVentaEstimado"
+          />
 
           @if (formError()) {
             <p class="pozos__form-error">{{ formError() }}</p>

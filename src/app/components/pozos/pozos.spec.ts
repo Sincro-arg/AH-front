@@ -25,6 +25,8 @@ describe('Pozos', () => {
     fechaCompra: null,
     precioVenta: null,
     fechaVenta: null,
+    imagenUrl: null,
+    precioVentaEstimado: null,
   };
 
   beforeEach(async () => {
@@ -121,6 +123,8 @@ describe('Pozos', () => {
         titulo: 'Renault Sandero 2020',
         autoDescripcion: 'Renault Sandero 2020, 50.000km',
         montoObjetivo: 8000,
+        imagenUrl: '',
+        precioVentaEstimado: 0,
       });
       comp.guardarPozo();
 
@@ -129,6 +133,8 @@ describe('Pozos', () => {
         titulo: 'Renault Sandero 2020',
         autoDescripcion: 'Renault Sandero 2020, 50.000km',
         montoObjetivo: 8000,
+        imagenUrl: '',
+        precioVentaEstimado: null,
       });
 
       const nuevoPozo: Pozo = {
@@ -161,6 +167,8 @@ describe('Pozos', () => {
         titulo: 'Fiat Cronos 2022 (actualizado)',
         autoDescripcion: pozoMock.autoDescripcion,
         montoObjetivo: pozoMock.montoObjetivo,
+        imagenUrl: pozoMock.imagenUrl ?? '',
+        precioVentaEstimado: null,
       });
 
       const pozoActualizado: Pozo = { ...pozoMock, titulo: 'Fiat Cronos 2022 (actualizado)' };
@@ -181,6 +189,8 @@ describe('Pozos', () => {
         titulo: 'Renault Sandero 2020',
         autoDescripcion: 'Renault Sandero 2020, 50.000km',
         montoObjetivo: 8000,
+        imagenUrl: '',
+        precioVentaEstimado: 0,
       });
       comp.guardarPozo();
 

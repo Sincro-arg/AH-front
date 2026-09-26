@@ -26,6 +26,8 @@ export class Pozos implements OnInit {
     titulo: ['', [Validators.required]],
     autoDescripcion: ['', [Validators.required]],
     montoObjetivo: [0, [Validators.required, Validators.min(1)]],
+    imagenUrl: [''],
+    precioVentaEstimado: [0],
   });
 
   readonly formVisible = signal(false);
@@ -70,7 +72,7 @@ export class Pozos implements OnInit {
   /** Abre el modal para crear un pozo nuevo. */
   abrirCrear(): void {
     this.pozoEditandoId.set(null);
-    this.pozoForm.reset({ titulo: '', autoDescripcion: '', montoObjetivo: 0 });
+    this.pozoForm.reset({ titulo: '', autoDescripcion: '', montoObjetivo: 0, imagenUrl: '', precioVentaEstimado: 0 });
     this.abrirForm();
   }
 
@@ -81,6 +83,8 @@ export class Pozos implements OnInit {
       titulo: pozo.titulo,
       autoDescripcion: pozo.autoDescripcion,
       montoObjetivo: pozo.montoObjetivo,
+      imagenUrl: pozo.imagenUrl ?? '',
+      precioVentaEstimado: pozo.precioVentaEstimado ?? 0,
     });
     this.abrirForm();
   }
@@ -101,7 +105,11 @@ export class Pozos implements OnInit {
     this.formError.set(null);
     this.formExito.set(false);
 
-    const datos = this.pozoForm.getRawValue();
+    const valores = this.pozoForm.getRawValue();
+    const datos = {
+      ...valores,
+      precioVentaEstimado: valores.precioVentaEstimado > 0 ? valores.precioVentaEstimado : null,
+    };
     const editId = this.pozoEditandoId();
     const obs = editId ? this.pozosSvc.actualizar(editId, datos) : this.pozosSvc.crear(datos);
 
