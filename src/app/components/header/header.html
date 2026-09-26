@@ -8,8 +8,8 @@
     @if (estaLogueado()) {
       <nav class="header__nav">
         <a class="header__nav-link" routerLink="/pozos">Pozos</a>
-        <a class="header__nav-link" routerLink="/mis-inversiones">Mis inversiones</a>
         <a class="header__nav-link" routerLink="/calculadora">Calculadora</a>
+        <a class="header__nav-link" routerLink="/mis-inversiones">Mis inversiones</a>
       </nav>
 
       <div class="header__user">
@@ -27,5 +27,63 @@
         <a class="header__nav-link" routerLink="/registro">Registrarme</a>
       </nav>
     }
+
+    <button
+      class="header__hamburger"
+      type="button"
+      [class.is-open]="menuOpen()"
+      (click)="toggleMenu()"
+      aria-label="Abrir menu"
+      [attr.aria-expanded]="menuOpen()"
+    >
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
   </div>
 </header>
+
+@if (menuOpen()) {
+  <div class="header__overlay" (click)="cerrarMenu()" aria-hidden="true"></div>
+}
+
+<aside
+  #drawer
+  class="header__drawer"
+  [class.is-open]="menuOpen()"
+  role="dialog"
+  aria-modal="true"
+  aria-label="Menu de navegacion"
+  (keydown)="onDrawerKeydown($event)"
+>
+  <div class="header__drawer-head">
+    <app-logo />
+    <button
+      class="header__drawer-close"
+      type="button"
+      (click)="cerrarMenu()"
+      aria-label="Cerrar menu"
+    >
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
+        <line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" />
+      </svg>
+    </button>
+  </div>
+
+  <nav class="header__drawer-nav">
+    @if (estaLogueado()) {
+      <a class="header__drawer-link" routerLink="/pozos" (click)="cerrarMenu()">Pozos</a>
+      <a class="header__drawer-link" routerLink="/calculadora" (click)="cerrarMenu()">Calculadora</a>
+      <a class="header__drawer-link" routerLink="/mis-inversiones" (click)="cerrarMenu()">Mis inversiones</a>
+      <a class="header__drawer-link" routerLink="/configuracion" (click)="cerrarMenu()">Configuracion</a>
+      <button class="header__drawer-link header__drawer-logout" type="button" (click)="logout(); cerrarMenu()">
+        Salir
+      </button>
+    } @else {
+      <a class="header__drawer-link" routerLink="/pozos" (click)="cerrarMenu()">Pozos</a>
+      <a class="header__drawer-link" routerLink="/calculadora" (click)="cerrarMenu()">Calculadora</a>
+      <a class="header__drawer-link" routerLink="/login" (click)="cerrarMenu()">Ingresar</a>
+      <a class="header__drawer-link" routerLink="/registro" (click)="cerrarMenu()">Registrarme</a>
+    }
+  </nav>
+</aside>
