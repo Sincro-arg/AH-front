@@ -87,4 +87,42 @@ describe('Header', () => {
     expect(localStorage.getItem(TOKEN_KEY)).toBeNull();
     expect(navigateSpy).toHaveBeenCalledWith(['/']);
   });
+
+  it('el click en el boton hamburguesa abre el drawer del menu mobile', () => {
+    fixture.detectChanges();
+
+    const boton: HTMLButtonElement = fixture.nativeElement.querySelector('.header__hamburger');
+    boton.click();
+    fixture.detectChanges();
+
+    expect(fixture.componentInstance.menuOpen()).toBeTrue();
+    const aside: HTMLElement = fixture.nativeElement.querySelector('.header__drawer');
+    expect(aside.classList.contains('is-open')).toBeTrue();
+  });
+
+  it('un segundo click en el boton hamburguesa cierra el drawer', () => {
+    fixture.detectChanges();
+
+    const boton: HTMLButtonElement = fixture.nativeElement.querySelector('.header__hamburger');
+    boton.click();
+    fixture.detectChanges();
+    boton.click();
+    fixture.detectChanges();
+
+    expect(fixture.componentInstance.menuOpen()).toBeFalse();
+    const aside: HTMLElement = fixture.nativeElement.querySelector('.header__drawer');
+    expect(aside.classList.contains('is-open')).toBeFalse();
+  });
+
+  it('presionar Escape con el menu abierto lo cierra', () => {
+    fixture.detectChanges();
+    fixture.componentInstance.abrirMenu();
+    fixture.detectChanges();
+    expect(fixture.componentInstance.menuOpen()).toBeTrue();
+
+    document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape' }));
+    fixture.detectChanges();
+
+    expect(fixture.componentInstance.menuOpen()).toBeFalse();
+  });
 });
