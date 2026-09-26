@@ -16,6 +16,11 @@ export const routes: Routes = [
     loadComponent: () => import('./components/pozos/pozos').then((m) => m.Pozos),
   },
   {
+    path: 'calculadora',
+    loadComponent: () =>
+      import('./components/calculadora/calculadora').then((m) => m.Calculadora),
+  },
+  {
     path: 'pozos/:id',
     loadComponent: () =>
       import('./components/pozo-detalle/pozo-detalle').then((m) => m.PozoDetalle),
