@@ -313,6 +313,10 @@
   color: var(--color-text);
 }
 
+.pozo-detalle__tabla-reparto-wrap {
+  overflow-x: auto;
+}
+
 .pozo-detalle__tabla-reparto {
   width: 100%;
   border-collapse: collapse;

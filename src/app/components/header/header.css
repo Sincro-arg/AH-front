@@ -115,9 +115,9 @@
 }
 
 .header__logout:hover {
-  background-color: color-mix(in srgb, var(--color-error) 12%, white);
+  background-color: color-mix(in srgb, var(--color-error) 12%, var(--color-surface));
   color: var(--color-error);
-  border-color: color-mix(in srgb, var(--color-error) 35%, white);
+  border-color: color-mix(in srgb, var(--color-error) 35%, var(--color-surface));
 }
 
 .header__brand:focus-visible,
