@@ -24,7 +24,7 @@
       } @else {
         <select
           id="pozo-select"
-          class="calculadora__input"
+          class="calculadora__input calculadora__select"
           [value]="pozoSeleccionadoId() ?? ''"
           (change)="seleccionarPozo($any($event.target).value)"
         >

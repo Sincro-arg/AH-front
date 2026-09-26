@@ -79,6 +79,23 @@
   border-color: var(--color-primary);
 }
 
+/* ── Select nativo: sin flecha del navegador, con la nuestra ── */
+.calculadora__select {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  padding-right: 2.2rem;
+  cursor: pointer;
+  background-repeat: no-repeat;
+  background-image:
+    linear-gradient(45deg, transparent 50%, var(--color-text-muted) 50%),
+    linear-gradient(135deg, var(--color-text-muted) 50%, transparent 50%);
+  background-position:
+    calc(100% - 1.2em) center,
+    calc(100% - 0.95em) center;
+  background-size: 5px 5px, 5px 5px;
+}
+
 .calculadora__vacio {
   margin: 0;
   color: var(--color-text-muted);
