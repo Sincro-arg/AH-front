@@ -1,3 +1,9 @@
+:host {
+  display: block;
+  width: 100%;
+  min-width: 0;
+}
+
 .landing {
   display: flex;
   flex-direction: column;
@@ -5,6 +11,8 @@
   gap: 2.5rem;
   padding: 3rem 1rem 2rem;
   text-align: center;
+  width: 100%;
+  min-width: 0;
 }
 
 .landing__hero {
@@ -12,6 +20,7 @@
   flex-direction: column;
   align-items: center;
   gap: 1rem;
+  width: 100%;
   max-width: 640px;
 }
 
@@ -36,6 +45,7 @@
   justify-content: center;
   gap: 0.75rem;
   margin-top: 0.5rem;
+  width: 100%;
 }
 
 .landing__boton {
