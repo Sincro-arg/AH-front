@@ -104,6 +104,38 @@ describe('Login', () => {
     expect(testFixture.componentInstance.cuentaCreada()).toBeTrue();
   });
 
+  it('renderiza el formulario en el layout full-bleed y dispara el submit al hacer click', () => {
+    fixture.detectChanges();
+
+    const form = (fixture.nativeElement as HTMLElement).querySelector('form.login__form');
+    expect(form).toBeTruthy();
+
+    const component = fixture.componentInstance;
+    component.form.setValue({ email: 'a@test.com', password: 'unaPassword1' });
+    fixture.detectChanges();
+
+    const submitBtn = (fixture.nativeElement as HTMLElement).querySelector<HTMLButtonElement>('.login__submit');
+    expect(submitBtn).toBeTruthy();
+    submitBtn!.click();
+
+    const req = httpMock.expectOne(`${environment.apiUrl}/auth/login`);
+    expect(req.request.method).toBe('POST');
+    req.flush({
+      token: 'un-token',
+      usuario: {
+        id: '1',
+        nombre: 'Ana',
+        apellido: 'Gomez',
+        email: 'a@test.com',
+        telefono: '',
+        tema: 'claro',
+        fechaAlta: new Date().toISOString(),
+        ultimoAcceso: new Date().toISOString(),
+        notificacionesEmail: true,
+      },
+    });
+  });
+
   it('muestra el error cuando el login falla', () => {
     const component = fixture.componentInstance;
     component.form.setValue({ email: 'a@test.com', password: 'mala' });

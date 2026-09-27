@@ -229,4 +229,47 @@ describe('Home', () => {
     expect(recientes[0].id).toBe('pozo-7');
     expect(recientes[5].id).toBe('pozo-2');
   });
+
+  it('el carrusel muestra la cantidad correcta de tarjetas cuando hay varios pozos', () => {
+    const pozosMock: Pozo[] = Array.from({ length: 3 }, (_, i) => ({
+      id: `pozo-${i}`,
+      titulo: `Pozo ${i}`,
+      autoDescripcion: 'auto',
+      montoObjetivo: 1000,
+      montoRecaudado: 200,
+      estado: 'Abierto',
+      fechaCreacion: new Date(2024, 0, i + 1).toISOString(),
+      precioCompra: null,
+      fechaCompra: null,
+      precioVenta: null,
+      fechaVenta: null,
+      imagenUrl: null,
+      precioVentaEstimado: null,
+    }));
+
+    fixture.detectChanges();
+    httpMock.expectOne(meUrl).flush(usuarioMock);
+    httpMock.expectOne(inversionesUrl).flush([]);
+    httpMock.expectOne(pozosUrl).flush(pozosMock);
+    fixture.detectChanges();
+
+    const tarjetas = (fixture.nativeElement as HTMLElement).querySelectorAll('.home__carrusel-item');
+    expect(tarjetas.length).toBe(3);
+  });
+
+  it('muestra el estado de error del carrusel cuando falla el pedido de pozos', () => {
+    fixture.detectChanges();
+    httpMock.expectOne(meUrl).flush(usuarioMock);
+    httpMock.expectOne(inversionesUrl).flush([]);
+    httpMock
+      .expectOne(pozosUrl)
+      .flush({ error: 'No se pudieron cargar los pozos recientes.' }, { status: 0, statusText: 'Unknown Error' });
+    fixture.detectChanges();
+
+    expect(fixture.componentInstance.errorPozos()).toBeTruthy();
+    expect(fixture.componentInstance.cargandoPozos()).toBeFalse();
+    const texto = (fixture.nativeElement as HTMLElement).textContent ?? '';
+    expect(texto).toContain('No se pudieron cargar los pozos recientes.');
+    expect((fixture.nativeElement as HTMLElement).querySelectorAll('.home__carrusel-item').length).toBe(0);
+  });
 });
