@@ -89,4 +89,23 @@ describe('CarruselPozos', () => {
       );
     });
   });
+
+  describe('indicador de deslizar en mobile', () => {
+    it('se muestra cuando hay mas de una tarjeta', () => {
+      fixture.componentRef.setInput('pozos', [crearPozo({ id: 'pozo-1' }), crearPozo({ id: 'pozo-2' })]);
+      fixture.detectChanges();
+
+      const hint = (fixture.nativeElement as HTMLElement).querySelector('.carrusel-pozos__hint-mobile');
+      expect(hint).toBeTruthy();
+      expect(hint?.textContent).toContain('Desliza');
+    });
+
+    it('no se muestra cuando hay una sola tarjeta', () => {
+      fixture.componentRef.setInput('pozos', [crearPozo()]);
+      fixture.detectChanges();
+
+      const hint = (fixture.nativeElement as HTMLElement).querySelector('.carrusel-pozos__hint-mobile');
+      expect(hint).toBeFalsy();
+    });
+  });
 });

@@ -217,6 +217,10 @@
   outline-offset: 2px;
 }
 
+.carrusel-pozos__hint-mobile {
+  display: none;
+}
+
 @media (max-width: 480px) {
   .carrusel-pozos__wrapper {
     gap: 0;
@@ -243,6 +247,14 @@
 
   .carrusel-pozos__item {
     width: min(68vw, 200px);
+  }
+
+  .carrusel-pozos__hint-mobile {
+    display: block;
+    margin: 0.35rem 0 0;
+    text-align: center;
+    font-size: 0.72rem;
+    color: var(--color-text-muted);
   }
 }
 
