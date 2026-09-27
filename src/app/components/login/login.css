@@ -152,7 +152,7 @@
 .login__input {
   padding: 0.6rem 0.7rem;
   border: 1px solid var(--color-border);
-  border-radius: 6px;
+  border-radius: var(--radius-sm);
   font-size: 0.95rem;
   background-color: var(--color-surface);
   color: var(--color-text);
@@ -179,7 +179,7 @@
   margin-top: 1.2rem;
   padding: 0.7rem;
   border: none;
-  border-radius: 6px;
+  border-radius: var(--radius-sm);
   background-color: var(--color-primary);
   color: #fff;
   font-weight: 600;
