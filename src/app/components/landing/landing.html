@@ -124,100 +124,14 @@
     />
   </section>
 
-  <section class="landing__pozos-recientes">
-    <h2 class="landing__resumen-titulo">Pozos recientes</h2>
-
-    @if (cargandoPozos()) {
-      <div class="landing__cargando">
-        <app-spinner />
-      </div>
-    } @else if (errorPozos(); as msgPozos) {
-      <div class="landing__estado landing__estado--error" role="alert">
-        <p>{{ msgPozos }}</p>
-        <button type="button" class="landing__reintentar" (click)="reintentarPozos()">Reintentar</button>
-      </div>
-    } @else if (pozosRecientes().length === 0) {
-      <div class="landing__estado">
-        <p>Todavia no hay pozos para mostrar.</p>
-      </div>
-    } @else {
-      <div class="landing__carrusel-wrapper">
-        <button
-          type="button"
-          class="landing__carrusel-btn landing__carrusel-btn--prev"
-          aria-label="Pozo anterior"
-          (click)="desplazarCarrusel(-1)"
-        >
-          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
-            <path
-              d="M15 6l-6 6 6 6"
-              stroke="currentColor"
-              stroke-width="2.2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            />
-          </svg>
-        </button>
-
-        <div class="landing__carrusel" #carrusel>
-          @for (pozo of pozosRecientes(); track pozo.id) {
-            <article class="landing__carrusel-item">
-              <div class="landing__carrusel-imagen">
-                @if (pozo.imagenUrl) {
-                  <img [src]="pozo.imagenUrl" [alt]="pozo.titulo" loading="lazy" />
-                } @else {
-                  <svg viewBox="0 0 48 32" fill="none" aria-hidden="true">
-                    <rect x="1" y="12" width="46" height="14" rx="3" fill="currentColor" opacity="0.18" />
-                    <circle cx="14" cy="27" r="4" fill="currentColor" opacity="0.35" />
-                    <circle cx="34" cy="27" r="4" fill="currentColor" opacity="0.35" />
-                    <path d="M6 12l4-7h20l6 7" stroke="currentColor" stroke-width="2" opacity="0.35" />
-                  </svg>
-                }
-                <span
-                  class="landing__carrusel-badge"
-                  [class.landing__carrusel-badge--abierto]="pozo.estado === 'Abierto'"
-                  [class.landing__carrusel-badge--comprado]="pozo.estado === 'Comprado'"
-                  [class.landing__carrusel-badge--vendido]="pozo.estado === 'Vendido'"
-                >
-                  {{ pozo.estado }}
-                </span>
-              </div>
-
-              <div class="landing__carrusel-info">
-                <span class="landing__carrusel-titulo">{{ pozo.titulo }}</span>
-
-                <div class="landing__carrusel-progreso">
-                  <div class="landing__carrusel-progreso-barra">
-                    <div class="landing__carrusel-progreso-fill" [style.width.%]="progresoPozo(pozo)"></div>
-                  </div>
-                  <span class="landing__carrusel-progreso-texto">
-                    {{ formatoMonto(pozo.montoRecaudado) }} de {{ formatoMonto(pozo.montoObjetivo) }}
-                  </span>
-                </div>
-              </div>
-            </article>
-          }
-        </div>
-
-        <button
-          type="button"
-          class="landing__carrusel-btn landing__carrusel-btn--next"
-          aria-label="Pozo siguiente"
-          (click)="desplazarCarrusel(1)"
-        >
-          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
-            <path
-              d="M9 6l6 6-6 6"
-              stroke="currentColor"
-              stroke-width="2.2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            />
-          </svg>
-        </button>
-      </div>
-    }
-  </section>
+  <app-carrusel-pozos
+    class="landing__pozos-recientes"
+    titulo="Pozos recientes"
+    [pozos]="pozosRecientes()"
+    [cargando]="cargandoPozos()"
+    [error]="errorPozos()"
+    (reintentar)="reintentarPozos()"
+  />
 
   <section class="landing__testimonios">
     <h2 class="landing__resumen-titulo">Lo que dicen nuestros inversores</h2>

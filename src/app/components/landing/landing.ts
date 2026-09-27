@@ -1,9 +1,9 @@
-import { Component, ElementRef, OnInit, inject, signal, viewChild } from '@angular/core';
+import { Component, OnInit, inject, signal } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
 import { RouterLink } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { Pozo, PozosService } from '../../services/pozos.service';
-import { Spinner } from '../spinner/spinner';
+import { CarruselPozos } from '../carrusel-pozos/carrusel-pozos';
 
 interface Testimonio {
   nombre: string;
@@ -14,7 +14,7 @@ interface Testimonio {
 @Component({
   selector: 'app-landing',
   standalone: true,
-  imports: [RouterLink, Spinner],
+  imports: [RouterLink, CarruselPozos],
   templateUrl: './landing.html',
   styleUrl: './landing.css',
 })
@@ -27,8 +27,6 @@ export class Landing implements OnInit {
   readonly pozosRecientes = signal<Pozo[]>([]);
   readonly cargandoPozos = signal(true);
   readonly errorPozos = signal<string | null>(null);
-
-  private readonly carruselRef = viewChild<ElementRef<HTMLDivElement>>('carrusel');
 
   /** Testimonios fijos para la seccion "Lo que dicen nuestros inversores". */
   readonly testimonios: Testimonio[] = [
@@ -70,21 +68,6 @@ export class Landing implements OnInit {
       currency: 'ARS',
       maximumFractionDigits: 0,
     });
-  }
-
-  /** Porcentaje de recaudacion de un pozo (0 a 100), para la barra de progreso. */
-  progresoPozo(pozo: Pozo): number {
-    if (pozo.montoObjetivo <= 0) return 0;
-    return Math.min(100, Math.round((pozo.montoRecaudado / pozo.montoObjetivo) * 100));
-  }
-
-  /** Desplaza el carrusel de pozos recientes un ancho de tarjeta hacia adelante o atras. */
-  desplazarCarrusel(direccion: 1 | -1): void {
-    const el = this.carruselRef()?.nativeElement;
-    if (!el) return;
-    const item = el.querySelector<HTMLElement>('.landing__carrusel-item');
-    const ancho = (item?.offsetWidth ?? el.clientWidth) + 16;
-    el.scrollBy({ left: direccion * ancho, behavior: 'smooth' });
   }
 
   private cargarPozosRecientes(): void {

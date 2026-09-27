@@ -168,7 +168,7 @@ describe('Landing', () => {
     httpMock.expectOne(pozosUrl).flush(pozosMock);
     fixture.detectChanges();
 
-    const tarjetas = (fixture.nativeElement as HTMLElement).querySelectorAll('.landing__carrusel-item');
+    const tarjetas = (fixture.nativeElement as HTMLElement).querySelectorAll('.carrusel-pozos__item');
     expect(tarjetas.length).toBe(3);
   });
 
@@ -183,6 +183,6 @@ describe('Landing', () => {
     expect(fixture.componentInstance.cargandoPozos()).toBeFalse();
     const texto = (fixture.nativeElement as HTMLElement).textContent ?? '';
     expect(texto).toContain('No se pudieron cargar los pozos recientes.');
-    expect((fixture.nativeElement as HTMLElement).querySelectorAll('.landing__carrusel-item').length).toBe(0);
+    expect((fixture.nativeElement as HTMLElement).querySelectorAll('.carrusel-pozos__item').length).toBe(0);
   });
 });

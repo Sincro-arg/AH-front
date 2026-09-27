@@ -116,106 +116,24 @@
     </div>
   }
 
-  <section class="home__pozos-recientes">
-    <h2 class="home__resumen-titulo">Pozos disponibles para invertir</h2>
+  <app-carrusel-pozos
+    class="home__pozos-recientes"
+    titulo="Pozos disponibles para invertir"
+    [pozos]="pozosDisponibles()"
+    [cargando]="cargandoPozos()"
+    [error]="errorPozos()"
+    mensajeVacio="No hay pozos abiertos para invertir en este momento."
+    [extraTemplate]="extraPozo"
+    (reintentar)="reintentarPozos()"
+  />
 
-    @if (cargandoPozos()) {
-      <div class="home__cargando">
-        <app-spinner />
-      </div>
-    } @else if (errorPozos(); as msgPozos) {
-      <div class="home__estado home__estado--error" role="alert">
-        <p>{{ msgPozos }}</p>
-        <button type="button" class="home__reintentar" (click)="reintentarPozos()">Reintentar</button>
-      </div>
-    } @else if (pozosDisponibles().length === 0) {
-      <div class="home__estado">
-        <p>No hay pozos abiertos para invertir en este momento.</p>
-      </div>
-    } @else {
-      <div class="home__carrusel-wrapper">
-        <button
-          type="button"
-          class="home__carrusel-btn home__carrusel-btn--prev"
-          aria-label="Pozo anterior"
-          (click)="desplazarCarrusel(-1)"
-        >
-          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
-            <path
-              d="M15 6l-6 6 6 6"
-              stroke="currentColor"
-              stroke-width="2.2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            />
-          </svg>
-        </button>
-
-        <div class="home__carrusel" #carrusel>
-          @for (pozo of pozosDisponibles(); track pozo.id) {
-            <article class="home__carrusel-item">
-              <div class="home__carrusel-imagen">
-                @if (pozo.imagenUrl) {
-                  <img [src]="pozo.imagenUrl" [alt]="pozo.titulo" loading="lazy" />
-                } @else {
-                  <svg viewBox="0 0 48 32" fill="none" aria-hidden="true">
-                    <rect x="1" y="12" width="46" height="14" rx="3" fill="currentColor" opacity="0.18" />
-                    <circle cx="14" cy="27" r="4" fill="currentColor" opacity="0.35" />
-                    <circle cx="34" cy="27" r="4" fill="currentColor" opacity="0.35" />
-                    <path d="M6 12l4-7h20l6 7" stroke="currentColor" stroke-width="2" opacity="0.35" />
-                  </svg>
-                }
-                <span
-                  class="home__carrusel-badge"
-                  [class.home__carrusel-badge--abierto]="pozo.estado === 'Abierto'"
-                  [class.home__carrusel-badge--comprado]="pozo.estado === 'Comprado'"
-                  [class.home__carrusel-badge--vendido]="pozo.estado === 'Vendido'"
-                >
-                  {{ pozo.estado }}
-                </span>
-              </div>
-
-              <div class="home__carrusel-info">
-                <span class="home__carrusel-titulo">{{ pozo.titulo }}</span>
-
-                <div class="home__carrusel-progreso">
-                  <div class="home__carrusel-progreso-barra">
-                    <div class="home__carrusel-progreso-fill" [style.width.%]="progresoPozo(pozo)"></div>
-                  </div>
-                  <span class="home__carrusel-progreso-texto">
-                    {{ formatoMonto(pozo.montoRecaudado) }} de {{ formatoMonto(pozo.montoObjetivo) }}
-                  </span>
-                </div>
-
-                <span class="home__carrusel-extra">
-                  @if (pozo.precioVentaEstimado) {
-                    Estimado de venta: {{ formatoMonto(pozo.precioVentaEstimado) }}
-                  } @else {
-                    Abierto hace {{ diasDesdeApertura(pozo) }} {{ diasDesdeApertura(pozo) === 1 ? 'dia' : 'dias' }}
-                  }
-                </span>
-              </div>
-            </article>
-          }
-        </div>
-
-        <button
-          type="button"
-          class="home__carrusel-btn home__carrusel-btn--next"
-          aria-label="Pozo siguiente"
-          (click)="desplazarCarrusel(1)"
-        >
-          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
-            <path
-              d="M9 6l6 6-6 6"
-              stroke="currentColor"
-              stroke-width="2.2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            />
-          </svg>
-        </button>
-      </div>
-    }
-  </section>
+  <ng-template #extraPozo let-pozo>
+    <span class="home__carrusel-extra">
+      @if (pozo.precioVentaEstimado) {
+        Estimado de venta: {{ formatoMonto(pozo.precioVentaEstimado) }}
+      } @else {
+        Abierto hace {{ diasDesdeApertura(pozo) }} {{ diasDesdeApertura(pozo) === 1 ? 'dia' : 'dias' }}
+      }
+    </span>
+  </ng-template>
 </section>

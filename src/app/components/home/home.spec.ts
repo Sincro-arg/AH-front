@@ -348,7 +348,7 @@ describe('Home', () => {
     httpMock.expectOne(pozosUrl).flush(pozosMock);
     fixture.detectChanges();
 
-    const tarjetas = (fixture.nativeElement as HTMLElement).querySelectorAll('.home__carrusel-item');
+    const tarjetas = (fixture.nativeElement as HTMLElement).querySelectorAll('.carrusel-pozos__item');
     expect(tarjetas.length).toBe(3);
   });
 
@@ -376,17 +376,17 @@ describe('Home', () => {
     fixture.detectChanges();
 
     const nativeEl = fixture.nativeElement as HTMLElement;
-    const carruselEl = nativeEl.querySelector('.home__carrusel') as HTMLElement;
+    const carruselEl = nativeEl.querySelector('.carrusel-pozos__carrusel') as HTMLElement;
     const scrollBySpy = spyOn(carruselEl, 'scrollBy');
 
-    const btnPrev = nativeEl.querySelector<HTMLButtonElement>('.home__carrusel-btn--prev');
+    const btnPrev = nativeEl.querySelector<HTMLButtonElement>('.carrusel-pozos__btn--prev');
     btnPrev?.click();
     expect(scrollBySpy).toHaveBeenCalledTimes(1);
     const argsPrev = scrollBySpy.calls.mostRecent().args[0] as ScrollToOptions;
     expect(argsPrev).toEqual(jasmine.objectContaining({ behavior: 'smooth', left: jasmine.any(Number) }));
     expect(argsPrev.left).toBeLessThan(0);
 
-    const btnNext = nativeEl.querySelector<HTMLButtonElement>('.home__carrusel-btn--next');
+    const btnNext = nativeEl.querySelector<HTMLButtonElement>('.carrusel-pozos__btn--next');
     btnNext?.click();
     expect(scrollBySpy).toHaveBeenCalledTimes(2);
     const argsNext = scrollBySpy.calls.mostRecent().args[0] as ScrollToOptions;
@@ -419,10 +419,10 @@ describe('Home', () => {
     fixture.detectChanges();
 
     const nativeEl = fixture.nativeElement as HTMLElement;
-    const img = nativeEl.querySelector<HTMLImageElement>('.home__carrusel-imagen img');
+    const img = nativeEl.querySelector<HTMLImageElement>('.carrusel-pozos__imagen img');
     expect(img).toBeTruthy();
     expect(img?.src).toBe('https://example.com/auto.jpg');
-    expect(nativeEl.querySelector('.home__carrusel-imagen svg')).toBeFalsy();
+    expect(nativeEl.querySelector('.carrusel-pozos__imagen svg')).toBeFalsy();
   });
 
   it('muestra el estimado de venta cuando el pozo lo tiene', () => {
@@ -500,7 +500,7 @@ describe('Home', () => {
     expect(fixture.componentInstance.cargandoPozos()).toBeFalse();
     const texto = (fixture.nativeElement as HTMLElement).textContent ?? '';
     expect(texto).toContain('No se pudieron cargar los pozos recientes.');
-    expect((fixture.nativeElement as HTMLElement).querySelectorAll('.home__carrusel-item').length).toBe(0);
+    expect((fixture.nativeElement as HTMLElement).querySelectorAll('.carrusel-pozos__item').length).toBe(0);
   });
 
 });

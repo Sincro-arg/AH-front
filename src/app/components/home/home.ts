@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, computed, inject, signal, viewChild } from '@angular/core';
+import { Component, OnInit, computed, inject, signal } from '@angular/core';
 import { DatePipe } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
 import { RouterLink } from '@angular/router';
@@ -7,11 +7,12 @@ import { UsuariosService } from '../../services/usuarios.service';
 import { InversionesService, MiInversion } from '../../services/inversiones.service';
 import { Pozo, PozosService } from '../../services/pozos.service';
 import { Spinner } from '../spinner/spinner';
+import { CarruselPozos } from '../carrusel-pozos/carrusel-pozos';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [DatePipe, RouterLink, Spinner],
+  imports: [DatePipe, RouterLink, Spinner, CarruselPozos],
   templateUrl: './home.html',
   styleUrl: './home.css',
 })
@@ -31,8 +32,6 @@ export class Home implements OnInit {
   readonly pozosDisponibles = signal<Pozo[]>([]);
   readonly cargandoPozos = signal(true);
   readonly errorPozos = signal<string | null>(null);
-
-  private readonly carruselRef = viewChild<ElementRef<HTMLDivElement>>('carrusel');
 
   /** Suma de lo invertido en pozos que todavia no se vendieron. */
   readonly totalInvertido = computed(() =>
@@ -100,25 +99,10 @@ export class Home implements OnInit {
     });
   }
 
-  /** Porcentaje de recaudacion de un pozo (0 a 100), para la barra de progreso. */
-  progresoPozo(pozo: Pozo): number {
-    if (pozo.montoObjetivo <= 0) return 0;
-    return Math.min(100, Math.round((pozo.montoRecaudado / pozo.montoObjetivo) * 100));
-  }
-
   /** Dias transcurridos desde que se creo el pozo, para mostrar "Abierto hace N dias". */
   diasDesdeApertura(pozo: Pozo): number {
     const ms = Date.now() - new Date(pozo.fechaCreacion).getTime();
     return Math.max(0, Math.floor(ms / (1000 * 60 * 60 * 24)));
-  }
-
-  /** Desplaza el carrusel de pozos recientes un ancho de tarjeta hacia adelante o atras. */
-  desplazarCarrusel(direccion: 1 | -1): void {
-    const el = this.carruselRef()?.nativeElement;
-    if (!el) return;
-    const item = el.querySelector<HTMLElement>('.home__carrusel-item');
-    const ancho = (item?.offsetWidth ?? el.clientWidth) + 16;
-    el.scrollBy({ left: direccion * ancho, behavior: 'smooth' });
   }
 
   private cargarUsuario(): void {
