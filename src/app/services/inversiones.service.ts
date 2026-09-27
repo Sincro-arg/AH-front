@@ -19,6 +19,7 @@ export interface MiInversion {
   id: string;
   pozoId: string;
   tituloPozo: string;
+  autoDescripcion: string;
   estadoPozo: EstadoPozo;
   monto: number;
   fecha: string;

@@ -108,6 +108,10 @@
   gap: 0.6rem;
 }
 
+.inversion-card__hd-texto {
+  min-width: 0;
+}
+
 .inversion-card__titulo {
   margin: 0;
   min-width: 0;
@@ -115,6 +119,13 @@
   font-size: 1.05rem;
   font-weight: 700;
   color: var(--color-text);
+}
+
+.inversion-card__auto {
+  margin: 0.15rem 0 0;
+  font-size: 0.82rem;
+  color: var(--color-text-muted);
+  overflow-wrap: break-word;
 }
 
 .inversion-card__estado {

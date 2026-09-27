@@ -24,7 +24,10 @@
         <li class="inversion-card">
           <a class="inversion-card__link" [routerLink]="['/pozos', inv.pozoId]">
             <div class="inversion-card__hd">
-              <h2 class="inversion-card__titulo">{{ inv.tituloPozo }}</h2>
+              <div class="inversion-card__hd-texto">
+                <h2 class="inversion-card__titulo">{{ inv.tituloPozo }}</h2>
+                <p class="inversion-card__auto">{{ inv.autoDescripcion }}</p>
+              </div>
               <span
                 class="inversion-card__estado"
                 [class.inversion-card__estado--abierto]="inv.estadoPozo === 'Abierto'"

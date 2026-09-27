@@ -16,6 +16,7 @@ describe('MisInversiones', () => {
     id: '1',
     pozoId: '10',
     tituloPozo: 'Fiat Cronos 2022',
+    autoDescripcion: 'Fiat Cronos 2021, 45.000 km, nafta',
     estadoPozo: 'Abierto',
     monto: 5000,
     fecha: new Date().toISOString(),
@@ -58,6 +59,7 @@ describe('MisInversiones', () => {
 
     const texto = (fixture.nativeElement as HTMLElement).textContent ?? '';
     expect(texto).toContain('Fiat Cronos 2022');
+    expect(texto).toContain('45.000 km');
     expect(texto).toContain('Abierto');
   });
 
