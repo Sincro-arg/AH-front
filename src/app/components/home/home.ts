@@ -5,6 +5,7 @@ import { RouterLink } from '@angular/router';
 import { AuthService, Usuario } from '../../services/auth.service';
 import { UsuariosService } from '../../services/usuarios.service';
 import { InversionesService, MiInversion } from '../../services/inversiones.service';
+import { Pozo, PozosService } from '../../services/pozos.service';
 import { Spinner } from '../spinner/spinner';
 
 @Component({
@@ -18,6 +19,7 @@ export class Home implements OnInit {
   private readonly authSvc = inject(AuthService);
   private readonly usuariosSvc = inject(UsuariosService);
   private readonly inversionesSvc = inject(InversionesService);
+  private readonly pozosSvc = inject(PozosService);
 
   readonly usuario = signal<Usuario | null>(null);
   readonly cargando = signal(true);
@@ -25,6 +27,10 @@ export class Home implements OnInit {
 
   readonly misInversiones = signal<MiInversion[]>([]);
   readonly cargandoInversiones = signal(true);
+
+  readonly pozosRecientes = signal<Pozo[]>([]);
+  readonly cargandoPozos = signal(true);
+  readonly errorPozos = signal<string | null>(null);
 
   /** Suma de lo invertido en pozos que todavia no se vendieron. */
   readonly totalInvertido = computed(() =>
@@ -63,11 +69,17 @@ export class Home implements OnInit {
   ngOnInit(): void {
     this.cargarUsuario();
     this.cargarInversiones();
+    this.cargarPozosRecientes();
   }
 
   /** Reintenta el pedido tras un error (boton "Reintentar"). */
   reintentar(): void {
     this.cargarUsuario();
+  }
+
+  /** Reintenta la carga de pozos recientes tras un error (boton "Reintentar"). */
+  reintentarPozos(): void {
+    this.cargarPozosRecientes();
   }
 
   /** Monto formateado en pesos, sin decimales. */
@@ -106,6 +118,25 @@ export class Home implements OnInit {
       },
       error: () => {
         this.cargandoInversiones.set(false);
+      },
+    });
+  }
+
+  private cargarPozosRecientes(): void {
+    this.cargandoPozos.set(true);
+    this.errorPozos.set(null);
+
+    this.pozosSvc.listar().subscribe({
+      next: (pozos) => {
+        const ordenados = [...pozos].sort(
+          (a, b) => new Date(b.fechaCreacion).getTime() - new Date(a.fechaCreacion).getTime(),
+        );
+        this.pozosRecientes.set(ordenados.slice(0, 6));
+        this.cargandoPozos.set(false);
+      },
+      error: (err: HttpErrorResponse) => {
+        this.errorPozos.set(err.error?.error ?? 'No se pudieron cargar los pozos recientes.');
+        this.cargandoPozos.set(false);
       },
     });
   }

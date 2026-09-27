@@ -100,4 +100,44 @@
       <app-spinner />
     </div>
   }
+
+  <section class="home__pozos-recientes">
+    <h2 class="home__resumen-titulo">Pozos recientes</h2>
+
+    @if (cargandoPozos()) {
+      <div class="home__cargando">
+        <app-spinner />
+      </div>
+    } @else if (errorPozos(); as msgPozos) {
+      <div class="home__estado home__estado--error" role="alert">
+        <p>{{ msgPozos }}</p>
+        <button type="button" class="home__reintentar" (click)="reintentarPozos()">Reintentar</button>
+      </div>
+    } @else if (pozosRecientes().length === 0) {
+      <div class="home__estado">
+        <p>Todavia no hay pozos para mostrar.</p>
+      </div>
+    } @else {
+      <div class="home__carrusel">
+        @for (pozo of pozosRecientes(); track pozo.id) {
+          <article class="home__carrusel-item">
+            <div class="home__carrusel-imagen">
+              @if (pozo.imagenUrl) {
+                <img [src]="pozo.imagenUrl" [alt]="pozo.titulo" loading="lazy" />
+              } @else {
+                <svg viewBox="0 0 48 32" fill="none" aria-hidden="true">
+                  <rect x="1" y="12" width="46" height="14" rx="3" fill="currentColor" opacity="0.18" />
+                  <circle cx="14" cy="27" r="4" fill="currentColor" opacity="0.35" />
+                  <circle cx="34" cy="27" r="4" fill="currentColor" opacity="0.35" />
+                  <path d="M6 12l4-7h20l6 7" stroke="currentColor" stroke-width="2" opacity="0.35" />
+                </svg>
+              }
+            </div>
+            <span class="home__carrusel-titulo">{{ pozo.titulo }}</span>
+            <span class="home__carrusel-estado">{{ pozo.estado }}</span>
+          </article>
+        }
+      </div>
+    }
+  </section>
 </section>

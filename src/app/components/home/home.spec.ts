@@ -5,6 +5,7 @@ import { provideRouter } from '@angular/router';
 import { environment } from '../../../environments/environment';
 import { AuthService } from '../../services/auth.service';
 import { MiInversion } from '../../services/inversiones.service';
+import { Pozo } from '../../services/pozos.service';
 import { Home } from './home';
 
 describe('Home', () => {
@@ -13,6 +14,7 @@ describe('Home', () => {
 
   const meUrl = `${environment.apiUrl}/usuarios/me`;
   const inversionesUrl = `${environment.apiUrl}/usuarios/me/inversiones`;
+  const pozosUrl = `${environment.apiUrl}/pozos`;
 
   const usuarioMock = {
     id: '1',
@@ -74,6 +76,7 @@ describe('Home', () => {
     fixture.detectChanges();
     httpMock.expectOne(meUrl).flush(usuarioMock);
     httpMock.expectOne(inversionesUrl).flush([]);
+    httpMock.expectOne(pozosUrl).flush([]);
     expect(fixture.componentInstance).toBeTruthy();
   });
 
@@ -85,12 +88,14 @@ describe('Home', () => {
 
     httpMock.expectOne(meUrl).flush(usuarioMock);
     httpMock.expectOne(inversionesUrl).flush([]);
+    httpMock.expectOne(pozosUrl).flush([]);
   });
 
   it('muestra los datos del usuario logueado', () => {
     fixture.detectChanges();
     httpMock.expectOne(meUrl).flush(usuarioMock);
     httpMock.expectOne(inversionesUrl).flush([]);
+    httpMock.expectOne(pozosUrl).flush([]);
     fixture.detectChanges();
 
     expect(fixture.componentInstance.usuario()).toEqual(usuarioMock);
@@ -103,6 +108,7 @@ describe('Home', () => {
     fixture.detectChanges();
     httpMock.expectOne(meUrl).flush({ ...usuarioMock, ultimoAcceso: null });
     httpMock.expectOne(inversionesUrl).flush([]);
+    httpMock.expectOne(pozosUrl).flush([]);
     fixture.detectChanges();
 
     const texto = (fixture.nativeElement as HTMLElement).textContent ?? '';
@@ -113,6 +119,7 @@ describe('Home', () => {
     fixture.detectChanges();
     httpMock.expectOne(meUrl).flush({ error: 'No se pudo conectar' }, { status: 0, statusText: 'Unknown Error' });
     httpMock.expectOne(inversionesUrl).flush([]);
+    httpMock.expectOne(pozosUrl).flush([]);
     fixture.detectChanges();
 
     expect(fixture.componentInstance.error()).toBeTruthy();
@@ -126,6 +133,7 @@ describe('Home', () => {
     fixture.detectChanges();
     httpMock.expectOne(meUrl).flush(null, { status: 500, statusText: 'Server Error' });
     httpMock.expectOne(inversionesUrl).flush([]);
+    httpMock.expectOne(pozosUrl).flush([]);
     fixture.detectChanges();
 
     fixture.componentInstance.reintentar();
@@ -143,6 +151,7 @@ describe('Home', () => {
     fixture.detectChanges();
     httpMock.expectOne(meUrl).flush(usuarioMock);
     httpMock.expectOne(inversionesUrl).flush([]);
+    httpMock.expectOne(pozosUrl).flush([]);
 
     const authSvc = TestBed.inject(AuthService);
     expect(authSvc.usuarioActual()).toEqual(usuarioMock);
@@ -152,6 +161,7 @@ describe('Home', () => {
     fixture.detectChanges();
     httpMock.expectOne(meUrl).flush(usuarioMock);
     httpMock.expectOne(inversionesUrl).flush(misInversionesMock);
+    httpMock.expectOne(pozosUrl).flush([]);
     fixture.detectChanges();
 
     // totalInvertido: suma de montos en pozos que no estan Vendidos (1000 + 300)
@@ -169,6 +179,7 @@ describe('Home', () => {
     httpMock
       .expectOne(inversionesUrl)
       .flush({ error: 'No se pudo conectar' }, { status: 0, statusText: 'Unknown Error' });
+    httpMock.expectOne(pozosUrl).flush([]);
     fixture.detectChanges();
 
     expect(fixture.componentInstance.cargandoInversiones()).toBeFalse();
@@ -176,5 +187,46 @@ describe('Home', () => {
     expect(fixture.componentInstance.totalInvertido()).toBe(0);
     expect(fixture.componentInstance.gananciaTotal()).toBe(0);
     expect(fixture.componentInstance.cantidadPozosActivos()).toBe(0);
+  });
+
+  it('llama a PozosService.listar() y muestra el estado vacio cuando no hay pozos', () => {
+    fixture.detectChanges();
+    httpMock.expectOne(meUrl).flush(usuarioMock);
+    httpMock.expectOne(inversionesUrl).flush([]);
+    httpMock.expectOne(pozosUrl).flush([]);
+    fixture.detectChanges();
+
+    expect(fixture.componentInstance.pozosRecientes()).toEqual([]);
+    const texto = (fixture.nativeElement as HTMLElement).textContent ?? '';
+    expect(texto).toContain('Todavia no hay pozos para mostrar.');
+  });
+
+  it('ordena los pozos recientes por fechaCreacion descendente y toma los primeros 6', () => {
+    const pozosMock: Pozo[] = Array.from({ length: 8 }, (_, i) => ({
+      id: `pozo-${i}`,
+      titulo: `Pozo ${i}`,
+      autoDescripcion: 'auto',
+      montoObjetivo: 1000,
+      montoRecaudado: 0,
+      estado: 'Abierto',
+      fechaCreacion: new Date(2024, 0, i + 1).toISOString(),
+      precioCompra: null,
+      fechaCompra: null,
+      precioVenta: null,
+      fechaVenta: null,
+      imagenUrl: null,
+      precioVentaEstimado: null,
+    }));
+
+    fixture.detectChanges();
+    httpMock.expectOne(meUrl).flush(usuarioMock);
+    httpMock.expectOne(inversionesUrl).flush([]);
+    httpMock.expectOne(pozosUrl).flush(pozosMock);
+    fixture.detectChanges();
+
+    const recientes = fixture.componentInstance.pozosRecientes();
+    expect(recientes.length).toBe(6);
+    expect(recientes[0].id).toBe('pozo-7');
+    expect(recientes[5].id).toBe('pozo-2');
   });
 });
