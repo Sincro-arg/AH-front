@@ -1,0 +1,69 @@
+<ng-template #contenidoInterno>
+  <div class="tarjeta-pozo__imagen">
+    @if (imagenUrl()) {
+      <img [src]="imagenUrl()" [alt]="imagenAlt()" loading="lazy" />
+    } @else {
+      <svg viewBox="0 0 48 32" fill="none" aria-hidden="true">
+        <rect x="1" y="12" width="46" height="14" rx="3" fill="currentColor" opacity="0.18" />
+        <circle cx="14" cy="27" r="4" fill="currentColor" opacity="0.35" />
+        <circle cx="34" cy="27" r="4" fill="currentColor" opacity="0.35" />
+        <path d="M6 12l4-7h20l6 7" stroke="currentColor" stroke-width="2" opacity="0.35" />
+      </svg>
+    }
+    @if (badgeEnImagen() && estado()) {
+      <span
+        class="tarjeta-pozo__badge tarjeta-pozo__badge--sobre-imagen"
+        [class.tarjeta-pozo__badge--abierto]="estado() === 'Abierto'"
+        [class.tarjeta-pozo__badge--comprado]="estado() === 'Comprado'"
+        [class.tarjeta-pozo__badge--vendido]="estado() === 'Vendido'"
+      >
+        {{ estado() }}
+      </span>
+    }
+  </div>
+
+  <div class="tarjeta-pozo__hd">
+    <h2 class="tarjeta-pozo__titulo">{{ titulo() }}</h2>
+    @if (!badgeEnImagen() && estado()) {
+      <span
+        class="tarjeta-pozo__badge"
+        [class.tarjeta-pozo__badge--abierto]="estado() === 'Abierto'"
+        [class.tarjeta-pozo__badge--comprado]="estado() === 'Comprado'"
+        [class.tarjeta-pozo__badge--vendido]="estado() === 'Vendido'"
+      >
+        {{ estado() }}
+      </span>
+    }
+  </div>
+
+  <ng-content select="[tarjeta-pozo-subtitulo]" />
+  <ng-content select="[tarjeta-pozo-extra]" />
+
+  @if (mostrarProgreso()) {
+    <div class="tarjeta-pozo__progreso">
+      <div class="tarjeta-pozo__barra">
+        <div class="tarjeta-pozo__barra-relleno" [style.width.%]="progreso()"></div>
+      </div>
+      <div class="tarjeta-pozo__montos">
+        <span>{{ formatoMonto(montoRecaudado() ?? 0) }}</span>
+        <span class="tarjeta-pozo__monto-objetivo">de {{ formatoMonto(montoObjetivo() ?? 0) }}</span>
+      </div>
+    </div>
+  } @else {
+    <ng-content select="[tarjeta-pozo-datos]" />
+  }
+
+  <ng-content select="[tarjeta-pozo-extra-post]" />
+</ng-template>
+
+@if (link(); as destino) {
+  <a class="tarjeta-pozo__link" [routerLink]="destino">
+    <ng-container [ngTemplateOutlet]="contenidoInterno" />
+  </a>
+} @else {
+  <div class="tarjeta-pozo__link">
+    <ng-container [ngTemplateOutlet]="contenidoInterno" />
+  </div>
+}
+
+<ng-content select="[tarjeta-pozo-acciones]" />

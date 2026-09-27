@@ -3,11 +3,12 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { RouterLink } from '@angular/router';
 import { InversionesService, MiInversion } from '../../services/inversiones.service';
 import { Spinner } from '../spinner/spinner';
+import { TarjetaPozo } from '../tarjeta-pozo/tarjeta-pozo';
 
 @Component({
   selector: 'app-mis-inversiones',
   standalone: true,
-  imports: [Spinner, RouterLink],
+  imports: [Spinner, RouterLink, TarjetaPozo],
   templateUrl: './mis-inversiones.html',
   styleUrl: './mis-inversiones.css',
 })

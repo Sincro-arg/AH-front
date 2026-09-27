@@ -1,15 +1,15 @@
 import { Component, ElementRef, HostListener, OnInit, ViewChild, inject, signal } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { RouterLink } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { Pozo, PozosService } from '../../services/pozos.service';
 import { Spinner } from '../spinner/spinner';
+import { TarjetaPozo } from '../tarjeta-pozo/tarjeta-pozo';
 
 @Component({
   selector: 'app-pozos',
   standalone: true,
-  imports: [Spinner, ReactiveFormsModule, RouterLink],
+  imports: [Spinner, ReactiveFormsModule, TarjetaPozo],
   templateUrl: './pozos.html',
   styleUrl: './pozos.css',
 })
@@ -51,13 +51,6 @@ export class Pozos implements OnInit {
   /** Reintenta el pedido tras un error (boton "Reintentar"). */
   reintentar(): void {
     this.cargarPozos();
-  }
-
-  /** Porcentaje de progreso 0-100, acotado, para la barra de cada tarjeta. */
-  progreso(pozo: Pozo): number {
-    if (pozo.montoObjetivo <= 0) return 0;
-    const pct = (pozo.montoRecaudado / pozo.montoObjetivo) * 100;
-    return Math.min(100, Math.max(0, Math.round(pct)));
   }
 
   /** Monto formateado en pesos, sin decimales. */

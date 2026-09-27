@@ -30,39 +30,23 @@
     <div class="pozos__grid">
       @for (pozo of pozos(); track pozo.id) {
         <article class="pozo-card">
-          <a class="pozo-card__link" [routerLink]="['/pozos', pozo.id]">
-            <div class="pozo-card__imagen">
-              @if (pozo.imagenUrl) {
-                <img [src]="pozo.imagenUrl" [alt]="pozo.titulo" loading="lazy" />
-              } @else {
-                <svg viewBox="0 0 48 32" fill="none" aria-hidden="true">
-                  <rect x="1" y="12" width="46" height="14" rx="3" fill="currentColor" opacity="0.18" />
-                  <circle cx="14" cy="27" r="4" fill="currentColor" opacity="0.35" />
-                  <circle cx="34" cy="27" r="4" fill="currentColor" opacity="0.35" />
-                  <path d="M6 12l4-7h20l6 7" stroke="currentColor" stroke-width="2" opacity="0.35" />
-                </svg>
-              }
-            </div>
-            <div class="pozo-card__hd">
-              <h2 class="pozo-card__titulo">{{ pozo.titulo }}</h2>
-              <span
-                class="pozo-card__estado"
-                [class.pozo-card__estado--abierto]="pozo.estado === 'Abierto'"
-                [class.pozo-card__estado--comprado]="pozo.estado === 'Comprado'"
-                [class.pozo-card__estado--vendido]="pozo.estado === 'Vendido'"
-              >
-                {{ pozo.estado }}
-              </span>
-            </div>
-
-            <p class="pozo-card__auto">{{ pozo.autoDescripcion }}</p>
+          <app-tarjeta-pozo
+            [imagenUrl]="pozo.imagenUrl"
+            [imagenAlt]="pozo.titulo"
+            [titulo]="pozo.titulo"
+            [estado]="pozo.estado"
+            [link]="['/pozos', pozo.id]"
+            [montoRecaudado]="pozo.montoRecaudado"
+            [montoObjetivo]="pozo.montoObjetivo"
+          >
+            <p tarjeta-pozo-subtitulo class="pozo-card__auto">{{ pozo.autoDescripcion }}</p>
 
             @if (pozo.estado === 'Abierto' && pozo.precioVentaEstimado !== null) {
-              <p class="pozo-card__precio">
+              <p tarjeta-pozo-extra class="pozo-card__precio">
                 Venta estimada: <strong>{{ formatoMonto(pozo.precioVentaEstimado) }}</strong>
               </p>
             } @else if (pozo.estado === 'Comprado' || pozo.estado === 'Vendido') {
-              <p class="pozo-card__precio">
+              <p tarjeta-pozo-extra class="pozo-card__precio">
                 @if (pozo.precioCompra !== null) {
                   <span>Compra: <strong>{{ formatoMonto(pozo.precioCompra) }}</strong></span>
                 }
@@ -72,25 +56,15 @@
               </p>
             }
 
-            <div class="pozo-card__progreso">
-              <div class="pozo-card__barra">
-                <div class="pozo-card__barra-relleno" [style.width.%]="progreso(pozo)"></div>
+            @if (authSvc.estaLogueado()) {
+              <div tarjeta-pozo-acciones class="pozo-card__acciones">
+                @if (pozo.estado === 'Abierto') {
+                  <button type="button" class="pozo-card__editar" (click)="abrirEditar(pozo)">Editar</button>
+                }
+                <button type="button" class="pozo-card__eliminar" (click)="eliminarPozo(pozo)">Eliminar</button>
               </div>
-              <div class="pozo-card__montos">
-                <span>{{ formatoMonto(pozo.montoRecaudado) }}</span>
-                <span class="pozo-card__monto-objetivo">de {{ formatoMonto(pozo.montoObjetivo) }}</span>
-              </div>
-            </div>
-          </a>
-
-          @if (authSvc.estaLogueado()) {
-            <div class="pozo-card__acciones">
-              @if (pozo.estado === 'Abierto') {
-                <button type="button" class="pozo-card__editar" (click)="abrirEditar(pozo)">Editar</button>
-              }
-              <button type="button" class="pozo-card__eliminar" (click)="eliminarPozo(pozo)">Eliminar</button>
-            </div>
-          }
+            }
+          </app-tarjeta-pozo>
         </article>
       }
     </div>

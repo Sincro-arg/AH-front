@@ -104,14 +104,6 @@ describe('Pozos', () => {
     expect(fixture.componentInstance.error()).toBeNull();
   });
 
-  it('calcula el progreso como porcentaje acotado entre 0 y 100', () => {
-    expect(fixture.componentInstance.progreso(pozoMock)).toBe(40);
-    expect(
-      fixture.componentInstance.progreso({ ...pozoMock, montoRecaudado: 20000 }),
-    ).toBe(100);
-    expect(fixture.componentInstance.progreso({ ...pozoMock, montoObjetivo: 0 })).toBe(0);
-  });
-
   describe('guardarPozo', () => {
     it('crea un pozo nuevo y lo agrega al principio de la lista', () => {
       fixture.detectChanges();

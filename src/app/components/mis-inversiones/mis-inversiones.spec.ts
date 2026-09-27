@@ -69,7 +69,7 @@ describe('MisInversiones', () => {
     httpMock.expectOne(url).flush([inversionMock]);
     fixture.detectChanges();
 
-    const tarjeta = (fixture.nativeElement as HTMLElement).querySelector('.inversion-card__imagen');
+    const tarjeta = (fixture.nativeElement as HTMLElement).querySelector('.tarjeta-pozo__imagen');
     expect(tarjeta?.querySelector('svg')).toBeTruthy();
     expect(tarjeta?.querySelector('img')).toBeFalsy();
   });
@@ -81,7 +81,7 @@ describe('MisInversiones', () => {
       .flush([{ ...inversionMock, imagenUrl: 'https://ejemplo.com/foto.jpg' }]);
     fixture.detectChanges();
 
-    const tarjeta = (fixture.nativeElement as HTMLElement).querySelector('.inversion-card__imagen');
+    const tarjeta = (fixture.nativeElement as HTMLElement).querySelector('.tarjeta-pozo__imagen');
     const img = tarjeta?.querySelector('img');
     expect(img).toBeTruthy();
     expect(img?.getAttribute('src')).toBe('https://ejemplo.com/foto.jpg');

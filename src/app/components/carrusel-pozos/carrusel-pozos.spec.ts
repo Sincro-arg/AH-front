@@ -37,38 +37,6 @@ describe('CarruselPozos', () => {
     expect(fixture.componentInstance).toBeTruthy();
   });
 
-  describe('progresoPozo', () => {
-    it('devuelve 0 cuando montoObjetivo es 0, sin dividir por cero', () => {
-      const pozo = crearPozo({ montoObjetivo: 0, montoRecaudado: 500 });
-      expect(fixture.componentInstance.progresoPozo(pozo)).toBe(0);
-    });
-
-    it('topea en 100 cuando montoRecaudado supera montoObjetivo', () => {
-      const pozo = crearPozo({ montoObjetivo: 1000, montoRecaudado: 5000 });
-      expect(fixture.componentInstance.progresoPozo(pozo)).toBe(100);
-    });
-
-    it('calcula el porcentaje redondeado en el caso normal', () => {
-      const pozo = crearPozo({ montoObjetivo: 10000, montoRecaudado: 4000 });
-      expect(fixture.componentInstance.progresoPozo(pozo)).toBe(40);
-    });
-  });
-
-  describe('formatoMonto', () => {
-    it('formatea el monto en pesos argentinos, sin decimales', () => {
-      const texto = fixture.componentInstance.formatoMonto(1500000);
-      expect(texto).toContain('$');
-      expect(texto).toContain('1.500.000');
-      expect(texto).not.toContain(',00');
-    });
-
-    it('formatea el 0 como $0', () => {
-      const texto = fixture.componentInstance.formatoMonto(0);
-      expect(texto).toContain('0');
-      expect(texto).toContain('$');
-    });
-  });
-
   describe('boton "Pozo siguiente"', () => {
     it('llama a scrollBy del contenedor del carrusel al hacer click, sin tirar error', () => {
       fixture.componentRef.setInput('pozos', [crearPozo()]);

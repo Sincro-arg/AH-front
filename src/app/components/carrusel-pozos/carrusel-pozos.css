@@ -69,6 +69,8 @@
   scroll-snap-align: start;
   display: flex;
   flex-direction: column;
+  gap: 0.6rem;
+  padding-bottom: 0.9rem;
   background: var(--color-surface);
   border: 1px solid var(--color-border);
   border-radius: 4px 14px 4px 14px;
@@ -92,98 +94,6 @@
     opacity: 1;
     transform: none;
   }
-}
-
-.carrusel-pozos__imagen {
-  position: relative;
-  aspect-ratio: 4 / 3;
-  background: color-mix(in srgb, var(--color-primary) 6%, var(--color-surface));
-  color: var(--color-primary);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.carrusel-pozos__imagen img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.carrusel-pozos__imagen svg {
-  width: 45%;
-}
-
-.carrusel-pozos__badge {
-  position: absolute;
-  top: 8px;
-  right: 8px;
-  font-size: 0.65rem;
-  font-weight: 700;
-  letter-spacing: 0.03em;
-  text-transform: uppercase;
-  padding: 3px 9px;
-  border-radius: 999px;
-  white-space: nowrap;
-}
-
-.carrusel-pozos__badge--abierto {
-  color: var(--color-success);
-  background: rgba(46, 125, 50, 0.12);
-  border: 1px solid rgba(46, 125, 50, 0.25);
-}
-
-.carrusel-pozos__badge--comprado {
-  color: var(--color-primary);
-  background: rgba(238, 79, 35, 0.1);
-  border: 1px solid rgba(238, 79, 35, 0.25);
-}
-
-.carrusel-pozos__badge--vendido {
-  color: var(--color-text-muted);
-  background: color-mix(in srgb, var(--color-text-muted) 12%, transparent);
-  border: 1px solid color-mix(in srgb, var(--color-text-muted) 25%, transparent);
-}
-
-.carrusel-pozos__info {
-  display: flex;
-  flex-direction: column;
-  gap: 0.55rem;
-  padding: 0.75rem 0.85rem 0.9rem;
-}
-
-.carrusel-pozos__item-titulo {
-  font-weight: 700;
-  font-size: 0.9rem;
-  color: var(--color-text);
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.carrusel-pozos__progreso {
-  display: flex;
-  flex-direction: column;
-  gap: 0.3rem;
-}
-
-.carrusel-pozos__progreso-barra {
-  height: 6px;
-  border-radius: 999px;
-  background: var(--color-border);
-  overflow: hidden;
-}
-
-.carrusel-pozos__progreso-fill {
-  height: 100%;
-  border-radius: 999px;
-  background: var(--color-primary);
-  transition: width 0.4s ease;
-}
-
-.carrusel-pozos__progreso-texto {
-  font-size: 0.72rem;
-  color: var(--color-text-muted);
 }
 
 .carrusel-pozos__btn {

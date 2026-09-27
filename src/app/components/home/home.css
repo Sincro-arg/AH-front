@@ -380,6 +380,8 @@
 }
 
 .home__carrusel-extra {
+  display: block;
+  margin: 0 0.85rem;
   font-size: 0.72rem;
   font-weight: 600;
   color: var(--color-text-muted);

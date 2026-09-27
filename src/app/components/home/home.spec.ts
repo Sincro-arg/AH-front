@@ -422,10 +422,10 @@ describe('Home', () => {
     fixture.detectChanges();
 
     const nativeEl = fixture.nativeElement as HTMLElement;
-    const img = nativeEl.querySelector<HTMLImageElement>('.carrusel-pozos__imagen img');
+    const img = nativeEl.querySelector<HTMLImageElement>('.tarjeta-pozo__imagen img');
     expect(img).toBeTruthy();
     expect(img?.src).toBe('https://example.com/auto.jpg');
-    expect(nativeEl.querySelector('.carrusel-pozos__imagen svg')).toBeFalsy();
+    expect(nativeEl.querySelector('.tarjeta-pozo__imagen svg')).toBeFalsy();
   });
 
   it('muestra el estimado de venta cuando el pozo lo tiene', () => {
