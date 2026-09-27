@@ -257,6 +257,47 @@ describe('Home', () => {
     expect(tarjetas.length).toBe(3);
   });
 
+  it('desplazarCarrusel llama a scrollBy del carrusel al hacer click en prev y next', () => {
+    const pozosMock: Pozo[] = Array.from({ length: 3 }, (_, i) => ({
+      id: `pozo-${i}`,
+      titulo: `Pozo ${i}`,
+      autoDescripcion: 'auto',
+      montoObjetivo: 1000,
+      montoRecaudado: 200,
+      estado: 'Abierto',
+      fechaCreacion: new Date(2024, 0, i + 1).toISOString(),
+      precioCompra: null,
+      fechaCompra: null,
+      precioVenta: null,
+      fechaVenta: null,
+      imagenUrl: null,
+      precioVentaEstimado: null,
+    }));
+
+    fixture.detectChanges();
+    httpMock.expectOne(meUrl).flush(usuarioMock);
+    httpMock.expectOne(inversionesUrl).flush([]);
+    httpMock.expectOne(pozosUrl).flush(pozosMock);
+    fixture.detectChanges();
+
+    const nativeEl = fixture.nativeElement as HTMLElement;
+    const carruselEl = nativeEl.querySelector('.home__carrusel') as HTMLElement;
+    const scrollBySpy = spyOn(carruselEl, 'scrollBy');
+
+    const btnPrev = nativeEl.querySelector<HTMLButtonElement>('.home__carrusel-btn--prev');
+    btnPrev?.click();
+    expect(scrollBySpy).toHaveBeenCalledTimes(1);
+    const argsPrev = scrollBySpy.calls.mostRecent().args[0] as ScrollToOptions;
+    expect(argsPrev).toEqual(jasmine.objectContaining({ behavior: 'smooth', left: jasmine.any(Number) }));
+    expect(argsPrev.left).toBeLessThan(0);
+
+    const btnNext = nativeEl.querySelector<HTMLButtonElement>('.home__carrusel-btn--next');
+    btnNext?.click();
+    expect(scrollBySpy).toHaveBeenCalledTimes(2);
+    const argsNext = scrollBySpy.calls.mostRecent().args[0] as ScrollToOptions;
+    expect(argsNext.left).toBeGreaterThan(0);
+  });
+
   it('muestra el estado de error del carrusel cuando falla el pedido de pozos', () => {
     fixture.detectChanges();
     httpMock.expectOne(meUrl).flush(usuarioMock);
