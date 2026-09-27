@@ -1,6 +1,6 @@
 .config {
   padding: 2rem 1.5rem;
-  max-width: 920px;
+  max-width: var(--content-max-width);
   margin: 0 auto;
   font-family: var(--font-family-base);
 }

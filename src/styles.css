@@ -11,6 +11,9 @@
   --color-success: #2e7d32;
   --color-bg: #ffffff;
   --font-family-base: 'Inter', system-ui, sans-serif;
+  /* Ancho maximo compartido del contenido: lo usan el header, el footer y
+     cada pantalla para que el layout quede alineado en toda la app. */
+  --content-max-width: 1280px;
   color-scheme: light;
 }
 
@@ -63,6 +66,14 @@ button:active:not(:disabled) {
 button:disabled {
   cursor: not-allowed;
   opacity: .6;
+}
+
+/* Contenedor comun de ancho de pagina: header, footer y cada pantalla lo
+   aplican a su elemento raiz de layout junto con --content-max-width. */
+.content-container {
+  max-width: var(--content-max-width);
+  width: 100%;
+  margin: 0 auto;
 }
 
 a {

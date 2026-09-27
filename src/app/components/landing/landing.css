@@ -133,7 +133,7 @@
    Por debajo de este breakpoint el layout mobile queda tal cual estaba. ── */
 @media (min-width: 1000px) {
   .landing {
-    max-width: 1180px;
+    max-width: var(--content-max-width);
     padding: 4rem 2rem 3rem;
   }
 
