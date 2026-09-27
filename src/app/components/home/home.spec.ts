@@ -298,6 +298,100 @@ describe('Home', () => {
     expect(argsNext.left).toBeGreaterThan(0);
   });
 
+  it('muestra la imagen real del pozo cuando el back manda imagenUrl (no cae al SVG placeholder)', () => {
+    const pozosMock: Pozo[] = [
+      {
+        id: 'pozo-1',
+        titulo: 'Pozo con foto',
+        autoDescripcion: 'auto',
+        montoObjetivo: 1000,
+        montoRecaudado: 200,
+        estado: 'Abierto',
+        fechaCreacion: new Date().toISOString(),
+        precioCompra: null,
+        fechaCompra: null,
+        precioVenta: null,
+        fechaVenta: null,
+        imagenUrl: 'https://example.com/auto.jpg',
+        precioVentaEstimado: null,
+      },
+    ];
+
+    fixture.detectChanges();
+    httpMock.expectOne(meUrl).flush(usuarioMock);
+    httpMock.expectOne(inversionesUrl).flush([]);
+    httpMock.expectOne(pozosUrl).flush(pozosMock);
+    fixture.detectChanges();
+
+    const nativeEl = fixture.nativeElement as HTMLElement;
+    const img = nativeEl.querySelector<HTMLImageElement>('.home__carrusel-imagen img');
+    expect(img).toBeTruthy();
+    expect(img?.src).toBe('https://example.com/auto.jpg');
+    expect(nativeEl.querySelector('.home__carrusel-imagen svg')).toBeFalsy();
+  });
+
+  it('muestra el estimado de venta cuando el pozo lo tiene', () => {
+    const pozosMock: Pozo[] = [
+      {
+        id: 'pozo-1',
+        titulo: 'Pozo con estimado',
+        autoDescripcion: 'auto',
+        montoObjetivo: 1000,
+        montoRecaudado: 200,
+        estado: 'Abierto',
+        fechaCreacion: new Date().toISOString(),
+        precioCompra: null,
+        fechaCompra: null,
+        precioVenta: null,
+        fechaVenta: null,
+        imagenUrl: null,
+        precioVentaEstimado: 1500000,
+      },
+    ];
+
+    fixture.detectChanges();
+    httpMock.expectOne(meUrl).flush(usuarioMock);
+    httpMock.expectOne(inversionesUrl).flush([]);
+    httpMock.expectOne(pozosUrl).flush(pozosMock);
+    fixture.detectChanges();
+
+    const texto = (fixture.nativeElement as HTMLElement).textContent ?? '';
+    expect(texto).toContain('Estimado de venta');
+    expect(texto).toContain(
+      fixture.componentInstance.formatoMonto(1500000),
+    );
+  });
+
+  it('muestra los dias desde que se abrio cuando el pozo no tiene estimado de venta', () => {
+    const fechaHaceTresDias = new Date(Date.now() - 3 * 24 * 60 * 60 * 1000).toISOString();
+    const pozosMock: Pozo[] = [
+      {
+        id: 'pozo-1',
+        titulo: 'Pozo sin estimado',
+        autoDescripcion: 'auto',
+        montoObjetivo: 1000,
+        montoRecaudado: 200,
+        estado: 'Abierto',
+        fechaCreacion: fechaHaceTresDias,
+        precioCompra: null,
+        fechaCompra: null,
+        precioVenta: null,
+        fechaVenta: null,
+        imagenUrl: null,
+        precioVentaEstimado: null,
+      },
+    ];
+
+    fixture.detectChanges();
+    httpMock.expectOne(meUrl).flush(usuarioMock);
+    httpMock.expectOne(inversionesUrl).flush([]);
+    httpMock.expectOne(pozosUrl).flush(pozosMock);
+    fixture.detectChanges();
+
+    const texto = (fixture.nativeElement as HTMLElement).textContent ?? '';
+    expect(texto).toContain('Abierto hace 3 dias');
+  });
+
   it('muestra el estado de error del carrusel cuando falla el pedido de pozos', () => {
     fixture.detectChanges();
     httpMock.expectOne(meUrl).flush(usuarioMock);

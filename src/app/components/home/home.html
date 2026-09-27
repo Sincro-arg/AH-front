@@ -213,6 +213,14 @@
                     {{ formatoMonto(pozo.montoRecaudado) }} de {{ formatoMonto(pozo.montoObjetivo) }}
                   </span>
                 </div>
+
+                <span class="home__carrusel-extra">
+                  @if (pozo.precioVentaEstimado) {
+                    Estimado de venta: {{ formatoMonto(pozo.precioVentaEstimado) }}
+                  } @else {
+                    Abierto hace {{ diasDesdeApertura(pozo) }} {{ diasDesdeApertura(pozo) === 1 ? 'dia' : 'dias' }}
+                  }
+                </span>
               </div>
             </article>
           }

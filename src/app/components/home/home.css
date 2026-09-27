@@ -538,6 +538,12 @@
   color: var(--color-text-muted);
 }
 
+.home__carrusel-extra {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--color-text-muted);
+}
+
 .home__carrusel-btn {
   flex-shrink: 0;
   display: flex;

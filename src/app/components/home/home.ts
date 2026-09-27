@@ -99,6 +99,12 @@ export class Home implements OnInit {
     return Math.min(100, Math.round((pozo.montoRecaudado / pozo.montoObjetivo) * 100));
   }
 
+  /** Dias transcurridos desde que se creo el pozo, para mostrar "Abierto hace N dias". */
+  diasDesdeApertura(pozo: Pozo): number {
+    const ms = Date.now() - new Date(pozo.fechaCreacion).getTime();
+    return Math.max(0, Math.floor(ms / (1000 * 60 * 60 * 24)));
+  }
+
   /** Desplaza el carrusel de pozos recientes un ancho de tarjeta hacia adelante o atras. */
   desplazarCarrusel(direccion: 1 | -1): void {
     const el = this.carruselRef()?.nativeElement;
