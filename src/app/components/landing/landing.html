@@ -218,4 +218,23 @@
       </div>
     }
   </section>
+
+  <section class="landing__testimonios">
+    <h2 class="landing__resumen-titulo">Lo que dicen nuestros inversores</h2>
+    <p class="landing__testimonios-aviso">
+      Testimonios de ejemplo, no corresponden a inversores reales.
+    </p>
+
+    <div class="landing__testimonios-grid">
+      @for (t of testimonios; track t.nombre) {
+        <article class="landing__testimonio-card">
+          <p class="landing__testimonio-frase">"{{ t.frase }}"</p>
+          <div class="landing__testimonio-footer">
+            <span class="landing__testimonio-nombre">{{ t.nombre }}</span>
+            <span class="landing__testimonio-monto">Invirtio {{ formatoMonto(t.monto) }}</span>
+          </div>
+        </article>
+      }
+    </div>
+  </section>
 </section>

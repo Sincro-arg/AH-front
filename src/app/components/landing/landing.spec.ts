@@ -73,6 +73,15 @@ describe('Landing', () => {
     expect(texto).not.toContain('Verificando conexion');
   });
 
+  it('muestra los testimonios con el aviso de que son de ejemplo', () => {
+    fixture.detectChanges();
+    httpMock.expectOne(pozosUrl).flush([]);
+
+    const texto = (fixture.nativeElement as HTMLElement).textContent ?? '';
+    expect(texto).toContain('Lo que dicen nuestros inversores');
+    expect(texto).toContain('Testimonios de ejemplo, no corresponden a inversores reales.');
+  });
+
   it('muestra la seccion "Como funciona" con sus beneficios', () => {
     fixture.detectChanges();
     httpMock.expectOne(pozosUrl).flush([]);
