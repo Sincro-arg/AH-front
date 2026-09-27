@@ -117,7 +117,7 @@
   }
 
   <section class="home__pozos-recientes">
-    <h2 class="home__resumen-titulo">Pozos recientes</h2>
+    <h2 class="home__resumen-titulo">Pozos disponibles para invertir</h2>
 
     @if (cargandoPozos()) {
       <div class="home__cargando">
@@ -128,9 +128,9 @@
         <p>{{ msgPozos }}</p>
         <button type="button" class="home__reintentar" (click)="reintentarPozos()">Reintentar</button>
       </div>
-    } @else if (pozosRecientes().length === 0) {
+    } @else if (pozosDisponibles().length === 0) {
       <div class="home__estado">
-        <p>Todavia no hay pozos para mostrar.</p>
+        <p>No hay pozos abiertos para invertir en este momento.</p>
       </div>
     } @else {
       <div class="home__carrusel-wrapper">
@@ -152,7 +152,7 @@
         </button>
 
         <div class="home__carrusel" #carrusel>
-          @for (pozo of pozosRecientes(); track pozo.id) {
+          @for (pozo of pozosDisponibles(); track pozo.id) {
             <article class="home__carrusel-item">
               <div class="home__carrusel-imagen">
                 @if (pozo.imagenUrl) {

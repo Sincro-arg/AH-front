@@ -28,7 +28,7 @@ export class Home implements OnInit {
   readonly misInversiones = signal<MiInversion[]>([]);
   readonly cargandoInversiones = signal(true);
 
-  readonly pozosRecientes = signal<Pozo[]>([]);
+  readonly pozosDisponibles = signal<Pozo[]>([]);
   readonly cargandoPozos = signal(true);
   readonly errorPozos = signal<string | null>(null);
 
@@ -78,7 +78,7 @@ export class Home implements OnInit {
   ngOnInit(): void {
     this.cargarUsuario();
     this.cargarInversiones();
-    this.cargarPozosRecientes();
+    this.cargarPozosDisponibles();
   }
 
   /** Reintenta el pedido tras un error (boton "Reintentar"). */
@@ -86,9 +86,9 @@ export class Home implements OnInit {
     this.cargarUsuario();
   }
 
-  /** Reintenta la carga de pozos recientes tras un error (boton "Reintentar"). */
+  /** Reintenta la carga de pozos disponibles tras un error (boton "Reintentar"). */
   reintentarPozos(): void {
-    this.cargarPozosRecientes();
+    this.cargarPozosDisponibles();
   }
 
   /** Monto formateado en pesos, sin decimales. */
@@ -152,20 +152,20 @@ export class Home implements OnInit {
     });
   }
 
-  private cargarPozosRecientes(): void {
+  private cargarPozosDisponibles(): void {
     this.cargandoPozos.set(true);
     this.errorPozos.set(null);
 
     this.pozosSvc.listar().subscribe({
       next: (pozos) => {
-        const ordenados = [...pozos].sort(
-          (a, b) => new Date(b.fechaCreacion).getTime() - new Date(a.fechaCreacion).getTime(),
-        );
-        this.pozosRecientes.set(ordenados.slice(0, 6));
+        const disponibles = pozos
+          .filter((p) => p.estado === 'Abierto')
+          .sort((a, b) => new Date(b.fechaCreacion).getTime() - new Date(a.fechaCreacion).getTime());
+        this.pozosDisponibles.set(disponibles);
         this.cargandoPozos.set(false);
       },
       error: (err: HttpErrorResponse) => {
-        this.errorPozos.set(err.error?.error ?? 'No se pudieron cargar los pozos recientes.');
+        this.errorPozos.set(err.error?.error ?? 'No se pudieron cargar los pozos disponibles para invertir.');
         this.cargandoPozos.set(false);
       },
     });

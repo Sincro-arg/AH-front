@@ -226,12 +226,12 @@ describe('Home', () => {
     httpMock.expectOne(pozosUrl).flush([]);
     fixture.detectChanges();
 
-    expect(fixture.componentInstance.pozosRecientes()).toEqual([]);
+    expect(fixture.componentInstance.pozosDisponibles()).toEqual([]);
     const texto = (fixture.nativeElement as HTMLElement).textContent ?? '';
-    expect(texto).toContain('Todavia no hay pozos para mostrar.');
+    expect(texto).toContain('No hay pozos abiertos para invertir en este momento.');
   });
 
-  it('ordena los pozos recientes por fechaCreacion descendente y toma los primeros 6', () => {
+  it('ordena los pozos disponibles por fechaCreacion descendente', () => {
     const pozosMock: Pozo[] = Array.from({ length: 8 }, (_, i) => ({
       id: `pozo-${i}`,
       titulo: `Pozo ${i}`,
@@ -254,10 +254,75 @@ describe('Home', () => {
     httpMock.expectOne(pozosUrl).flush(pozosMock);
     fixture.detectChanges();
 
-    const recientes = fixture.componentInstance.pozosRecientes();
-    expect(recientes.length).toBe(6);
-    expect(recientes[0].id).toBe('pozo-7');
-    expect(recientes[5].id).toBe('pozo-2');
+    const disponibles = fixture.componentInstance.pozosDisponibles();
+    expect(disponibles.length).toBe(8);
+    expect(disponibles[0].id).toBe('pozo-7');
+    expect(disponibles[7].id).toBe('pozo-0');
+  });
+
+  it('filtra y muestra solo los pozos con estado Abierto', () => {
+    const pozosMock: Pozo[] = [
+      {
+        id: 'pozo-abierto',
+        titulo: 'Pozo Abierto',
+        autoDescripcion: 'auto',
+        montoObjetivo: 1000,
+        montoRecaudado: 0,
+        estado: 'Abierto',
+        fechaCreacion: new Date(2024, 0, 1).toISOString(),
+        precioCompra: null,
+        fechaCompra: null,
+        precioVenta: null,
+        fechaVenta: null,
+        imagenUrl: null,
+        precioVentaEstimado: null,
+      },
+      {
+        id: 'pozo-comprado',
+        titulo: 'Pozo Comprado',
+        autoDescripcion: 'auto',
+        montoObjetivo: 1000,
+        montoRecaudado: 1000,
+        estado: 'Comprado',
+        fechaCreacion: new Date(2024, 0, 2).toISOString(),
+        precioCompra: 900,
+        fechaCompra: new Date().toISOString(),
+        precioVenta: null,
+        fechaVenta: null,
+        imagenUrl: null,
+        precioVentaEstimado: null,
+      },
+      {
+        id: 'pozo-vendido',
+        titulo: 'Pozo Vendido',
+        autoDescripcion: 'auto',
+        montoObjetivo: 1000,
+        montoRecaudado: 1000,
+        estado: 'Vendido',
+        fechaCreacion: new Date(2024, 0, 3).toISOString(),
+        precioCompra: 900,
+        fechaCompra: new Date().toISOString(),
+        precioVenta: 1200,
+        fechaVenta: new Date().toISOString(),
+        imagenUrl: null,
+        precioVentaEstimado: null,
+      },
+    ];
+
+    fixture.detectChanges();
+    httpMock.expectOne(meUrl).flush(usuarioMock);
+    httpMock.expectOne(inversionesUrl).flush([]);
+    httpMock.expectOne(pozosUrl).flush(pozosMock);
+    fixture.detectChanges();
+
+    const disponibles = fixture.componentInstance.pozosDisponibles();
+    expect(disponibles.length).toBe(1);
+    expect(disponibles[0].id).toBe('pozo-abierto');
+
+    const texto = (fixture.nativeElement as HTMLElement).textContent ?? '';
+    expect(texto).toContain('Pozo Abierto');
+    expect(texto).not.toContain('Pozo Comprado');
+    expect(texto).not.toContain('Pozo Vendido');
   });
 
   it('el carrusel muestra la cantidad correcta de tarjetas cuando hay varios pozos', () => {
