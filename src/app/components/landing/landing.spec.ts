@@ -73,6 +73,16 @@ describe('Landing', () => {
     expect(texto).not.toContain('Verificando conexion');
   });
 
+  it('muestra la seccion "Como funciona" con sus beneficios', () => {
+    fixture.detectChanges();
+    httpMock.expectOne(pozosUrl).flush([]);
+
+    const texto = (fixture.nativeElement as HTMLElement).textContent ?? '';
+    expect(texto).toContain('Como funciona PozoAuto');
+    expect(texto).toContain('Diversifica tu inversion');
+    expect(texto).toContain('Transparencia total');
+  });
+
   it('ofrece registrarse o ingresar si no hay usuario logueado', () => {
     fixture.detectChanges();
     httpMock.expectOne(pozosUrl).flush([]);
