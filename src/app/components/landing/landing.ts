@@ -1,6 +1,6 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { Pozo, PozosService } from '../../services/pozos.service';
 import { CarruselPozos } from '../carrusel-pozos/carrusel-pozos';
@@ -21,6 +21,7 @@ interface Testimonio {
 export class Landing implements OnInit {
   private readonly authSvc = inject(AuthService);
   private readonly pozosSvc = inject(PozosService);
+  private readonly router = inject(Router);
 
   readonly estaLogueado = this.authSvc.estaLogueado;
 
@@ -53,6 +54,10 @@ export class Landing implements OnInit {
   ];
 
   ngOnInit(): void {
+    if (this.authSvc.estaLogueado()) {
+      this.router.navigate(['/cuenta']);
+      return;
+    }
     this.cargarPozosRecientes();
   }
 

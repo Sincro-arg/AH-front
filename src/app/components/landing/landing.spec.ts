@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideHttpClient } from '@angular/common/http';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
-import { provideRouter } from '@angular/router';
+import { provideRouter, Router } from '@angular/router';
 import { environment } from '../../../environments/environment';
 import { AuthService } from '../../services/auth.service';
 import { Pozo } from '../../services/pozos.service';
@@ -101,13 +101,15 @@ describe('Landing', () => {
     expect(texto).toContain('Ya tengo cuenta');
   });
 
-  it('ofrece ver los pozos si el usuario ya esta logueado', () => {
+  it('redirige a /cuenta si el usuario ya esta logueado, sin mostrar la landing publica', () => {
+    const router = TestBed.inject(Router);
+    const navigateSpy = spyOn(router, 'navigate');
     authSvc.actualizarUsuarioActual(usuarioMock);
-    fixture.detectChanges();
-    httpMock.expectOne(pozosUrl).flush([]);
 
-    const texto = (fixture.nativeElement as HTMLElement).textContent ?? '';
-    expect(texto).toContain('Ver pozos disponibles');
+    fixture.detectChanges();
+
+    expect(navigateSpy).toHaveBeenCalledWith(['/cuenta']);
+    httpMock.expectNone(pozosUrl);
   });
 
   it('llama a PozosService.listar() y muestra el estado vacio cuando no hay pozos', () => {
