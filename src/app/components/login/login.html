@@ -34,42 +34,44 @@
   </div>
 
   <div class="login-page__card">
-    <h1>Ingresar</h1>
+    <div class="login-page__card-inner">
+      <h1>Ingresar</h1>
 
-    @if (cuentaCreada()) {
-      <p class="login__exito">Cuenta creada con exito. Ya podes ingresar.</p>
-    }
-
-    <form class="login__form" [formGroup]="form" (ngSubmit)="onSubmit()">
-      <label class="login__label" for="login-email">Email</label>
-      <input
-        id="login-email"
-        class="login__input"
-        type="email"
-        formControlName="email"
-        autocomplete="email"
-      />
-
-      <label class="login__label" for="login-password">Contrasena</label>
-      <input
-        id="login-password"
-        class="login__input"
-        type="password"
-        formControlName="password"
-        autocomplete="current-password"
-      />
-
-      @if (error()) {
-        <p class="login__error">{{ error() }}</p>
+      @if (cuentaCreada()) {
+        <p class="login__exito">Cuenta creada con exito. Ya podes ingresar.</p>
       }
 
-      <button class="login__submit" type="submit" [disabled]="enviando()">
-        {{ enviando() ? 'Ingresando...' : 'Ingresar' }}
-      </button>
-    </form>
+      <form class="login__form" [formGroup]="form" (ngSubmit)="onSubmit()">
+        <label class="login__label" for="login-email">Email</label>
+        <input
+          id="login-email"
+          class="login__input"
+          type="email"
+          formControlName="email"
+          autocomplete="email"
+        />
 
-    <p class="login__footer">
-      Todavia no tenes cuenta? <a routerLink="/registro">Registrate</a>
-    </p>
+        <label class="login__label" for="login-password">Contrasena</label>
+        <input
+          id="login-password"
+          class="login__input"
+          type="password"
+          formControlName="password"
+          autocomplete="current-password"
+        />
+
+        @if (error()) {
+          <p class="login__error">{{ error() }}</p>
+        }
+
+        <button class="login__submit" type="submit" [disabled]="enviando()">
+          {{ enviando() ? 'Ingresando...' : 'Ingresar' }}
+        </button>
+      </form>
+
+      <p class="login__footer">
+        Todavia no tenes cuenta? <a routerLink="/registro">Registrate</a>
+      </p>
+    </div>
   </div>
 </section>
