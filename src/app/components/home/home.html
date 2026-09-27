@@ -245,4 +245,20 @@
       </div>
     }
   </section>
+
+  <section class="home__testimonios">
+    <h2 class="home__resumen-titulo">Lo que dicen nuestros inversores</h2>
+
+    <div class="home__testimonios-grid">
+      @for (t of testimonios; track t.nombre) {
+        <article class="home__testimonio-card">
+          <p class="home__testimonio-frase">"{{ t.frase }}"</p>
+          <div class="home__testimonio-footer">
+            <span class="home__testimonio-nombre">{{ t.nombre }}</span>
+            <span class="home__testimonio-monto">Invirtio {{ formatoMonto(t.monto) }}</span>
+          </div>
+        </article>
+      }
+    </div>
+  </section>
 </section>
