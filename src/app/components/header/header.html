@@ -70,6 +70,13 @@
     </button>
   </div>
 
+  @if (estaLogueado()) {
+    <div class="header__drawer-user">
+      <span class="header__drawer-user-name">{{ usuario()?.nombre }} {{ usuario()?.apellido }}</span>
+      <span class="header__drawer-date">{{ fechaHoy() }}</span>
+    </div>
+  }
+
   <nav class="header__drawer-nav">
     @if (estaLogueado()) {
       <a class="header__drawer-link" routerLink="/pozos" (click)="cerrarMenu()">Pozos</a>

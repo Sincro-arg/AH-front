@@ -223,6 +223,29 @@
   outline-offset: 2px;
 }
 
+.header__drawer-user {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  padding: 0.85rem 1.25rem;
+  border-bottom: 1px solid var(--color-border);
+  flex-shrink: 0;
+}
+
+.header__drawer-user-name {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--color-text);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.header__drawer-date {
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+}
+
 .header__drawer-nav {
   display: flex;
   flex-direction: column;

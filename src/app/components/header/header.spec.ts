@@ -88,6 +88,22 @@ describe('Header', () => {
     expect(navigateSpy).toHaveBeenCalledWith(['/']);
   });
 
+  it('muestra el nombre del usuario y la fecha dentro del drawer mobile', () => {
+    authSvc.actualizarUsuarioActual(usuarioMock);
+    fixture.detectChanges();
+
+    const drawer: HTMLElement = fixture.nativeElement.querySelector('.header__drawer-user');
+    expect(drawer).toBeTruthy();
+    expect(drawer.textContent).toContain('Ana Gomez');
+  });
+
+  it('no muestra el bloque de usuario en el drawer si no hay sesion', () => {
+    fixture.detectChanges();
+
+    const drawer = fixture.nativeElement.querySelector('.header__drawer-user');
+    expect(drawer).toBeFalsy();
+  });
+
   it('el click en el boton hamburguesa abre el drawer del menu mobile', () => {
     fixture.detectChanges();
 
