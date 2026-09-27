@@ -45,15 +45,20 @@
   display: flex;
   align-items: center;
   gap: 0.6rem;
+  max-width: 100%;
 }
 
 .carrusel-pozos__carrusel {
   display: flex;
   gap: 1rem;
   overflow-x: auto;
+  overflow-y: hidden;
+  min-width: 0;
   scroll-snap-type: x mandatory;
   scroll-behavior: smooth;
   -webkit-overflow-scrolling: touch;
+  touch-action: pan-x;
+  overscroll-behavior-x: contain;
   padding: 0.25rem 0.15rem 0.75rem;
   scrollbar-width: thin;
 }
@@ -213,18 +218,22 @@
 }
 
 @media (max-width: 480px) {
-  .carrusel-pozos__item {
-    width: 155px;
+  .carrusel-pozos__wrapper {
+    gap: 0;
   }
 
   .carrusel-pozos__btn {
-    width: 30px;
-    height: 30px;
+    display: none;
   }
 
-  .carrusel-pozos__btn svg {
-    width: 15px;
-    height: 15px;
+  .carrusel-pozos__carrusel {
+    scroll-snap-type: x proximity;
+    gap: 0.75rem;
+    padding: 0.25rem 0 0.75rem;
+  }
+
+  .carrusel-pozos__item {
+    width: min(68vw, 200px);
   }
 }
 
