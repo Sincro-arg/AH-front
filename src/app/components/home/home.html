@@ -33,48 +33,6 @@
     </div>
   </div>
 
-  <section class="home__como-funciona">
-    <div class="home__como-funciona-texto">
-      <h2 class="home__resumen-titulo">Como funciona PozoAuto</h2>
-      <ul class="home__beneficios">
-        <li class="home__beneficio">
-          <span class="home__beneficio-icono" aria-hidden="true">🚗</span>
-          <div>
-            <strong>Diversifica tu inversion</strong>
-            <p>Repartis tu dinero entre varios autos en simultaneo, en vez de apostar todo a uno solo.</p>
-          </div>
-        </li>
-        <li class="home__beneficio">
-          <span class="home__beneficio-icono" aria-hidden="true">📈</span>
-          <div>
-            <strong>Segui el progreso de cada pozo</strong>
-            <p>Vas viendo en tiempo real cuanto se recaudo, cuando se compra el auto y cuando se vende.</p>
-          </div>
-        </li>
-        <li class="home__beneficio">
-          <span class="home__beneficio-icono" aria-hidden="true">💸</span>
-          <div>
-            <strong>Cobras tu parte proporcional</strong>
-            <p>Cuando el auto se vende, la ganancia se reparte segun lo que invertiste en ese pozo.</p>
-          </div>
-        </li>
-        <li class="home__beneficio">
-          <span class="home__beneficio-icono" aria-hidden="true">🔍</span>
-          <div>
-            <strong>Transparencia total</strong>
-            <p>Podes ver quien invirtio cuanto en cada pozo, sin sorpresas ni letra chica.</p>
-          </div>
-        </li>
-      </ul>
-    </div>
-    <img
-      class="home__como-funciona-foto"
-      src="https://images.unsplash.com/photo-1552519507-da3b142c6e3d?w=800&q=80"
-      alt="Auto en exhibicion, listo para invertir"
-      loading="lazy"
-    />
-  </section>
-
   @if (usuario(); as u) {
     <div class="home__layout">
       <div class="home__principal">
@@ -259,24 +217,5 @@
         </button>
       </div>
     }
-  </section>
-
-  <section class="home__testimonios">
-    <h2 class="home__resumen-titulo">Lo que dicen nuestros inversores</h2>
-    <p class="home__testimonios-aviso">
-      Testimonios de ejemplo, no corresponden a inversores reales.
-    </p>
-
-    <div class="home__testimonios-grid">
-      @for (t of testimonios; track t.nombre) {
-        <article class="home__testimonio-card">
-          <p class="home__testimonio-frase">"{{ t.frase }}"</p>
-          <div class="home__testimonio-footer">
-            <span class="home__testimonio-nombre">{{ t.nombre }}</span>
-            <span class="home__testimonio-monto">Invirtio {{ formatoMonto(t.monto) }}</span>
-          </div>
-        </article>
-      }
-    </div>
   </section>
 </section>

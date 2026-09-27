@@ -438,22 +438,4 @@ describe('Home', () => {
     expect((fixture.nativeElement as HTMLElement).querySelectorAll('.home__carrusel-item').length).toBe(0);
   });
 
-  it('muestra la seccion de testimonios con 4 tarjetas fijas', () => {
-    fixture.detectChanges();
-    httpMock.expectOne(meUrl).flush(usuarioMock);
-    httpMock.expectOne(inversionesUrl).flush([]);
-    httpMock.expectOne(pozosUrl).flush([]);
-    fixture.detectChanges();
-
-    const nativeEl = fixture.nativeElement as HTMLElement;
-    const tarjetas = nativeEl.querySelectorAll('.home__testimonio-card');
-    expect(tarjetas.length).toBe(4);
-
-    const texto = nativeEl.textContent ?? '';
-    expect(texto).toContain('Lo que dicen nuestros inversores');
-    for (const t of fixture.componentInstance.testimonios) {
-      expect(texto).toContain(t.nombre);
-      expect(texto).toContain(t.frase);
-    }
-  });
 });

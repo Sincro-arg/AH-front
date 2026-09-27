@@ -8,12 +8,6 @@ import { InversionesService, MiInversion } from '../../services/inversiones.serv
 import { Pozo, PozosService } from '../../services/pozos.service';
 import { Spinner } from '../spinner/spinner';
 
-interface Testimonio {
-  nombre: string;
-  monto: number;
-  frase: string;
-}
-
 @Component({
   selector: 'app-home',
   standalone: true,
@@ -39,30 +33,6 @@ export class Home implements OnInit {
   readonly errorPozos = signal<string | null>(null);
 
   private readonly carruselRef = viewChild<ElementRef<HTMLDivElement>>('carrusel');
-
-  /** Testimonios fijos para la seccion "Lo que dicen nuestros inversores". */
-  readonly testimonios: Testimonio[] = [
-    {
-      nombre: 'Marcela Ibañez',
-      monto: 250000,
-      frase: 'Empece con un pozo chico para probar y ya recupere la inversion en el segundo auto.',
-    },
-    {
-      nombre: 'Ruben Casaretto',
-      monto: 500000,
-      frase: 'Me gusta poder ver en tiempo real cuanto se recaudo antes de comprar el auto.',
-    },
-    {
-      nombre: 'Florencia Otero',
-      monto: 150000,
-      frase: 'Diversifico entre varios pozos y asi no dependo de que se venda uno solo bien.',
-    },
-    {
-      nombre: 'Damian Sosa',
-      monto: 800000,
-      frase: 'La transparencia de quien invirtio cuanto me dio confianza para meter mas plata.',
-    },
-  ];
 
   /** Suma de lo invertido en pozos que todavia no se vendieron. */
   readonly totalInvertido = computed(() =>
