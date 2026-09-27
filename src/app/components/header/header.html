@@ -1,11 +1,16 @@
 <header class="header">
   <div class="header__inner">
-    <a class="header__brand" [routerLink]="estaLogueado() ? '/cuenta' : '/'">
+    <a class="header__brand" [routerLink]="!verificandoSesion() && estaLogueado() ? '/cuenta' : '/'">
       <app-logo />
       <span class="header__brand-name">PozoAuto</span>
     </a>
 
-    @if (estaLogueado()) {
+    @if (verificandoSesion()) {
+      <nav class="header__nav">
+        <a class="header__nav-link" routerLink="/pozos">Pozos</a>
+        <a class="header__nav-link" routerLink="/calculadora">Calculadora</a>
+      </nav>
+    } @else if (estaLogueado()) {
       <nav class="header__nav">
         <a class="header__nav-link" routerLink="/pozos">Pozos</a>
         <a class="header__nav-link" routerLink="/calculadora">Calculadora</a>
@@ -78,7 +83,10 @@
   }
 
   <nav class="header__drawer-nav">
-    @if (estaLogueado()) {
+    @if (verificandoSesion()) {
+      <a class="header__drawer-link" routerLink="/pozos" (click)="cerrarMenu()">Pozos</a>
+      <a class="header__drawer-link" routerLink="/calculadora" (click)="cerrarMenu()">Calculadora</a>
+    } @else if (estaLogueado()) {
       <a class="header__drawer-link" routerLink="/pozos" (click)="cerrarMenu()">Pozos</a>
       <a class="header__drawer-link" routerLink="/calculadora" (click)="cerrarMenu()">Calculadora</a>
       <a class="header__drawer-link" routerLink="/mis-inversiones" (click)="cerrarMenu()">Mis inversiones</a>

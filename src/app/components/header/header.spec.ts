@@ -76,6 +76,15 @@ describe('Header', () => {
     expect(link).toBeFalsy();
   });
 
+  it('mientras se verifica la sesion no muestra ni el bloque de invitado ni el de cuenta', () => {
+    authSvc.verificandoSesion.set(true);
+    fixture.detectChanges();
+
+    expect(fixture.nativeElement.textContent).not.toContain('Salir');
+    expect(fixture.nativeElement.textContent).not.toContain('Ingresar');
+    expect(fixture.nativeElement.textContent).not.toContain('Registrarme');
+  });
+
   it('cerrar sesion borra el token y redirige al inicio', () => {
     localStorage.setItem(TOKEN_KEY, 'un-token-jwt');
     authSvc.actualizarUsuarioActual(usuarioMock);

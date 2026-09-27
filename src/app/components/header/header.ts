@@ -24,6 +24,7 @@ export class Header {
   private readonly authSvc = inject(AuthService);
 
   readonly estaLogueado = this.authSvc.estaLogueado;
+  readonly verificandoSesion = this.authSvc.verificandoSesion;
   readonly usuario = computed(() => this.authSvc.usuarioActual());
   readonly menuOpen = signal(false);
 

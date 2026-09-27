@@ -40,6 +40,10 @@ describe('AuthService', () => {
     localStorage.removeItem(TOKEN_KEY);
   });
 
+  it('arranca sin verificar sesion cuando no hay token guardado', () => {
+    expect(service.verificandoSesion()).toBeFalse();
+  });
+
   it('guarda el token y el usuario al loguearse correctamente', () => {
     service.login('ana@test.com', 'unaPassword1').subscribe();
 
@@ -104,5 +108,39 @@ describe('AuthService al recargar la app con sesion activa', () => {
     });
 
     expect(setSpy).toHaveBeenCalledWith('oscuro');
+  });
+
+  it('arranca verificando la sesion cuando hay token, y deja de verificar cuando /usuarios/me resuelve', () => {
+    const service = TestBed.inject(AuthService);
+    httpMock = TestBed.inject(HttpTestingController);
+
+    expect(service.verificandoSesion()).toBeTrue();
+
+    const req = httpMock.expectOne(`${environment.apiUrl}/usuarios/me`);
+    req.flush({
+      id: '1',
+      nombre: 'Ana',
+      apellido: 'Gomez',
+      email: 'ana@test.com',
+      telefono: '',
+      tema: 'oscuro',
+      fechaAlta: new Date().toISOString(),
+      ultimoAcceso: new Date().toISOString(),
+      notificacionesEmail: true,
+    });
+
+    expect(service.verificandoSesion()).toBeFalse();
+  });
+
+  it('deja de verificar la sesion cuando /usuarios/me falla por token invalido o vencido', () => {
+    const service = TestBed.inject(AuthService);
+    httpMock = TestBed.inject(HttpTestingController);
+
+    expect(service.verificandoSesion()).toBeTrue();
+
+    const req = httpMock.expectOne(`${environment.apiUrl}/usuarios/me`);
+    req.flush('no autorizado', { status: 401, statusText: 'Unauthorized' });
+
+    expect(service.verificandoSesion()).toBeFalse();
   });
 });

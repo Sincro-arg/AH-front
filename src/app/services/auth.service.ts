@@ -42,6 +42,8 @@ export class AuthService {
 
   readonly usuarioActual = signal<Usuario | null>(null);
   readonly estaLogueado = computed(() => !!this.usuarioActual());
+  /** True mientras se restaura la sesion (GET /usuarios/me) al arrancar con token guardado. */
+  readonly verificandoSesion = signal<boolean>(!!this.getToken());
 
   constructor() {
     if (this.getToken()) {
@@ -75,8 +77,12 @@ export class AuthService {
       next: (usuario) => {
         this.usuarioActual.set(usuario);
         this.themeSvc.set(usuario.tema);
+        this.verificandoSesion.set(false);
       },
-      error: () => this.limpiarSesion(),
+      error: () => {
+        this.limpiarSesion();
+        this.verificandoSesion.set(false);
+      },
     });
   }
 
