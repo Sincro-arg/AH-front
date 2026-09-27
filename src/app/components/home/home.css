@@ -322,6 +322,58 @@
   color: var(--color-success);
 }
 
+.home__resumen-detalle {
+  margin-top: 0.75rem;
+  padding-top: 0.6rem;
+  border-top: 1px solid var(--color-border);
+}
+
+.home__resumen-detalle-titulo {
+  display: block;
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: var(--color-text-muted);
+  margin-bottom: 0.4rem;
+}
+
+.home__resumen-lista {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.home__resumen-detalle-item {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 0 0.5rem;
+  font-size: 0.78rem;
+}
+
+.home__resumen-detalle-pozo {
+  color: var(--color-text);
+  font-weight: 600;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.home__resumen-detalle-monto {
+  color: var(--color-text);
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.home__resumen-detalle-fecha {
+  grid-column: 1;
+  color: var(--color-text-muted);
+  font-size: 0.72rem;
+}
+
 .home__resumen-link {
   display: inline-block;
   margin-top: 0.75rem;

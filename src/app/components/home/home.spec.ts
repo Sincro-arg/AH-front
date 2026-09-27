@@ -173,6 +173,33 @@ describe('Home', () => {
     expect(fixture.componentInstance.cargandoInversiones()).toBeFalse();
   });
 
+  it('muestra el detalle de las ultimas inversiones (pozo, monto y fecha) en el sidebar', () => {
+    fixture.detectChanges();
+    httpMock.expectOne(meUrl).flush(usuarioMock);
+    httpMock.expectOne(inversionesUrl).flush(misInversionesMock);
+    httpMock.expectOne(pozosUrl).flush([]);
+    fixture.detectChanges();
+
+    expect(fixture.componentInstance.ultimasInversiones().length).toBe(3);
+    const texto = (fixture.nativeElement as HTMLElement).textContent ?? '';
+    expect(texto).toContain('Ultimos movimientos');
+    expect(texto).toContain('Pozo Norte');
+    expect(texto).toContain('Pozo Sur');
+    expect(texto).toContain(fixture.componentInstance.formatoMonto(1000));
+    expect(texto).toContain(fixture.componentInstance.formatoMonto(500));
+  });
+
+  it('no muestra el detalle de ultimos movimientos si no hay inversiones', () => {
+    fixture.detectChanges();
+    httpMock.expectOne(meUrl).flush(usuarioMock);
+    httpMock.expectOne(inversionesUrl).flush([]);
+    httpMock.expectOne(pozosUrl).flush([]);
+    fixture.detectChanges();
+
+    const texto = (fixture.nativeElement as HTMLElement).textContent ?? '';
+    expect(texto).not.toContain('Ultimos movimientos');
+  });
+
   it('deja cargandoInversiones en false si falla el pedido de mis inversiones', () => {
     fixture.detectChanges();
     httpMock.expectOne(meUrl).flush(usuarioMock);

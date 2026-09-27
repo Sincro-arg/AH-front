@@ -80,6 +80,13 @@ export class Home implements OnInit {
     () => new Set(this.misInversiones().filter((i) => i.estadoPozo !== 'Vendido').map((i) => i.pozoId)).size,
   );
 
+  /** Las 3 inversiones mas recientes, para el detalle "a nivel de pedido" del sidebar. */
+  readonly ultimasInversiones = computed(() =>
+    [...this.misInversiones()]
+      .sort((a, b) => new Date(b.fecha).getTime() - new Date(a.fecha).getTime())
+      .slice(0, 3),
+  );
+
   /** Saludo segun la hora del dia. */
   readonly saludo = computed(() => {
     const h = new Date().getHours();

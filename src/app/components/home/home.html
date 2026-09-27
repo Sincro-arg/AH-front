@@ -122,6 +122,21 @@
                 {{ formatoMonto(gananciaTotal()) }}
               </span>
             </div>
+
+            @if (ultimasInversiones().length > 0) {
+              <div class="home__resumen-detalle">
+                <span class="home__resumen-detalle-titulo">Ultimos movimientos</span>
+                <ul class="home__resumen-lista">
+                  @for (inv of ultimasInversiones(); track inv.id) {
+                    <li class="home__resumen-detalle-item">
+                      <span class="home__resumen-detalle-pozo">{{ inv.tituloPozo }}</span>
+                      <span class="home__resumen-detalle-monto">{{ formatoMonto(inv.monto) }}</span>
+                      <span class="home__resumen-detalle-fecha">{{ inv.fecha | date: 'shortDate' }}</span>
+                    </li>
+                  }
+                </ul>
+              </div>
+            }
           }
           <a class="home__resumen-link" routerLink="/mis-inversiones">Ver todas mis inversiones</a>
         </div>
