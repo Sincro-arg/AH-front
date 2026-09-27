@@ -80,6 +80,24 @@ describe('PozoDetalle', () => {
     expect(texto).toContain('Juan Perez');
   });
 
+  it('aplica el corte de palabra al nombre del inversor para que no desborde la tarjeta', () => {
+    fixture.detectChanges();
+    const nombreLargo = 'Maria de los Angeles Fernandez Gonzalez Rodriguez';
+    httpMock.expectOne(pozoUrl).flush({
+      ...pozoMock,
+      inversiones: [{ id: 'i1', usuarioId: 'u1', nombreInversor: nombreLargo, monto: 4000, fecha: new Date().toISOString() }],
+    });
+    fixture.detectChanges();
+
+    const nombreEl = (fixture.nativeElement as HTMLElement).querySelector('.pozo-detalle__item-nombre');
+    expect(nombreEl).toBeTruthy();
+    expect(nombreEl?.textContent).toContain(nombreLargo);
+
+    const estilos = getComputedStyle(nombreEl as Element);
+    expect(estilos.overflowWrap).toBe('break-word');
+    expect(estilos.minWidth).toBe('0px');
+  });
+
   it('muestra un estado de error si falla el pedido', () => {
     fixture.detectChanges();
     httpMock.expectOne(pozoUrl).flush(null, { status: 500, statusText: 'Server Error' });

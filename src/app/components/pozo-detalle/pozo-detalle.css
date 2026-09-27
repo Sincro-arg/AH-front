@@ -390,6 +390,8 @@
 }
 
 .pozo-detalle__item-nombre {
+  min-width: 0;
+  overflow-wrap: break-word;
   font-weight: 600;
   color: var(--color-text);
 }
