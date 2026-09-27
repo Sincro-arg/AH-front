@@ -203,6 +203,76 @@
   color: var(--color-primary);
 }
 
+/* ── Como funciona: puntos de valor + foto ── */
+.home__como-funciona {
+  display: grid;
+  grid-template-columns: 1fr 320px;
+  gap: 1.75rem;
+  align-items: center;
+  margin-bottom: 2rem;
+  padding: 1.5rem;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 4px 14px 4px 14px;
+}
+
+.home__beneficios {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+  list-style: none;
+  margin: 0.75rem 0 0;
+  padding: 0;
+}
+
+.home__beneficio {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.65rem;
+}
+
+.home__beneficio-icono {
+  font-size: 1.4rem;
+  line-height: 1;
+}
+
+.home__beneficio strong {
+  display: block;
+  font-size: 0.9rem;
+  color: var(--color-text);
+  margin-bottom: 0.2rem;
+}
+
+.home__beneficio p {
+  margin: 0;
+  font-size: 0.82rem;
+  color: var(--color-text-muted);
+}
+
+.home__como-funciona-foto {
+  width: 100%;
+  height: 220px;
+  object-fit: cover;
+  border-radius: 4px 14px 4px 14px;
+}
+
+@media (max-width: 860px) {
+  .home__como-funciona {
+    grid-template-columns: 1fr;
+  }
+
+  .home__como-funciona-foto {
+    height: 160px;
+    order: -1;
+  }
+}
+
+@media (max-width: 480px) {
+  .home__beneficios {
+    grid-template-columns: 1fr;
+  }
+}
+
 /* ── Sidebar: resumen de inversiones y accesos rapidos ── */
 .home__resumen {
   padding: 1.1rem 1.2rem;
