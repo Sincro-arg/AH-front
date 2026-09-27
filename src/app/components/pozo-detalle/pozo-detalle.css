@@ -49,7 +49,7 @@
 
 .pozo-detalle__estado {
   padding: 1.5rem;
-  border-radius: 4px 14px 4px 14px;
+  border-radius: var(--radius-card);
   border: 1px solid var(--color-border);
   background: var(--color-surface);
   text-align: center;
@@ -66,7 +66,7 @@
 
 .pozo-detalle__reintentar {
   border: none;
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   padding: 0.5rem 1.25rem;
   font-weight: 600;
   color: #fff;
@@ -107,7 +107,7 @@
   letter-spacing: 0.03em;
   text-transform: uppercase;
   padding: 4px 12px;
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   white-space: nowrap;
 }
 
@@ -139,14 +139,14 @@
 
 .pozo-detalle__barra {
   height: 10px;
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   background: var(--color-border);
   overflow: hidden;
 }
 
 .pozo-detalle__barra-relleno {
   height: 100%;
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   background: var(--color-primary);
   transition: width 0.3s ease;
 }
@@ -175,7 +175,7 @@
   padding: 1rem 1.1rem;
   background: var(--color-surface);
   border: 1px solid var(--color-border);
-  border-radius: 4px 14px 4px 14px;
+  border-radius: var(--radius-card);
 }
 
 .pozo-detalle__dato dt {
@@ -205,7 +205,7 @@
   margin-bottom: 1.5rem;
   background: var(--color-surface);
   border: 1px solid var(--color-border);
-  border-radius: 4px 14px 4px 14px;
+  border-radius: var(--radius-card);
 }
 
 .pozo-detalle__form {
@@ -223,7 +223,7 @@
 .pozo-detalle__input {
   padding: 0.6rem 0.7rem;
   border: 1px solid var(--color-border);
-  border-radius: 6px;
+  border-radius: var(--radius-sm);
   font-size: 0.95rem;
   font-family: inherit;
   background-color: var(--color-surface);
@@ -266,7 +266,7 @@
 .pozo-detalle__invertir-btn {
   align-self: flex-start;
   border: none;
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   padding: 0.6rem 1.5rem;
   font-weight: 600;
   color: #fff;
@@ -285,13 +285,13 @@
   margin-bottom: 1.5rem;
   background: var(--color-surface);
   border: 1px solid var(--color-border);
-  border-radius: 4px 14px 4px 14px;
+  border-radius: var(--radius-card);
 }
 
 .pozo-detalle__estado-btn {
   align-self: flex-start;
   border: none;
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   padding: 0.6rem 1.5rem;
   font-weight: 600;
   color: #fff;
@@ -316,7 +316,7 @@
   margin-bottom: 1.5rem;
   background: var(--color-surface);
   border: 1px solid var(--color-border);
-  border-radius: 4px 14px 4px 14px;
+  border-radius: var(--radius-card);
 }
 
 .pozo-detalle__reparto-total {
@@ -357,7 +357,7 @@
 .pozo-detalle__alerta {
   margin: 0 0 1rem;
   padding: 0.75rem 1rem;
-  border-radius: 8px;
+  border-radius: var(--radius-md);
   border: 1px solid rgba(192, 57, 43, 0.3);
   background: rgba(192, 57, 43, 0.08);
   color: var(--color-error);
@@ -385,7 +385,7 @@
   padding: 0.7rem 0.9rem;
   background: var(--color-surface);
   border: 1px solid var(--color-border);
-  border-radius: 8px;
+  border-radius: var(--radius-md);
   font-size: 0.9rem;
 }
 
@@ -415,7 +415,7 @@
 .pozo-detalle__item-editar,
 .pozo-detalle__item-eliminar {
   padding: 0.35rem 0.7rem;
-  border-radius: 6px;
+  border-radius: var(--radius-sm);
   font-size: 0.78rem;
   font-weight: 600;
   cursor: pointer;
@@ -437,7 +437,7 @@
 .pozo-detalle__imagen {
   width: 100%;
   aspect-ratio: 4 / 3;
-  border-radius: 4px 14px 4px 14px;
+  border-radius: var(--radius-card);
   overflow: hidden;
   background: color-mix(in srgb, var(--color-primary) 8%, var(--color-border) 40%);
   color: var(--color-primary);
@@ -461,7 +461,7 @@
   padding: 1.1rem 1.2rem;
   background: var(--color-surface);
   border: 1px solid var(--color-border);
-  border-radius: 4px 14px 4px 14px;
+  border-radius: var(--radius-card);
 }
 
 .pozo-detalle__calculadora-texto {
@@ -545,8 +545,8 @@
   display: flex;
   flex-direction: column;
   background-color: var(--color-surface);
-  border-radius: 10px;
-  box-shadow: 0 24px 60px -12px rgba(0, 0, 0, 0.35);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
   animation: pozo-detalle-modal-pop 0.28s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
@@ -584,7 +584,7 @@
   flex-shrink: 0;
   background: none;
   border: 1px solid var(--color-border);
-  border-radius: 8px;
+  border-radius: var(--radius-md);
   color: var(--color-text-muted);
   cursor: pointer;
   transition: color 0.18s ease, border-color 0.18s ease;
@@ -615,7 +615,7 @@
 .pozo-detalle__modal-cancelar {
   padding: 0.6rem 1rem;
   border: 1px solid var(--color-border);
-  border-radius: 6px;
+  border-radius: var(--radius-sm);
   background: transparent;
   color: var(--color-text);
   font-weight: 600;
@@ -625,7 +625,7 @@
 .pozo-detalle__modal-guardar {
   padding: 0.6rem 1rem;
   border: none;
-  border-radius: 6px;
+  border-radius: var(--radius-sm);
   background-color: var(--color-primary);
   color: #fff;
   font-weight: 600;
@@ -640,7 +640,7 @@
 .pozo-detalle__modal-confirmar {
   padding: 0.6rem 1rem;
   border: 1px solid var(--color-error);
-  border-radius: 6px;
+  border-radius: var(--radius-sm);
   background-color: var(--color-error);
   color: #fff;
   font-weight: 600;

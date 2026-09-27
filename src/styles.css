@@ -14,6 +14,28 @@
   /* Ancho maximo compartido del contenido: lo usan el header, el footer y
      cada pantalla para que el layout quede alineado en toda la app. */
   --content-max-width: 1280px;
+
+  /* Espaciado: escala compartida para gaps, paddings y margins nuevos. */
+  --space-xs: 0.25rem;
+  --space-sm: 0.5rem;
+  --space-md: 0.75rem;
+  --space-lg: 1rem;
+  --space-xl: 1.5rem;
+  --space-2xl: 2rem;
+
+  /* Radios: mismos valores que ya se repetian sueltos en varios componentes. */
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 10px;
+  --radius-pill: 999px;
+  --radius-card: 4px 14px 4px 14px;
+
+  /* Sombras */
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.06);
+  --shadow-md: 0 24px 60px -12px rgba(0, 0, 0, 0.35);
+  --shadow-lg: 6px 0 24px rgba(0, 0, 0, 0.15);
+  --shadow-hover: 0 10px 22px -14px rgba(238, 79, 35, 0.4);
+
   color-scheme: light;
 }
 
