@@ -21,6 +21,7 @@ export interface MiInversion {
   tituloPozo: string;
   autoDescripcion: string;
   estadoPozo: EstadoPozo;
+  imagenUrl: string | null;
   monto: number;
   fecha: string;
   gananciaCorrespondiente: number | null;

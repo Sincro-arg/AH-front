@@ -18,6 +18,7 @@ describe('MisInversiones', () => {
     tituloPozo: 'Fiat Cronos 2022',
     autoDescripcion: 'Fiat Cronos 2021, 45.000 km, nafta',
     estadoPozo: 'Abierto',
+    imagenUrl: null,
     monto: 5000,
     fecha: new Date().toISOString(),
     gananciaCorrespondiente: null,
@@ -61,6 +62,30 @@ describe('MisInversiones', () => {
     expect(texto).toContain('Fiat Cronos 2022');
     expect(texto).toContain('45.000 km');
     expect(texto).toContain('Abierto');
+  });
+
+  it('muestra el placeholder cuando la inversion no tiene imagenUrl', () => {
+    fixture.detectChanges();
+    httpMock.expectOne(url).flush([inversionMock]);
+    fixture.detectChanges();
+
+    const tarjeta = (fixture.nativeElement as HTMLElement).querySelector('.inversion-card__imagen');
+    expect(tarjeta?.querySelector('svg')).toBeTruthy();
+    expect(tarjeta?.querySelector('img')).toBeFalsy();
+  });
+
+  it('muestra la imagen del pozo cuando la inversion tiene imagenUrl', () => {
+    fixture.detectChanges();
+    httpMock
+      .expectOne(url)
+      .flush([{ ...inversionMock, imagenUrl: 'https://ejemplo.com/foto.jpg' }]);
+    fixture.detectChanges();
+
+    const tarjeta = (fixture.nativeElement as HTMLElement).querySelector('.inversion-card__imagen');
+    const img = tarjeta?.querySelector('img');
+    expect(img).toBeTruthy();
+    expect(img?.getAttribute('src')).toBe('https://ejemplo.com/foto.jpg');
+    expect(tarjeta?.querySelector('svg')).toBeFalsy();
   });
 
   it('muestra la ganancia solo si el pozo esta vendido', () => {

@@ -23,6 +23,18 @@
       @for (inv of inversiones(); track inv.id) {
         <li class="inversion-card">
           <a class="inversion-card__link" [routerLink]="['/pozos', inv.pozoId]">
+            <div class="inversion-card__imagen">
+              @if (inv.imagenUrl) {
+                <img [src]="inv.imagenUrl" [alt]="inv.tituloPozo" loading="lazy" />
+              } @else {
+                <svg viewBox="0 0 48 32" fill="none" aria-hidden="true">
+                  <rect x="1" y="12" width="46" height="14" rx="3" fill="currentColor" opacity="0.18" />
+                  <circle cx="14" cy="27" r="4" fill="currentColor" opacity="0.35" />
+                  <circle cx="34" cy="27" r="4" fill="currentColor" opacity="0.35" />
+                  <path d="M6 12l4-7h20l6 7" stroke="currentColor" stroke-width="2" opacity="0.35" />
+                </svg>
+              }
+            </div>
             <div class="inversion-card__hd">
               <div class="inversion-card__hd-texto">
                 <h2 class="inversion-card__titulo">{{ inv.tituloPozo }}</h2>
