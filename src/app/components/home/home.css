@@ -580,6 +580,13 @@
   margin-top: 2rem;
 }
 
+.home__testimonios-aviso {
+  margin: 0.35rem 0 0;
+  font-size: 0.8rem;
+  font-style: italic;
+  color: var(--color-text-muted);
+}
+
 .home__testimonios-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
