@@ -31,10 +31,12 @@ export const routes: Routes = [
   {
     path: 'login',
     loadComponent: () => import('./components/login/login').then((m) => m.Login),
+    canActivate: [invitadoGuard],
   },
   {
     path: 'registro',
     loadComponent: () => import('./components/registro/registro').then((m) => m.Registro),
+    canActivate: [invitadoGuard],
   },
   {
     path: 'configuracion',
