@@ -50,6 +50,7 @@
 
 .carrusel-pozos__carrusel {
   display: flex;
+  flex: 1 1 0;
   gap: 1rem;
   overflow-x: auto;
   overflow-y: hidden;
