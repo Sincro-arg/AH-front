@@ -22,8 +22,15 @@ export class Home implements OnInit {
   private readonly inversionesSvc = inject(InversionesService);
   private readonly pozosSvc = inject(PozosService);
 
-  readonly usuario = signal<Usuario | null>(null);
-  readonly cargando = signal(true);
+  /**
+   * Arranca con el usuario que ya trajo AuthService (el guard espero a que
+   * verificandoSesion terminara antes de dejar entrar a esta ruta, asi que
+   * en el 99% de los casos reales ya esta disponible sin pedir de nuevo).
+   * Evita el parpadeo de "Cargando..." en el bloque principal mientras se
+   * espera un round-trip que ya no hace falta esperar para mostrar algo.
+   */
+  readonly usuario = signal<Usuario | null>(this.authSvc.usuarioActual());
+  readonly cargando = signal(!this.authSvc.usuarioActual());
   readonly error = signal<string | null>(null);
 
   readonly misInversiones = signal<MiInversion[]>([]);
@@ -106,7 +113,12 @@ export class Home implements OnInit {
   }
 
   private cargarUsuario(): void {
-    this.cargando.set(true);
+    // Si ya tenemos usuario (via AuthService), este pedido es un refresco en
+    // segundo plano: no volvemos a mostrar el spinner para no tapar datos
+    // que la persona ya esta viendo.
+    if (!this.usuario()) {
+      this.cargando.set(true);
+    }
     this.error.set(null);
 
     this.usuariosSvc.obtenerMe().subscribe({

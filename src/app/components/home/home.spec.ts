@@ -153,6 +153,25 @@ describe('Home', () => {
     expect(fixture.componentInstance.error()).toBeNull();
   });
 
+  it('si AuthService ya tiene el usuario (lo dejo el guard), lo muestra de entrada sin pasar por el spinner del bloque principal y lo refresca en segundo plano', () => {
+    const authSvc = TestBed.inject(AuthService);
+    authSvc.actualizarUsuarioActual(usuarioMock);
+
+    const fixtureConSesion = TestBed.createComponent(Home);
+    fixtureConSesion.detectChanges();
+
+    const nativeEl = fixtureConSesion.nativeElement as HTMLElement;
+    expect(nativeEl.querySelector('.home__cargando')).toBeFalsy();
+    expect(nativeEl.querySelector('.home__cards')).toBeTruthy();
+    expect(nativeEl.textContent ?? '').toContain('Ana');
+
+    // El pedido a /usuarios/me se sigue haciendo (refresco en segundo plano),
+    // solo que ya no bloquea la primera pintura con el spinner.
+    httpMock.expectOne(meUrl).flush(usuarioMock);
+    httpMock.expectOne(inversionesUrl).flush([]);
+    httpMock.expectOne(pozosUrl).flush([]);
+  });
+
   it('sincroniza el usuario cargado con AuthService', () => {
     fixture.detectChanges();
     httpMock.expectOne(meUrl).flush(usuarioMock);
