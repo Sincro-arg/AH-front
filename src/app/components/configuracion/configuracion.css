@@ -410,6 +410,16 @@
   cursor: pointer;
 }
 
+@media (max-width: 480px) {
+  .config {
+    padding: 1.25rem 1rem;
+  }
+
+  .config__grid {
+    grid-template-columns: 1fr;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .config__overlay,
   .config__modal {

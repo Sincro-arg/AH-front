@@ -390,6 +390,17 @@
   color: var(--color-text-muted);
 }
 
+@media (min-width: 481px) and (max-width: 860px) {
+  .home-hero__content {
+    max-width: 68%;
+  }
+
+  .home-hero__illustration {
+    width: 120px;
+    opacity: 0.65;
+  }
+}
+
 @media (max-width: 480px) {
   .home-hero__content {
     max-width: 100%;
