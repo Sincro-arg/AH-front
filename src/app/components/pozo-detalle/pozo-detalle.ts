@@ -32,6 +32,9 @@ export class PozoDetalle implements OnInit {
   readonly cargando = signal(true);
   readonly error = signal<string | null>(null);
 
+  /** Se marca en true si el <img> del pozo dispara error de carga (URL rota); pasa a mostrar el placeholder. */
+  readonly imagenRota = signal(false);
+
   readonly invertirForm = this.fb.nonNullable.group({
     monto: [0, [Validators.required, Validators.min(1)]],
   });

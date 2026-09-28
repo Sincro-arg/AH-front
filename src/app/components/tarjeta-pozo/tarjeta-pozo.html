@@ -1,7 +1,7 @@
 <ng-template #contenidoInterno>
   <div class="tarjeta-pozo__imagen">
-    @if (imagenUrl()) {
-      <img [src]="imagenUrl()" [alt]="imagenAlt()" loading="lazy" />
+    @if (imagenUrl() && !imagenRota()) {
+      <img [src]="imagenUrl()" [alt]="imagenAlt()" loading="lazy" (error)="imagenRota.set(true)" />
     } @else {
       <svg viewBox="0 0 48 32" fill="none" aria-hidden="true">
         <rect x="1" y="12" width="46" height="14" rx="3" fill="currentColor" opacity="0.18" />

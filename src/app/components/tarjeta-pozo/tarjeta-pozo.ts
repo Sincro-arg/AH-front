@@ -1,4 +1,4 @@
-import { Component, input } from '@angular/core';
+import { Component, input, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { NgTemplateOutlet } from '@angular/common';
 import { EstadoPozo } from '../../services/pozos.service';
@@ -23,6 +23,9 @@ import { EstadoPozo } from '../../services/pozos.service';
 export class TarjetaPozo {
   readonly imagenUrl = input<string | null>(null);
   readonly imagenAlt = input('');
+
+  /** Se marca en true si el <img> dispara error de carga (URL rota); pasa a mostrar el placeholder. */
+  readonly imagenRota = signal(false);
   readonly titulo = input('');
   readonly estado = input<EstadoPozo | undefined>(undefined);
 

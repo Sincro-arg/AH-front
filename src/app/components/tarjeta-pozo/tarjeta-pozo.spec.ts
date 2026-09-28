@@ -38,6 +38,21 @@ describe('TarjetaPozo', () => {
     expect(img?.src).toBe('https://ejemplo.com/foto.jpg');
   });
 
+  it('muestra el placeholder si la imagen dispara error de carga', () => {
+    fixture.componentRef.setInput('imagenUrl', 'https://cdn.example.com/roto.jpg');
+    fixture.detectChanges();
+
+    const nativeEl = fixture.nativeElement as HTMLElement;
+    const img = nativeEl.querySelector<HTMLImageElement>('.tarjeta-pozo__imagen img');
+    expect(img).toBeTruthy();
+
+    img?.dispatchEvent(new Event('error'));
+    fixture.detectChanges();
+
+    expect(nativeEl.querySelector('.tarjeta-pozo__imagen img')).toBeFalsy();
+    expect(nativeEl.querySelector('.tarjeta-pozo__imagen svg')).toBeTruthy();
+  });
+
   describe('progreso', () => {
     it('devuelve 0 cuando montoObjetivo es 0, sin dividir por cero', () => {
       fixture.componentRef.setInput('montoObjetivo', 0);
