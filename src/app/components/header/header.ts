@@ -27,22 +27,32 @@ export class Header {
   readonly verificandoSesion = this.authSvc.verificandoSesion;
   readonly usuario = computed(() => this.authSvc.usuarioActual());
   readonly menuOpen = signal(false);
+  readonly cuentaMenuOpen = signal(false);
 
   @ViewChild('drawer') private drawerRef?: ElementRef<HTMLElement>;
+  @ViewChild('cuenta') private cuentaRef?: ElementRef<HTMLElement>;
   private elementoConFocoPrevio: HTMLElement | null = null;
 
-  /** Fecha de hoy, corta y en español, para mostrar junto al usuario. */
-  readonly fechaHoy = computed(() => {
-    const txt = new Date().toLocaleDateString('es-AR', {
-      weekday: 'long',
-      day: 'numeric',
-      month: 'long',
-    });
-    return txt.charAt(0).toUpperCase() + txt.slice(1);
-  });
-
   logout(): void {
+    this.cuentaMenuOpen.set(false);
     this.authSvc.logout();
+  }
+
+  toggleCuentaMenu(): void {
+    this.cuentaMenuOpen.update((v) => !v);
+  }
+
+  cerrarCuentaMenu(): void {
+    this.cuentaMenuOpen.set(false);
+  }
+
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event: MouseEvent): void {
+    if (!this.cuentaMenuOpen()) return;
+    const el = this.cuentaRef?.nativeElement;
+    if (el && !el.contains(event.target as Node)) {
+      this.cerrarCuentaMenu();
+    }
   }
 
   toggleMenu(): void {
@@ -72,6 +82,9 @@ export class Header {
   onEscape(): void {
     if (this.menuOpen()) {
       this.cerrarMenu();
+    }
+    if (this.cuentaMenuOpen()) {
+      this.cerrarCuentaMenu();
     }
   }
 

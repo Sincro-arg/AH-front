@@ -74,59 +74,107 @@
   color: var(--color-primary);
 }
 
-.header__user {
-  display: flex;
-  align-items: center;
-  gap: 0.9rem;
+.header__account {
+  position: relative;
   min-width: 0;
   grid-column: 3;
   justify-self: end;
 }
 
-.header__date {
-  font-size: 0.82rem;
-  color: var(--color-text-muted);
-  white-space: nowrap;
-  flex-shrink: 0;
-}
-
-.header__user-link {
-  font-size: 0.9rem;
-  font-weight: 600;
+.header__account-trigger {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.1rem;
+  background: none;
+  border: none;
+  padding: 0.2rem 0.4rem;
+  border-radius: var(--radius-md);
   color: var(--color-text);
-  text-decoration: none;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  border-radius: var(--radius-sm);
-  padding: 0.2rem 0.1rem;
+  max-width: 110px;
 }
 
-.header__user-link:hover {
+.header__account-trigger:hover {
+  background-color: color-mix(in srgb, var(--color-text) 6%, transparent);
+}
+
+.header__account-avatar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.6rem;
+  height: 1.6rem;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--color-primary) 12%, transparent);
   color: var(--color-primary);
 }
 
-.header__logout {
-  background: none;
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-sm);
-  padding: 0.4rem 0.8rem;
-  font-size: 0.85rem;
-  font-weight: 500;
-  color: var(--color-text-muted);
-  flex-shrink: 0;
+.header__account-avatar svg {
+  width: 1.05rem;
+  height: 1.05rem;
 }
 
-.header__logout:hover {
-  background-color: color-mix(in srgb, var(--color-error) 12%, var(--color-surface));
+.header__account-nombre {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--color-text);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 100%;
+}
+
+.header__account-menu {
+  display: none;
+  position: absolute;
+  top: calc(100% + 0.5rem);
+  right: 0;
+  min-width: 160px;
+  flex-direction: column;
+  padding: 0.35rem;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-md);
+  z-index: 10;
+}
+
+.header__account.is-open .header__account-menu {
+  display: flex;
+}
+
+.header__account-item {
+  display: block;
+  width: 100%;
+  text-align: left;
+  padding: 0.6rem 0.7rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.88rem;
+  font-weight: 500;
+  color: var(--color-text);
+  text-decoration: none;
+  background: none;
+  border: none;
+  font-family: inherit;
+  cursor: pointer;
+}
+
+.header__account-item:hover {
+  background-color: color-mix(in srgb, var(--color-text) 6%, transparent);
+}
+
+.header__account-item--salir {
   color: var(--color-error);
-  border-color: color-mix(in srgb, var(--color-error) 35%, var(--color-surface));
+}
+
+.header__account-item--salir:hover {
+  background-color: color-mix(in srgb, var(--color-error) 12%, transparent);
 }
 
 .header__brand:focus-visible,
 .header__nav-link:focus-visible,
-.header__user-link:focus-visible,
-.header__logout:focus-visible {
+.header__account-trigger:focus-visible,
+.header__account-item:focus-visible {
   outline: 2px solid var(--color-primary);
   outline-offset: 2px;
 }
@@ -248,11 +296,6 @@
   white-space: nowrap;
 }
 
-.header__drawer-date {
-  font-size: 0.8rem;
-  color: var(--color-text-muted);
-}
-
 .header__drawer-nav {
   display: flex;
   flex-direction: column;
@@ -291,7 +334,7 @@
 
 @media (max-width: 767px) {
   .header__nav,
-  .header__user {
+  .header__account {
     display: none;
   }
 

@@ -71,16 +71,6 @@ export class Home implements OnInit {
     return 'Buenas noches';
   });
 
-  /** Fecha de hoy formateada en español (capitalizada). */
-  readonly fechaHoy = computed(() => {
-    const txt = new Date().toLocaleDateString('es-AR', {
-      weekday: 'long',
-      day: 'numeric',
-      month: 'long',
-    });
-    return txt.charAt(0).toUpperCase() + txt.slice(1);
-  });
-
   ngOnInit(): void {
     this.cargarUsuario();
     this.cargarInversiones();

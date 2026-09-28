@@ -134,6 +134,7 @@
 @media (min-width: 1000px) {
   .landing {
     max-width: var(--content-max-width);
+    margin: 0 auto;
     padding: 4rem 2rem 3rem;
   }
 
@@ -245,11 +246,10 @@
 /* ── Como funciona: puntos de valor + foto ── */
 .landing__como-funciona {
   display: grid;
-  grid-template-columns: 1fr 320px;
+  grid-template-columns: 1fr 380px;
   gap: 1.75rem;
   align-items: center;
   width: 100%;
-  max-width: 900px;
   text-align: left;
   padding: 1.5rem;
   background: var(--color-surface);
@@ -318,7 +318,6 @@
 /* ── Carrusel de pozos recientes: ver app-carrusel-pozos ── */
 .landing__pozos-recientes {
   width: 100%;
-  max-width: 900px;
   text-align: left;
 }
 
@@ -332,7 +331,6 @@
 /* ── Testimonios ── */
 .landing__testimonios {
   width: 100%;
-  max-width: 900px;
   text-align: left;
 }
 
@@ -345,7 +343,11 @@
 
 .landing__testimonios-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  /* minmax de 300px: dentro del ancho del contenedor comun (hasta 1216px de
+     contenido) entran como maximo 3 columnas, y con auto-fit el numero real
+     de columnas baja a 2 o a 1 en pantallas mas chicas. Como los testimonios
+     son multiplo de 3, nunca queda uno solo huerfano en la ultima fila. */
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   gap: 1rem;
   margin-top: 0.75rem;
 }

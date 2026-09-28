@@ -51,6 +51,26 @@ export class Landing implements OnInit {
       monto: 800000,
       frase: 'La transparencia de quien invirtio cuanto me dio confianza para meter mas plata.',
     },
+    {
+      nombre: 'Lucia Fernandez',
+      monto: 350000,
+      frase: 'Arranque con un pozo y termine invirtiendo en tres al mismo tiempo, es simple de seguir.',
+    },
+    {
+      nombre: 'Nicolas Peralta',
+      monto: 620000,
+      frase: 'Nunca antes habia invertido en nada y me quede tranquilo viendo cada paso del proceso.',
+    },
+    {
+      nombre: 'Carla Medina',
+      monto: 420000,
+      frase: 'Lo que mas valoro es poder invertir montos chicos sin quedar afuera de pozos grandes.',
+    },
+    {
+      nombre: 'Gaston Villalba',
+      monto: 900000,
+      frase: 'Ya vendi mi primer auto invertido y la plata se acredito sin vueltas, volveria a meter.',
+    },
   ];
 
   ngOnInit(): void {

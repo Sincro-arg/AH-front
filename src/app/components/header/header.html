@@ -17,12 +17,36 @@
         <a class="header__nav-link" routerLink="/mis-inversiones">Mis inversiones</a>
       </nav>
 
-      <div class="header__user">
-        <span class="header__date">{{ fechaHoy() }}</span>
-        <a class="header__user-link" routerLink="/configuracion">
-          {{ usuario()?.nombre }} {{ usuario()?.apellido }}
-        </a>
-        <button class="header__logout" type="button" (click)="logout()">Salir</button>
+      <div class="header__account" [class.is-open]="cuentaMenuOpen()" #cuenta>
+        <button
+          class="header__account-trigger"
+          type="button"
+          (click)="toggleCuentaMenu()"
+          aria-haspopup="true"
+          [attr.aria-expanded]="cuentaMenuOpen()"
+        >
+          <span class="header__account-avatar" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+              <circle cx="12" cy="8" r="3.4" />
+              <path d="M5 20c1.1-4.2 4.1-6.2 7-6.2s5.9 2 7 6.2" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+          </span>
+          <span class="header__account-nombre">{{ usuario()?.nombre }}</span>
+        </button>
+
+        <div class="header__account-menu" role="menu">
+          <a class="header__account-item" role="menuitem" routerLink="/configuracion" (click)="cerrarCuentaMenu()">
+            Configuración
+          </a>
+          <button
+            class="header__account-item header__account-item--salir"
+            role="menuitem"
+            type="button"
+            (click)="logout()"
+          >
+            Salir
+          </button>
+        </div>
       </div>
     } @else {
       <nav class="header__nav">
@@ -78,7 +102,6 @@
   @if (estaLogueado()) {
     <div class="header__drawer-user">
       <span class="header__drawer-user-name">{{ usuario()?.nombre }} {{ usuario()?.apellido }}</span>
-      <span class="header__drawer-date">{{ fechaHoy() }}</span>
     </div>
   }
 

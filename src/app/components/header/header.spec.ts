@@ -139,6 +139,40 @@ describe('Header', () => {
     expect(aside.classList.contains('is-open')).toBeFalse();
   });
 
+  it('no muestra la fecha en el header', () => {
+    authSvc.actualizarUsuarioActual(usuarioMock);
+    fixture.detectChanges();
+
+    expect(fixture.nativeElement.querySelector('.header__date')).toBeFalsy();
+    expect(fixture.nativeElement.querySelector('.header__drawer-date')).toBeFalsy();
+  });
+
+  it('el click en la cuenta abre el menu con Configuracion y Salir', () => {
+    authSvc.actualizarUsuarioActual(usuarioMock);
+    fixture.detectChanges();
+
+    const trigger: HTMLButtonElement = fixture.nativeElement.querySelector('.header__account-trigger');
+    trigger.click();
+    fixture.detectChanges();
+
+    expect(fixture.componentInstance.cuentaMenuOpen()).toBeTrue();
+    const cuenta: HTMLElement = fixture.nativeElement.querySelector('.header__account');
+    expect(cuenta.classList.contains('is-open')).toBeTrue();
+  });
+
+  it('un click afuera de la cuenta cierra el menu', () => {
+    authSvc.actualizarUsuarioActual(usuarioMock);
+    fixture.detectChanges();
+    fixture.componentInstance.toggleCuentaMenu();
+    fixture.detectChanges();
+    expect(fixture.componentInstance.cuentaMenuOpen()).toBeTrue();
+
+    document.body.click();
+    fixture.detectChanges();
+
+    expect(fixture.componentInstance.cuentaMenuOpen()).toBeFalse();
+  });
+
   it('presionar Escape con el menu abierto lo cierra', () => {
     fixture.detectChanges();
     fixture.componentInstance.abrirMenu();
