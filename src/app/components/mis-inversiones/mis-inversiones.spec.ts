@@ -99,6 +99,29 @@ describe('MisInversiones', () => {
     expect(texto).toContain('Ganancia');
   });
 
+  it('muestra varias inversiones con estados distintos, y la ganancia solo en la Vendida', () => {
+    const inversionesMock: MiInversion[] = [
+      { ...inversionMock, id: '1', pozoId: '10', tituloPozo: 'Fiat Cronos 2022', estadoPozo: 'Abierto', gananciaCorrespondiente: null },
+      { ...inversionMock, id: '2', pozoId: '11', tituloPozo: 'Renault Sandero Stepway 2017', estadoPozo: 'Comprado', gananciaCorrespondiente: null },
+      { ...inversionMock, id: '3', pozoId: '12', tituloPozo: 'Peugeot 208 2019', estadoPozo: 'Vendido', gananciaCorrespondiente: 1200 },
+    ];
+
+    fixture.detectChanges();
+    httpMock.expectOne(url).flush(inversionesMock);
+    fixture.detectChanges();
+
+    const tarjetas = (fixture.nativeElement as HTMLElement).querySelectorAll('.inversion-card');
+    expect(tarjetas.length).toBe(3);
+
+    const [abierta, comprada, vendida] = Array.from(tarjetas).map((t) => t.textContent ?? '');
+    expect(abierta).toContain('Fiat Cronos 2022');
+    expect(abierta).not.toContain('Ganancia');
+    expect(comprada).toContain('Renault Sandero Stepway 2017');
+    expect(comprada).not.toContain('Ganancia');
+    expect(vendida).toContain('Peugeot 208 2019');
+    expect(vendida).toContain('Ganancia');
+  });
+
   it('muestra un estado vacio si no hay inversiones', () => {
     fixture.detectChanges();
     httpMock.expectOne(url).flush([]);
