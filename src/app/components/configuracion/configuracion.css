@@ -92,7 +92,7 @@
 .config__card:hover {
   transform: translateY(-2px);
   border-color: rgba(238, 79, 35, 0.4);
-  box-shadow: 0 10px 22px -14px rgba(238, 79, 35, 0.4);
+  box-shadow: var(--shadow-hover);
 }
 
 .config__card-titulo {
@@ -213,7 +213,7 @@
   width: 40px;
   height: 22px;
   flex-shrink: 0;
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   background-color: var(--color-border);
   transition: background-color 0.15s ease;
 }
@@ -334,7 +334,7 @@
   flex-direction: column;
   background-color: var(--color-surface);
   border-radius: var(--radius-lg);
-  box-shadow: 0 24px 60px -12px rgba(0, 0, 0, 0.35);
+  box-shadow: var(--shadow-md);
   animation: config-modal-pop 0.28s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
