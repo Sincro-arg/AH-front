@@ -46,8 +46,16 @@ export class AuthService {
   readonly verificandoSesion = signal<boolean>(!!this.getToken());
 
   constructor() {
+    // Se difiere al siguiente microtask (no se llama directo desde el constructor):
+    // el interceptor de HttpClient (authInterceptor) hace inject(AuthService), y si
+    // el HTTP se dispara mientras este mismo constructor todavia esta corriendo,
+    // Angular no term de registrar el servicio en el injector y tira
+    // NG0200 (Circular dependency detected for AuthService). Esto rompia SIEMPRE
+    // que habia un token guardado al arrancar la app (login persistido / recarga):
+    // el error caia en el catch de cargarUsuarioActual(), que limpiaba la sesion y
+    // mandaba de vuelta a /login aunque el back respondiera bien.
     if (this.getToken()) {
-      this.cargarUsuarioActual();
+      queueMicrotask(() => this.cargarUsuarioActual());
     }
   }
 
