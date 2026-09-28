@@ -71,6 +71,16 @@
   align-items: start;
 }
 
+@media (min-width: 860px) {
+  .config__grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.config__card--peligro {
+  grid-column: 1 / -1;
+}
+
 .config__card {
   padding: 1.25rem;
   border: 1px solid var(--color-border);
