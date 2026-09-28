@@ -51,6 +51,7 @@
 .carrusel-pozos__carrusel {
   display: flex;
   flex: 1 1 0;
+  justify-content: center;
   gap: var(--space-lg);
   overflow-x: auto;
   overflow-y: hidden;
