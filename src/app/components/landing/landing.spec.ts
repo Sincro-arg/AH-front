@@ -58,6 +58,15 @@ describe('Landing', () => {
     expect(texto).not.toContain('Verificando conexion');
   });
 
+  it('muestra la actividad reciente con el aviso de que es de ejemplo', () => {
+    fixture.detectChanges();
+    httpMock.expectOne(pozosUrl).flush([]);
+
+    const texto = (fixture.nativeElement as HTMLElement).textContent ?? '';
+    expect(texto).toContain('Se estan sumando ahora');
+    expect(texto).toContain('Actividad de ejemplo, no corresponde a inversiones reales.');
+  });
+
   it('muestra los testimonios con el aviso de que son de ejemplo', () => {
     fixture.detectChanges();
     httpMock.expectOne(pozosUrl).flush([]);

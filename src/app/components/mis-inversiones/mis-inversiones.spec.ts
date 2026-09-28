@@ -64,14 +64,15 @@ describe('MisInversiones', () => {
     expect(texto).toContain('Abierto');
   });
 
-  it('muestra el placeholder cuando la inversion no tiene imagenUrl', () => {
+  it('muestra la imagen por defecto cuando la inversion no tiene imagenUrl', () => {
     fixture.detectChanges();
     httpMock.expectOne(url).flush([inversionMock]);
     fixture.detectChanges();
 
     const tarjeta = (fixture.nativeElement as HTMLElement).querySelector('.tarjeta-pozo__imagen');
-    expect(tarjeta?.querySelector('svg')).toBeTruthy();
-    expect(tarjeta?.querySelector('img')).toBeFalsy();
+    const img = tarjeta?.querySelector<HTMLImageElement>('img');
+    expect(img).toBeTruthy();
+    expect(img?.getAttribute('src')).toBe('/imagenes/auto-default.svg');
   });
 
   it('muestra la imagen del pozo cuando la inversion tiene imagenUrl', () => {

@@ -32,18 +32,9 @@
   object-fit: cover;
 }
 
-.tarjeta-pozo__imagen svg {
-  width: 46%;
-  height: auto;
-}
-
 :host(.tarjeta-pozo--compacta) .tarjeta-pozo__imagen {
   aspect-ratio: 4 / 3;
   background: color-mix(in srgb, var(--color-primary) 6%, var(--color-surface));
-}
-
-:host(.tarjeta-pozo--compacta) .tarjeta-pozo__imagen svg {
-  width: 45%;
 }
 
 .tarjeta-pozo__badge {

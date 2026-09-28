@@ -19,12 +19,14 @@ describe('TarjetaPozo', () => {
     expect(fixture.componentInstance).toBeTruthy();
   });
 
-  it('muestra el placeholder cuando no hay imagenUrl', () => {
+  it('muestra la imagen por defecto cuando no hay imagenUrl', () => {
     fixture.detectChanges();
 
-    const nativeEl = fixture.nativeElement as HTMLElement;
-    expect(nativeEl.querySelector('.tarjeta-pozo__imagen svg')).toBeTruthy();
-    expect(nativeEl.querySelector('.tarjeta-pozo__imagen img')).toBeFalsy();
+    const img = (fixture.nativeElement as HTMLElement).querySelector<HTMLImageElement>(
+      '.tarjeta-pozo__imagen img',
+    );
+    expect(img).toBeTruthy();
+    expect(img?.getAttribute('src')).toBe('/imagenes/auto-default.svg');
   });
 
   it('muestra la imagen cuando hay imagenUrl', () => {
@@ -38,7 +40,7 @@ describe('TarjetaPozo', () => {
     expect(img?.src).toBe('https://ejemplo.com/foto.jpg');
   });
 
-  it('muestra el placeholder si la imagen dispara error de carga', () => {
+  it('vuelve a la imagen por defecto si la imagen dispara error de carga', () => {
     fixture.componentRef.setInput('imagenUrl', 'https://cdn.example.com/roto.jpg');
     fixture.detectChanges();
 
@@ -49,8 +51,9 @@ describe('TarjetaPozo', () => {
     img?.dispatchEvent(new Event('error'));
     fixture.detectChanges();
 
-    expect(nativeEl.querySelector('.tarjeta-pozo__imagen img')).toBeFalsy();
-    expect(nativeEl.querySelector('.tarjeta-pozo__imagen svg')).toBeTruthy();
+    const imgDespues = nativeEl.querySelector<HTMLImageElement>('.tarjeta-pozo__imagen img');
+    expect(imgDespues).toBeTruthy();
+    expect(imgDespues?.getAttribute('src')).toBe('/imagenes/auto-default.svg');
   });
 
   describe('progreso', () => {

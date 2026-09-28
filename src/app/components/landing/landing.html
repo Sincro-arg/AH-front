@@ -64,6 +64,23 @@
     </div>
   </div>
 
+  <section class="landing__actividad">
+    <h2 class="landing__actividad-titulo">
+      <span class="landing__actividad-punto" aria-hidden="true"></span>
+      Se estan sumando ahora
+    </h2>
+    <ul class="landing__actividad-lista">
+      @for (a of actividadReciente; track a.nombre) {
+        <li class="landing__actividad-item">
+          <span class="landing__actividad-nombre">{{ a.nombre }}</span>
+          <span class="landing__actividad-texto">invirtio {{ formatoMonto(a.monto) }}</span>
+          <span class="landing__actividad-hace">{{ a.hace }}</span>
+        </li>
+      }
+    </ul>
+    <p class="landing__actividad-aviso">Actividad de ejemplo, no corresponde a inversiones reales.</p>
+  </section>
+
   <div class="landing__pasos">
     <div class="landing__paso">
       <span class="landing__paso-numero">1</span>

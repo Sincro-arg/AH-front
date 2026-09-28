@@ -11,6 +11,12 @@ interface Testimonio {
   frase: string;
 }
 
+interface ActividadInversion {
+  nombre: string;
+  monto: number;
+  hace: string;
+}
+
 @Component({
   selector: 'app-landing',
   standalone: true,
@@ -70,6 +76,15 @@ export class Landing implements OnInit {
       monto: 900000,
       frase: 'Ya vendi mi primer auto invertido y la plata se acredito sin vueltas, volveria a meter.',
     },
+  ];
+
+  /** Actividad de ejemplo para dar la sensacion de que otras personas estan invirtiendo ahora. */
+  readonly actividadReciente: ActividadInversion[] = [
+    { nombre: 'Martina G.', monto: 45000, hace: 'Hace 2 minutos' },
+    { nombre: 'Franco L.', monto: 120000, hace: 'Hace 5 minutos' },
+    { nombre: 'Sofia R.', monto: 30000, hace: 'Hace 9 minutos' },
+    { nombre: 'Tomas D.', monto: 80000, hace: 'Hace 14 minutos' },
+    { nombre: 'Valentina P.', monto: 60000, hace: 'Hace 21 minutos' },
   ];
 
   ngOnInit(): void {

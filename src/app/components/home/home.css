@@ -115,8 +115,7 @@
   position: absolute;
   top: 50%;
   right: 2%;
-  width: 200px;
-  max-width: 38vw;
+  width: 24vw;
   transform: translateY(-50%);
 }
 
@@ -184,12 +183,6 @@
   font-size: 0.95rem;
   color: var(--color-text);
   word-break: break-word;
-}
-
-.home__link {
-  display: inline-block;
-  font-weight: 600;
-  color: var(--color-primary);
 }
 
 /* ── Sidebar: resumen de inversiones y accesos rapidos ── */

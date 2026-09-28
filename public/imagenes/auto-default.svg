@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" role="img" aria-label="Ilustracion generica de un auto">
+  <defs>
+    <linearGradient id="fondoAutoDefault" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#fdeee0"/>
+      <stop offset="100%" stop-color="#fbe3cf"/>
+    </linearGradient>
+    <linearGradient id="carroceriaAutoDefault" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#f6a389"/>
+      <stop offset="100%" stop-color="#ef8064"/>
+    </linearGradient>
+  </defs>
+
+  <rect x="0" y="0" width="400" height="400" rx="28" fill="url(#fondoAutoDefault)"/>
+
+  <ellipse cx="200" cy="292" rx="150" ry="12" fill="#df6c4f" opacity="0.18"/>
+
+  <path
+    d="M64 250c2-30 20-46 40-52 14-26 42-38 70-38h44c30 0 58 14 74 40 22 6 40 24 44 50 2 12-6 22-18 22H82c-12 0-20-10-18-22z"
+    fill="url(#carroceriaAutoDefault)"
+  />
+  <path
+    d="M64 250c2-30 20-46 40-52 14-26 42-38 70-38h44c30 0 58 14 74 40 22 6 40 24 44 50"
+    fill="none"
+    stroke="#d9614a"
+    stroke-width="4"
+    stroke-linecap="round"
+  />
+
+  <path
+    d="M126 196c10-20 30-32 52-32h30c22 0 42 12 52 32z"
+    fill="#fbcabb"
+    opacity="0.9"
+  />
+  <line x1="204" y1="164" x2="204" y2="196" stroke="#d9614a" stroke-width="3" opacity="0.5"/>
+
+  <rect x="60" y="238" width="26" height="14" rx="7" fill="#fbcabb"/>
+  <rect x="314" y="238" width="26" height="14" rx="7" fill="#fbcabb"/>
+
+  <circle cx="128" cy="272" r="34" fill="#7a4436"/>
+  <circle cx="128" cy="272" r="18" fill="#c98a72"/>
+  <circle cx="128" cy="272" r="6" fill="#7a4436"/>
+
+  <circle cx="278" cy="272" r="34" fill="#7a4436"/>
+  <circle cx="278" cy="272" r="18" fill="#c98a72"/>
+  <circle cx="278" cy="272" r="6" fill="#7a4436"/>
+
+  <path d="M330 214h14l4 12h-16z" fill="#fff4ea" opacity="0.85"/>
+  <path d="M78 224l-10 10 6 4 10-8z" fill="#c94f34" opacity="0.7"/>
+</svg>
