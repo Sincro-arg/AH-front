@@ -87,12 +87,12 @@
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-  gap: 0.6rem;
-  margin: 0 1.2rem;
+  gap: var(--space-sm);
+  margin: 0 var(--space-lg);
 }
 
 :host(.tarjeta-pozo--compacta) .tarjeta-pozo__hd {
-  margin: 0 0.85rem;
+  margin: 0 var(--space-md);
 }
 
 .tarjeta-pozo__titulo {
@@ -114,13 +114,13 @@
 .tarjeta-pozo__progreso {
   display: flex;
   flex-direction: column;
-  gap: 0.4rem;
-  margin: auto 1.2rem 0;
+  gap: var(--space-sm);
+  margin: auto var(--space-lg) 0;
 }
 
 :host(.tarjeta-pozo--compacta) .tarjeta-pozo__progreso {
-  margin: 0 0.85rem;
-  gap: 0.3rem;
+  margin: 0 var(--space-md);
+  gap: var(--space-xs);
 }
 
 .tarjeta-pozo__barra {
@@ -144,7 +144,7 @@
 .tarjeta-pozo__montos {
   display: flex;
   align-items: baseline;
-  gap: 0.4rem;
+  gap: var(--space-sm);
   font-size: 0.85rem;
   font-weight: 700;
   color: var(--color-text);

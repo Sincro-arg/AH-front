@@ -5,7 +5,7 @@
 }
 
 .carrusel-pozos__titulo {
-  margin: 0 0 0.75rem;
+  margin: 0 0 var(--space-md);
   font-size: 1.05rem;
   font-weight: 700;
   color: var(--color-text);
@@ -16,7 +16,7 @@
 }
 
 .carrusel-pozos__estado {
-  padding: 1.25rem;
+  padding: var(--space-xl);
   border-radius: var(--radius-card);
   border: 1px solid var(--color-border);
   background: var(--color-surface);
@@ -27,14 +27,14 @@
 }
 
 .carrusel-pozos__estado--error p {
-  margin: 0 0 0.75rem;
+  margin: 0 0 var(--space-md);
   color: var(--color-error);
 }
 
 .carrusel-pozos__reintentar {
   border: none;
   border-radius: var(--radius-pill);
-  padding: 0.5rem 1.25rem;
+  padding: var(--space-sm) var(--space-xl);
   font-weight: 600;
   color: #fff;
   background: var(--color-primary);
@@ -44,14 +44,14 @@
   position: relative;
   display: flex;
   align-items: center;
-  gap: 0.6rem;
+  gap: var(--space-sm);
   max-width: 100%;
 }
 
 .carrusel-pozos__carrusel {
   display: flex;
   flex: 1 1 0;
-  gap: 1rem;
+  gap: var(--space-lg);
   overflow-x: auto;
   overflow-y: hidden;
   min-width: 0;
@@ -60,7 +60,7 @@
   -webkit-overflow-scrolling: touch;
   touch-action: pan-x;
   overscroll-behavior-x: contain;
-  padding: 0.25rem 0.15rem 0.75rem;
+  padding: var(--space-xs) var(--space-xs) var(--space-md);
   scrollbar-width: thin;
 }
 
@@ -70,8 +70,8 @@
   scroll-snap-align: start;
   display: flex;
   flex-direction: column;
-  gap: 0.6rem;
-  padding-bottom: 0.9rem;
+  gap: var(--space-sm);
+  padding-bottom: var(--space-lg);
   background: var(--color-surface);
   border: 1px solid var(--color-border);
   border-radius: 4px 14px 4px 14px;
@@ -143,8 +143,8 @@
 
   .carrusel-pozos__carrusel {
     scroll-snap-type: x proximity;
-    gap: 0.75rem;
-    padding: 0.25rem 0 0.75rem;
+    gap: var(--space-md);
+    padding: var(--space-xs) 0 var(--space-md);
     background-image:
       linear-gradient(to right, var(--color-surface), transparent),
       linear-gradient(to left, var(--color-surface), transparent),
@@ -162,7 +162,7 @@
 
   .carrusel-pozos__hint-mobile {
     display: block;
-    margin: 0.35rem 0 0;
+    margin: var(--space-xs) 0 0;
     text-align: center;
     font-size: 0.72rem;
     color: var(--color-text-muted);
