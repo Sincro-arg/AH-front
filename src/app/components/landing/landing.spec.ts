@@ -1,30 +1,16 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideHttpClient } from '@angular/common/http';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
-import { provideRouter, Router } from '@angular/router';
+import { provideRouter } from '@angular/router';
 import { environment } from '../../../environments/environment';
-import { AuthService } from '../../services/auth.service';
 import { Pozo } from '../../services/pozos.service';
 import { Landing } from './landing';
 
 describe('Landing', () => {
   let fixture: ComponentFixture<Landing>;
-  let authSvc: AuthService;
   let httpMock: HttpTestingController;
 
   const pozosUrl = `${environment.apiUrl}/pozos`;
-
-  const usuarioMock = {
-    id: '1',
-    nombre: 'Ana',
-    apellido: 'Gomez',
-    email: 'ana@test.com',
-    telefono: '1122334455',
-    tema: 'claro' as const,
-    fechaAlta: new Date().toISOString(),
-    ultimoAcceso: new Date().toISOString(),
-    notificacionesEmail: true,
-  };
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -41,7 +27,6 @@ describe('Landing', () => {
     }).compileComponents();
 
     fixture = TestBed.createComponent(Landing);
-    authSvc = TestBed.inject(AuthService);
     httpMock = TestBed.inject(HttpTestingController);
   });
 
@@ -99,17 +84,6 @@ describe('Landing', () => {
     const texto = (fixture.nativeElement as HTMLElement).textContent ?? '';
     expect(texto).toContain('Quiero invertir');
     expect(texto).toContain('Ya tengo cuenta');
-  });
-
-  it('redirige a /cuenta si el usuario ya esta logueado, sin mostrar la landing publica', () => {
-    const router = TestBed.inject(Router);
-    const navigateSpy = spyOn(router, 'navigate');
-    authSvc.actualizarUsuarioActual(usuarioMock);
-
-    fixture.detectChanges();
-
-    expect(navigateSpy).toHaveBeenCalledWith(['/cuenta']);
-    httpMock.expectNone(pozosUrl);
   });
 
   it('llama a PozosService.listar() y muestra el estado vacio cuando no hay pozos', () => {

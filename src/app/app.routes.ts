@@ -1,10 +1,12 @@
 import { Routes } from '@angular/router';
 import { authGuard } from './guards/auth.guard';
+import { invitadoGuard } from './guards/invitado.guard';
 
 export const routes: Routes = [
   {
     path: '',
     loadComponent: () => import('./components/landing/landing').then((m) => m.Landing),
+    canActivate: [invitadoGuard],
   },
   {
     path: 'cuenta',
