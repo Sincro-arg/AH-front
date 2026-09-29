@@ -39,6 +39,22 @@
   color-scheme: light;
 }
 
+/* En pantallas mas grandes que Full HD (1920x1080) el contenido quedaba
+   pegado a 1280px de ancho: se veia chico, con franjas vacias enormes a los
+   costados. Estos dos escalones lo ensanchan para monitores QHD/4K sin tocar
+   nada por debajo de 1920px (donde --content-max-width sigue en 1280px). */
+@media (min-width: 1921px) {
+  :root {
+    --content-max-width: 1600px;
+  }
+}
+
+@media (min-width: 2561px) {
+  :root {
+    --content-max-width: 1920px;
+  }
+}
+
 :root[data-tema='oscuro'] {
   --color-text: #f1f5f9;
   --color-text-muted: #cbd5e1;
