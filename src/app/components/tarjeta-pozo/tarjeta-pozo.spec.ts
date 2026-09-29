@@ -26,7 +26,7 @@ describe('TarjetaPozo', () => {
       '.tarjeta-pozo__imagen img',
     );
     expect(img).toBeTruthy();
-    expect(img?.getAttribute('src')).toBe('/imagenes/auto-default.svg');
+    expect(img?.getAttribute('src')).toBe('/imagenes/auto.jpg');
   });
 
   it('muestra la imagen cuando hay imagenUrl', () => {
@@ -53,7 +53,7 @@ describe('TarjetaPozo', () => {
 
     const imgDespues = nativeEl.querySelector<HTMLImageElement>('.tarjeta-pozo__imagen img');
     expect(imgDespues).toBeTruthy();
-    expect(imgDespues?.getAttribute('src')).toBe('/imagenes/auto-default.svg');
+    expect(imgDespues?.getAttribute('src')).toBe('/imagenes/auto.jpg');
   });
 
   describe('progreso', () => {

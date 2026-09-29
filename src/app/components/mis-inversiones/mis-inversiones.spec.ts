@@ -72,7 +72,7 @@ describe('MisInversiones', () => {
     const tarjeta = (fixture.nativeElement as HTMLElement).querySelector('.tarjeta-pozo__imagen');
     const img = tarjeta?.querySelector<HTMLImageElement>('img');
     expect(img).toBeTruthy();
-    expect(img?.getAttribute('src')).toBe('/imagenes/auto-default.svg');
+    expect(img?.getAttribute('src')).toBe('/imagenes/auto.jpg');
   });
 
   it('muestra la imagen del pozo cuando la inversion tiene imagenUrl', () => {

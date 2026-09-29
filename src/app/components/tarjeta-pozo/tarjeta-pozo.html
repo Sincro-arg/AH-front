@@ -3,7 +3,7 @@
     @if (imagenUrl() && !imagenRota()) {
       <img [src]="imagenUrl()" [alt]="imagenAlt()" loading="lazy" (error)="imagenRota.set(true)" />
     } @else {
-      <img src="/imagenes/auto-default.svg" [alt]="imagenAlt() || 'Auto'" loading="lazy" />
+      <img src="/imagenes/auto.jpg" [alt]="imagenAlt() || 'Auto'" loading="lazy" />
     }
     @if (badgeEnImagen() && estado()) {
       <span

@@ -242,7 +242,7 @@
           @if (p.imagenUrl && !imagenRota()) {
             <img [src]="p.imagenUrl" [alt]="p.titulo" loading="lazy" (error)="imagenRota.set(true)" />
           } @else {
-            <img src="/imagenes/auto-default.svg" [alt]="p.titulo" loading="lazy" />
+            <img src="/imagenes/auto.jpg" [alt]="p.titulo" loading="lazy" />
           }
         </div>
 
